@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "reservation")
-public class Reservation {
+@Table(name="Records")
+public class Records {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column
     private Date borrowDate;
@@ -17,14 +17,11 @@ public class Reservation {
     private Integer Status;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "emp_id")
     private Employee employee;
 
 //    @ManyToOne
-//    @JoinColumn(name = "bookId")
+//    @JoinColumn
 //    private Book book;
-
-
-
 
 }
