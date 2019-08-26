@@ -1,16 +1,17 @@
 package com.tgfc.library.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "employee")
-public class employee implements Serializable {
+@Table(name = "Employee")
+public class Employee implements Serializable {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY, generator="reservationGenerator")
+    @GenericGenerator(name = "reservationGenerator", strategy = "native")
     private int id;
     @Column(name="account")
     private String account;
