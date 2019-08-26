@@ -10,8 +10,7 @@ import java.io.Serializable;
 public class Employee implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY, generator="reservationGenerator")
-    @GenericGenerator(name = "reservationGenerator", strategy = "native")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
     @Column(name="account")
     private String account;
