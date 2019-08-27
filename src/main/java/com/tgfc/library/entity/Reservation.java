@@ -13,7 +13,7 @@ public class Reservation {
     private Date startDate;
     @Column
     private Date endDate;
-    @Column
+    @Column(length = 5)
     private Integer Status;
 
     @ManyToOne

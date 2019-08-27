@@ -15,7 +15,7 @@ public class Records {
     private Date borrowDate;
     @Column
     private Date returnDate;
-    @Column
+    @Column(length = 5)
     private Integer Status;
 
     @ManyToOne
