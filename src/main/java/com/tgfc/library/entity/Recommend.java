@@ -9,15 +9,15 @@ public class Recommend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(length = 30)
+    @Column(length = 30,nullable = false)
     private String isbn;
-    @Column(length = 30)
+    @Column(length = 30,nullable = false)
     private String pubHouse;
-    @Column(length = 30)
+    @Column(length = 30,nullable = false)
     private String auther;
     @Column
     private String reason;
-    @Column
+    @Column(nullable = false)
     private Date publishDate;
 
     @ManyToOne

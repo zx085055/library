@@ -11,11 +11,11 @@ public class Records {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column
+    @Column(nullable = false)
     private Date borrowDate;
-    @Column
+    @Column(nullable = false)
     private Date returnDate;
-    @Column(length = 5)
+    @Column(length = 5,nullable = false)
     private Integer Status;
 
     @ManyToOne

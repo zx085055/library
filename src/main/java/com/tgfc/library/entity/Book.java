@@ -14,25 +14,25 @@ public class Book implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
     @GenericGenerator(name = "generatorName", strategy = "native")
     private Integer bookId;
-    @Column(name="name",length = 50)
+    @Column(name="name",length = 50,nullable = false)
     private String name;
-    @Column(name = "author",length = 30)
+    @Column(name = "author",length = 30,nullable = false)
     private String author;
-    @Column(name = "isbn",length = 30)
+    @Column(name = "isbn",length = 30,nullable = false)
     private String isbn;
-    @Column(name = "pub_house",length = 30)
+    @Column(name = "pub_house",length = 30,nullable = false)
     private String pubHouse;
     @Column(name = "intro")
     private String intro;
-    @Column(name = "price",length = 10)
+    @Column(name = "price",length = 10,nullable = false)
     private Integer price;
     @Column(name = "photo_url")
     private String photoUrl;
-    @Column(name = "purchase_date")
+    @Column(name = "purchase_date",nullable = false)
     private Date purchaseDate;
-    @Column(name = "publish_date")
+    @Column(name = "publish_date",nullable = false)
     private Date publishDate;
-    @Column(name="type",length = 20)
+    @Column(name="type",length = 20,nullable = false)
     private String type;
 
 

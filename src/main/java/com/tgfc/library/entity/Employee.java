@@ -12,13 +12,13 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
-    @Column(name="account",length = 30)
+    @Column(name="account",length = 30,nullable = false)
     private String account;
-    @Column(name="name",length = 20)
+    @Column(name="name",length = 20,nullable = false)
     private String name;
-    @Column(name="email",length = 50)
+    @Column(name="email",length = 50,nullable = false)
     private String email;
-    @Column(name="password",length = 30)
+    @Column(name="password",length = 30,nullable = false)
     private String password;
 
     public int getId() {

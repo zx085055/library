@@ -9,11 +9,11 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
-    @Column
+    @Column(nullable = false)
     private Date startDate;
-    @Column
+    @Column(nullable = false)
     private Date endDate;
-    @Column(length = 5)
+    @Column(length = 5,nullable = false)
     private Integer Status;
 
     @ManyToOne
