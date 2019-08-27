@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "books")
-public class Books implements Serializable {
+@Table(name = "book")
+public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")

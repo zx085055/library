@@ -1,6 +1,6 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.entity.Books;
+import com.tgfc.library.entity.Book;
 import com.tgfc.library.repository.IBookDataRepository;
 import com.tgfc.library.request.BookDataPageRequest;
 import com.tgfc.library.service.IBookDataService;
@@ -23,7 +23,7 @@ public class BookDataService implements IBookDataService {
 
 
     @Override
-    public Page<Books> getBooksList(BookDataPageRequest model)  {
+    public Page<Book> getBooksList(BookDataPageRequest model)  {
         String keyword = model.getKeyword() == null ? "%" : "%" + model.getKeyword() + "%";
 
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
@@ -32,7 +32,7 @@ public class BookDataService implements IBookDataService {
     }
 
     @Override
-    public Books getById(int storeId) {
+    public Book getById(int storeId) {
         //bookDataRepository.getOne(storeId);
         return bookDataRepository.getOne(storeId);
     }
