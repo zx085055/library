@@ -10,9 +10,9 @@ public class Reservation {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     @Column
-    private Date borrowDate;
+    private Date startDate;
     @Column
-    private Date returnDate;
+    private Date endDate;
     @Column
     private Integer Status;
 
