@@ -9,11 +9,11 @@ public class Recommend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column
+    @Column(length = 30)
     private String isbn;
-    @Column
+    @Column(length = 30)
     private String pubHouse;
-    @Column
+    @Column(length = 30)
     private String auther;
     @Column
     private String reason;
