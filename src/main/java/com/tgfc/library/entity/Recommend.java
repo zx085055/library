@@ -10,6 +10,8 @@ public class Recommend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(length = 30,nullable = false)
+    private String name;
+    @Column(length = 30,nullable = false)
     private String isbn;
     @Column(length = 30,nullable = false)
     private String pubHouse;
@@ -78,5 +80,13 @@ public class Recommend {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
