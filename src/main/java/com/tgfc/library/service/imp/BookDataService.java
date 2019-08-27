@@ -1,7 +1,7 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Book;
-import com.tgfc.library.repository.IBookDataRepository;
+import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.request.BookDataPageRequest;
 import com.tgfc.library.service.IBookDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class BookDataService implements IBookDataService {
 
 
     @Autowired
-    IBookDataRepository bookDataRepository;
+    IBookRepository bookDataRepository;
 
 
 

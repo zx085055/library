@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IBookDataRepository extends JpaRepository<Book,Integer> {
+public interface IBookRepository extends JpaRepository<Book,Integer> {
 
     @Override
     public Book getOne(Integer id);
