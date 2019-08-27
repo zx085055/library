@@ -4,10 +4,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import javax.validation.constraints.Min;
+
 public class PageableRequest {
 
     private  int pageSize;
 
+    @Min(value = 0,message = "分頁不能小於0")
     private  int pageNumber;
 
     private String sortType;
