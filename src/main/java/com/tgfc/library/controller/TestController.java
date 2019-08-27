@@ -1,6 +1,6 @@
 package com.tgfc.library.controller;
 
-import com.tgfc.library.service.SendMailService;
+import com.tgfc.library.service.imp.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +12,7 @@ public class TestController {
 
     @GetMapping(value = "/api")
     public String get(){
-        sendMailService.sendMail("我是標題","你好","tgfc061@tgfc.tw");
+//        sendMailService.sendMail("我是標題","你好","tgfc061@tgfc.tw");
         return "Hello Security";
     }
 }
