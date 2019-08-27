@@ -1,0 +1,65 @@
+package com.tgfc.library.request;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import javax.validation.constraints.Min;
+
+public class PageableRequest {
+
+    private  int pageSize;
+
+    @Min(value = 0,message = "分頁不能小於0")
+    private  int pageNumber;
+
+    private String sortType;
+
+    private String sortBy;
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public String getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
+    }
+
+    public String getSortBy() {
+        return sortBy;
+    }
+
+    public void setSortBy(String sortBy) {
+        this.sortBy = sortBy;
+    }
+
+    public Pageable getPageable(){
+        Sort sort = new Sort(getDirection(),getSortBy());
+        return PageRequest.of(getPageNumber(),getPageSize(),sort);
+    }
+
+    private Sort.Direction getDirection(){
+        if(this.sortType.equals(Sort.Direction.ASC)){
+            return Sort.Direction.ASC;
+        }else{
+            return Sort.Direction.DESC;
+        }
+
+    }
+}
