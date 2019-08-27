@@ -13,35 +13,35 @@ public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
     @GenericGenerator(name = "generatorName", strategy = "native")
-    private Integer book_id;
-    @Column(name="name")
+    private Integer bookId;
+    @Column(name="name",length = 50)
     private String name;
-    @Column(name = "author")
+    @Column(name = "author",length = 30)
     private String author;
-    @Column(name = "isbn")
+    @Column(name = "isbn",length = 30)
     private String isbn;
-    @Column(name = "pub_house")
-    private String pub_house;
+    @Column(name = "pub_house",length = 30)
+    private String pubHouse;
     @Column(name = "intro")
     private String intro;
-    @Column(name = "price")
+    @Column(name = "price",length = 10)
     private Integer price;
     @Column(name = "photo_url")
     private String photoUrl;
     @Column(name = "purchase_date")
-    private Date purchase_date;
+    private Date purchaseDate;
     @Column(name = "publish_date")
-    private Date publish_date;
-    @Column(name="type")
+    private Date publishDate;
+    @Column(name="type",length = 20)
     private String type;
 
 
-    public Integer getBook_id() {
-        return book_id;
+    public Integer getBookId() {
+        return bookId;
     }
 
-    public void setBook_id(Integer book_id) {
-        this.book_id = book_id;
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
     }
 
     public String getName() {
@@ -68,12 +68,12 @@ public class Book implements Serializable {
         this.isbn = isbn;
     }
 
-    public String getPub_house() {
-        return pub_house;
+    public String getPubHouse() {
+        return pubHouse;
     }
 
-    public void setPub_house(String pub_house) {
-        this.pub_house = pub_house;
+    public void setPubHouse(String pubHouse) {
+        this.pubHouse = pubHouse;
     }
 
     public String getIntro() {
@@ -100,20 +100,20 @@ public class Book implements Serializable {
         this.photoUrl = photoUrl;
     }
 
-    public Date getPurchase_date() {
-        return purchase_date;
+    public Date getPurchaseDate() {
+        return purchaseDate;
     }
 
-    public void setPurchase_date(Date purchase_date) {
-        this.purchase_date = purchase_date;
+    public void setPurchaseDate(Date purchaseDate) {
+        this.purchaseDate = purchaseDate;
     }
 
-    public Date getPublish_date() {
-        return publish_date;
+    public Date getPublishDate() {
+        return publishDate;
     }
 
-    public void setPublish_date(Date publish_date) {
-        this.publish_date = publish_date;
+    public void setPublishDate(Date publishDate) {
+        this.publishDate = publishDate;
     }
 
     public String getType() {
