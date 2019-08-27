@@ -10,10 +10,7 @@ import java.io.Serializable;
 public class Employee implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int id;
-    @Column(name="account",length = 30,nullable = false)
-    private String account;
+    private String id;
     @Column(name="name",length = 20,nullable = false)
     private String name;
     @Column(name="email",length = 50,nullable = false)
@@ -21,20 +18,12 @@ public class Employee implements Serializable {
     @Column(name="password",length = 30,nullable = false)
     private String password;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
     }
 
     public String getName() {
