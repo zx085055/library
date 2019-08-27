@@ -12,7 +12,6 @@ import java.util.Date;
 
 @Repository
 public interface IRecordsRepository extends JpaRepository<Records,Integer> {
-
     @Override
     Records getOne(Integer integer);
     @Override
