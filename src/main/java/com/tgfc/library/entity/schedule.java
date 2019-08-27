@@ -28,8 +28,8 @@ public class schedule {
     @Column(name = "type", length = 2)
     private String type;
 
-    @Column(name = "starting_time")
-    private Date startingTime;
+    @Column(name = "start_time")
+    private Date startTime;
 
     @Column(name = "end_time")
     private Date endTime;
@@ -89,12 +89,12 @@ public class schedule {
         this.type = type;
     }
 
-    public Date getStartingTime() {
-        return startingTime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStartingTime(Date startingTime) {
-        this.startingTime = startingTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     public Date getEndTime() {
