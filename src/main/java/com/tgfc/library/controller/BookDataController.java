@@ -2,7 +2,7 @@ package com.tgfc.library.controller;
 
 import com.tgfc.library.entity.Book;
 import com.tgfc.library.request.BookDataPageRequest;
-import com.tgfc.library.service.IBookDataService;
+import com.tgfc.library.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class BookDataController {
 
     @Autowired
-    IBookDataService bookDataService;
+    IBookService bookDataService;
 
     @GetMapping(value = "/api/update")
     public Book get(@RequestParam("id") Integer id) {

@@ -3,7 +3,7 @@ package com.tgfc.library.service.imp;
 import com.tgfc.library.entity.Book;
 import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.request.BookDataPageRequest;
-import com.tgfc.library.service.IBookDataService;
+import com.tgfc.library.service.IBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class BookDataService implements IBookDataService {
+public class BookService implements IBookService {
 
 
     @Autowired
