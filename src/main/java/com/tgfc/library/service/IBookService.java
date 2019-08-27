@@ -8,7 +8,7 @@ import com.tgfc.library.request.BookDataPageRequest;
 import org.springframework.data.domain.Page;
 
 public interface IBookService {
-    Page<Book> getBooksList(BookDataPageRequest model) ;
+    Page<Book> getBookList(BookDataPageRequest model) ;
     Book getById(int storeId);
 }
 

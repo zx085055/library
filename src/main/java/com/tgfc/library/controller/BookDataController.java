@@ -20,6 +20,6 @@ public class BookDataController {
 
     @PostMapping(value = "/api/update")
     public Page<Book> getKeyWord(@RequestBody BookDataPageRequest model) {
-        return bookDataService.getBooksList(model);
+        return bookDataService.getBookList(model);
     }
 }

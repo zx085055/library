@@ -23,7 +23,7 @@ public class BookService implements IBookService {
 
 
     @Override
-    public Page<Book> getBooksList(BookDataPageRequest model)  {
+    public Page<Book> getBookList(BookDataPageRequest model)  {
         String keyword = model.getKeyword() == null ? "%" : "%" + model.getKeyword() + "%";
 
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
