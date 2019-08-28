@@ -41,7 +41,7 @@ public class ResponseAdvice implements ResponseBodyAdvice {
     @ExceptionHandler
     @ResponseBody
     ResponseEntity handleException(Exception e) throws Exception {
-        //TODO 針對Exception 回傳相對應 http code
+
         if (e instanceof BindException) {
             return ResponseEntity.status(400).body(new CommonResponse(false, ParamErrorCode.PARAMETER_ERROR, ((BindException) e).getFieldError().getDefaultMessage()));
         } else if(e instanceof MethodArgumentTypeMismatchException){
