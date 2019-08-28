@@ -1,4 +1,4 @@
-package com.tgfc.library.conf;
+package com.tgfc.library.security;
 
 import com.tgfc.library.provider.CustomProvider;
 import org.springframework.beans.factory.annotation.Autowired;

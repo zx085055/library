@@ -10,12 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/recommend")
+@RequestMapping("/recommend")
 public class RecommendController {
     @Autowired
     IRecommendService recommendService;
 
-
+    @PostMapping("/select")
+    public Page<Recommend> select(@RequestBody RecommendPageRequest recommend){
+        return recommendService.select(recommend.getName(),recommend.getPageable());
+    }
 
 
 

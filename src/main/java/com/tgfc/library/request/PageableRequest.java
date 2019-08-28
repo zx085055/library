@@ -10,12 +10,11 @@ public class PageableRequest {
 
     private  int pageSize;
 
-    @Min(value = 0,message = "分頁不能小於0")
     private  int pageNumber;
 
-    private String sortType;
+    private String sortType="ASC";
 
-    private String sortBy;
+    private String sortBy="id";
 
     public int getPageSize() {
         return pageSize;
