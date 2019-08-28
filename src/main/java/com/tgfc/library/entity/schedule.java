@@ -1,12 +1,13 @@
 package com.tgfc.library.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.Date;
 
 @Entity
 @Table(name = "schedule")
-public class schedule {
+public class schedule implements Serializable {
 
 
     @Id

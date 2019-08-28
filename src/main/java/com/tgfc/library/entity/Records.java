@@ -3,11 +3,12 @@ package com.tgfc.library.entity;
 import javax.persistence.*;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name="records")
-public class Records {
+public class Records implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
