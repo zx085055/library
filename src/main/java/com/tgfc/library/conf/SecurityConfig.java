@@ -27,8 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //關閉 csrf 防護
         http.csrf().disable();
-        http.authorizeRequests().anyRequest().authenticated();//設定權限
-        http.formLogin().loginProcessingUrl("/api/login");    //設定登入
+//        http.authorizeRequests().anyRequest().authenticated();//設定權限
+//        http.formLogin().loginProcessingUrl("/api/login");    //設定登入
 
     }
 

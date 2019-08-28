@@ -1,30 +1,17 @@
-package com.tgfc.library.entity;
+package com.tgfc.library.request;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import com.tgfc.library.entity.Employee;
+
 import java.util.Date;
 
-@Entity
-@Table(name = "recommend")
-public class Recommend implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RecommendPageRequest extends PageableRequest {
     private Integer id;
-    @Column(length = 30,nullable = false)
     private String name;
-    @Column(length = 30,nullable = false)
     private String isbn;
-    @Column(length = 30,nullable = false)
     private String pubHouse;
-    @Column(length = 30,nullable = false)
     private String auther;
-    @Column
     private String reason;
-    @Column(nullable = false)
     private Date publishDate;
-
-    @ManyToOne
-    @JoinColumn(name = "emp_id")
     private Employee employee;
 
     public Integer getId() {
@@ -33,6 +20,14 @@ public class Recommend implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIsbn() {
@@ -81,13 +76,5 @@ public class Recommend implements Serializable {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
