@@ -8,9 +8,9 @@ import javax.validation.constraints.Min;
 
 public class PageableRequest {
 
-    private  int pageSize;
+    private  int pageSize=10;
 
-    private  int pageNumber;
+    private  int pageNumber=0;
 
     private String sortType="ASC";
 
