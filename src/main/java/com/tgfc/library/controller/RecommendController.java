@@ -15,11 +15,7 @@ public class RecommendController {
     @Autowired
     IRecommendService recommendService;
 
-    @PostMapping("/select")
-    public Page<Recommend> select(@RequestBody ){
 
-        recommendService.select();
-    }
 
 
 

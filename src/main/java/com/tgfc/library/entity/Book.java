@@ -13,7 +13,7 @@ public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
     @GenericGenerator(name = "generatorName", strategy = "native")
-    private Integer bookId;
+    private Integer id;
     @Column(name="name",length = 50,nullable = false)
     private String name;
     @Column(name = "author",length = 30,nullable = false)
@@ -37,11 +37,11 @@ public class Book implements Serializable {
 
 
     public Integer getBookId() {
-        return bookId;
+        return id;
     }
 
     public void setBookId(Integer bookId) {
-        this.bookId = bookId;
+        this.id = bookId;
     }
 
     public String getName() {
