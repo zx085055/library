@@ -7,6 +7,9 @@ import java.util.Date;
 @Entity
 @Table(name = "recommend")
 public class Recommend implements Serializable {
+
+    private static final long serialVersionUID = -3049053392909116198L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

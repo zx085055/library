@@ -9,6 +9,9 @@ import java.util.Date;
 @Entity
 @Table(name="records")
 public class Records implements Serializable {
+
+    private static final long serialVersionUID = -2702636334338651966L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

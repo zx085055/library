@@ -10,6 +10,8 @@ import java.io.Serializable;
 @Table(name = "Employee")
 public class Employee implements Serializable {
 
+
+    private static final long serialVersionUID = 6535024363806436052L;
     @Id
     private String id;
     @Column(name="name",length = 20,nullable = false)
