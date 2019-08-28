@@ -1,8 +1,9 @@
 package com.tgfc.library.entity;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
@@ -15,7 +16,7 @@ public class Employee implements Serializable {
     private String name;
     @Column(name="email",length = 50,nullable = false)
     private String email;
-    @Column(name="password",length = 30,nullable = false)
+    @Column(name="password",length = 100,nullable = false)
     private String password;
 
     public String getId() {
