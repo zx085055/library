@@ -58,7 +58,13 @@ public class RecommendService implements IRecommendService {
     @Override
     @Transactional
     public Boolean delete(Integer id) {
-        recommendRepository.deleteById(id);
-        return true;
+        boolean exist = recommendRepository.existsById(id);
+        if (exist){
+            recommendRepository.deleteById(id);
+            return true;
+        }else {
+            return false;
+        }
+
     }
 }
