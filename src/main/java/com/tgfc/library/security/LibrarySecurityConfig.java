@@ -38,9 +38,9 @@ public class LibrarySecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
 
             http.headers().frameOptions().sameOrigin();
-            http.cors().and().antMatcher("/**")
+            http.cors().and().antMatcher("/api/**")
                     .authorizeRequests()
-                    .antMatchers("/*")
+                    .antMatchers("/api/*")
                     .authenticated()
                     .and()
                     .requestCache()

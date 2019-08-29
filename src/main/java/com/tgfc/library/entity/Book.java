@@ -34,6 +34,10 @@ public class Book implements Serializable {
     private Date publishDate;
     @Column(name="type",length = 20,nullable = false)
     private String type;
+    @Column(name = "page",length = 10,nullable = false)
+    private Date page;
+    @Column(name="language",length = 20,nullable = false)
+    private String language;
 
 
     public Integer getBookId() {
