@@ -24,7 +24,7 @@ public class ScheduleController {
 
     /**
      * TODO 新增排程
-     * 傳入值:ScheduleModel (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
+     * 傳入值:SchedulePageRequset (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * 回傳值:Boolean
      */
 
@@ -38,14 +38,14 @@ public class ScheduleController {
 
     /**
      * TODO 編輯排程
-     * 傳入值:ScheduleModel (id，排程名稱，類型，通知時間，起始日期，結束日期，狀態)
+     * 傳入值:SchedulePageRequset (id，排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * 回傳值:Boolean
      */
 
     /**
      * TODO 查詢排程列表
-     * 傳入值:SchedulePageModel (排程名稱，起始日期，結束日期，分頁頁數，分頁容量)
-     * 回傳值:ScheduleResponse (序號，排程名稱，起始日期，結束日期，上次執行情況，狀態)
+     * 傳入值:SchedulePageRequset (排程名稱，起始日期，結束日期，分頁頁數，分頁容量)
+     * 回傳值:SchedulePageResponse (序號，排程名稱，起始日期，結束日期，上次執行情況，狀態)
      */
 
     /**
