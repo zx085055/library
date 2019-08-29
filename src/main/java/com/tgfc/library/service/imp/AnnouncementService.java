@@ -36,9 +36,9 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Boolean insert(Announcement announcement) {
-        String id = ContextUtil.getPrincipal().toString();
+        String id = "TGFC061";
 
-        Employee employee = employeeRepository.getOne(id);
+        Employee employee = employeeRepository.findById(id).get();
         announcement.setCreateTime(new Date());
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
