@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.Date;
 
 @RestController
-
+@RequestMapping("/book")
 public class BookController {
 
     @Autowired
@@ -77,7 +77,7 @@ public class BookController {
         try {
             String protocol = "http";
             String host = address.getHostAddress().toString();
-            int port = 4567;
+            int port = 8080;
             String path = image;
             URL url = new URL (protocol, host, port, path);
             System.out.println(url.toString()+"?");

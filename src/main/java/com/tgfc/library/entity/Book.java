@@ -35,10 +35,33 @@ public class Book implements Serializable {
     @Column(name="type",length = 20,nullable = false)
     private String type;
     @Column(name = "page",length = 10,nullable = false)
-    private Date page;
+    private String page;
     @Column(name="language",length = 20,nullable = false)
     private String language;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
 
     public Integer getBookId() {
         return id;
