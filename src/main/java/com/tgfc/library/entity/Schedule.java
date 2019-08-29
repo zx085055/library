@@ -1,5 +1,7 @@
 package com.tgfc.library.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Time;
@@ -7,11 +9,12 @@ import java.util.Date;
 
 @Entity
 @Table(name = "schedule")
-public class schedule implements Serializable {
+public class Schedule implements Serializable {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
+    @GenericGenerator(name = "generatorName", strategy = "native")
     private String id;
 
     @Column(name = "name", nullable = false)
@@ -38,20 +41,6 @@ public class schedule implements Serializable {
     @Column(name = "job_name", nullable = false)
     private Time jobName;
 
-    @Column(name = "job_group", nullable = false)
-    private Time jobGroup;
-
-    @Column(name = "job_class_name", nullable = false)
-    private Time jobClassName;
-
-    @Column(name = "trigger_name", nullable = false)
-    private Time triggerName;
-
-    @Column(name = "trigger_group", nullable = false)
-    private Time triggerGroup;
-
-    @Column(name = "cron", nullable = false)
-    private Time cron;
 
     @ManyToOne
     @JoinColumn(name = "create_user_id")
@@ -135,45 +124,5 @@ public class schedule implements Serializable {
 
     public void setJobName(Time jobName) {
         this.jobName = jobName;
-    }
-
-    public Time getJobGroup() {
-        return jobGroup;
-    }
-
-    public void setJobGroup(Time jobGroup) {
-        this.jobGroup = jobGroup;
-    }
-
-    public Time getJobClassName() {
-        return jobClassName;
-    }
-
-    public void setJobClassName(Time jobClassName) {
-        this.jobClassName = jobClassName;
-    }
-
-    public Time getTriggerName() {
-        return triggerName;
-    }
-
-    public void setTriggerName(Time triggerName) {
-        this.triggerName = triggerName;
-    }
-
-    public Time getTriggerGroup() {
-        return triggerGroup;
-    }
-
-    public void setTriggerGroup(Time triggerGroup) {
-        this.triggerGroup = triggerGroup;
-    }
-
-    public Time getCron() {
-        return cron;
-    }
-
-    public void setCron(Time cron) {
-        this.cron = cron;
     }
 }
