@@ -3,7 +3,6 @@ package com.tgfc.library.controller;
 import com.tgfc.library.entity.Announcement;
 import com.tgfc.library.request.AnnouncementPageRequest;
 import com.tgfc.library.service.IAnnouncementService;
-import com.tgfc.library.service.imp.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,5 +19,10 @@ public class AnnouncementController {
     @PostMapping("/select")
     public Page<Announcement> select(@RequestBody AnnouncementPageRequest announcement){
         return announcementService.select(announcement.getTitle(),announcement.getPageable());
+    }
+
+    @PostMapping("/insert")
+    public Boolean insert(@RequestBody Announcement announcement){
+        return announcementService.insert(announcement);
     }
 }
