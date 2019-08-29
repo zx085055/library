@@ -30,7 +30,7 @@ public class RecommendController {
     }
 
     @DeleteMapping("/delete")
-    public Boolean delete(@Param("id") int id){
+    public Boolean delete(@RequestParam int id){
         return recommendService.delete(id);
     }
 
