@@ -5,9 +5,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 /**
- * TODO 出借到期
+ * TODO 出借即將到期
  */
-public class LendingExpiredJob implements Job {
+public class LendingNearlyExpiredJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
