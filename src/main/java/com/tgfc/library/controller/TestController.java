@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
 
-    @GetMapping(value = "/api/{id}")
+    @GetMapping(value = "/{id}")
     public String get(){
 //        sendMailService.sendMail("我是標題","你好","tgfc061@tgfc.tw");
         return "Hello Security";
