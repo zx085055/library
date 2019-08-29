@@ -54,9 +54,7 @@ public class LibrarySecurityConfig {
                     });
 
 
-            http.csrf().ignoringAntMatchers("/login*");
-            http.csrf().ignoringAntMatchers("/logout*");
-//            http.csrf().csrfTokenRepository(new CookieCsrfTokenRepository());
+//
 
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 

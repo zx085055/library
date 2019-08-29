@@ -14,11 +14,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -57,28 +55,5 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         }
 
     }
-
-//    private String getXsfToken(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse){
-//        String result =null;
-//        Cookie[] cookies =httpServletRequest.getCookies();
-//        if(cookies!=null) {
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("XSRF-TOKEN")) {
-//                    result = cookie.getValue();
-//                    break;
-//                }
-//            }
-//        }
-//        if(result==null){
-//            Collection<String> headers =httpServletResponse.getHeaders("Set-Cookie");
-//            for (String header : headers) {
-//                if(header.contains("XSRF-TOKEN")){
-//                    result =header.substring(header.indexOf("=")+1,header.indexOf(";"));
-//                    break;
-//                }
-//            }
-//        }
-//        return result;
-//    }
 
 }
