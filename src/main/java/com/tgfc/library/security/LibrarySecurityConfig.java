@@ -38,22 +38,22 @@ public class LibrarySecurityConfig {
         protected void configure(HttpSecurity http) throws Exception {
 
             http.headers().frameOptions().sameOrigin();
-            http.cors().and().antMatcher("/api/**")
+            http.cors().and().antMatcher("/**")
                     .authorizeRequests()
-                    .antMatchers("/api/**")
+                    .antMatchers("/*")
                     .authenticated()
                     .and()
                     .requestCache()
                     .requestCache(new NullRequestCache())
                     .and()
-                    .logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID","XSRF-TOKEN")
+                    .logout().logoutUrl("/logout").deleteCookies("JSESSIONID","XSRF-TOKEN")
                     .logoutSuccessHandler((HttpServletRequest var1, HttpServletResponse response, Authentication var3)->{
                         CommonResponse logoutOk =new CommonResponse(true,null,"logout ok");
                         response.setHeader("Content-type", "application/json;charset=UTF-8");
                         response.getWriter().print(mapper.writeValueAsString(logoutOk));
                     });
-            http.csrf().ignoringAntMatchers("/api/login*");
-            http.csrf().ignoringAntMatchers("/api/logout*");
+            http.csrf().ignoringAntMatchers("/login*");
+            http.csrf().ignoringAntMatchers("/logout*");
             http.csrf().csrfTokenRepository(new CookieCsrfTokenRepository());
 
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
