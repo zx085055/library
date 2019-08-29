@@ -11,8 +11,10 @@ import java.net.InetAddress;
 @Service
 public class PhotoService implements IPhotoService {
 
+    String filePath = this.getClass().getClassLoader().getResource("").getPath() + "files/";
+
     @Value("${file.root.path}")
-    String filePath;
+    String filePath2;
 
     @Value("${file.path}")
     private String filePath1;
@@ -40,7 +42,7 @@ public class PhotoService implements IPhotoService {
     public String getPhoto( HttpServletResponse  response,String Photo) {
 
 
-        String path = this.filePath +"/"+ Photo;
+        String path = this.filePath + Photo;
 
         return path ;
 
