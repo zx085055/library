@@ -56,9 +56,10 @@ public class BookService implements IBookService {
             PhotoService photoService = new PhotoService();
             photoService.uploadPhoto(files, book.getIsbn());
             book.setPhotoUrl(book.getIsbn()+".jpg");
+
         }
         //BeanUtils.copyProperties(addBook,book);
-
+       // book.setPhotoUrl(book.getIsbn()+".jpg");
         bookDataRepository.save(book);
 
         return null;
