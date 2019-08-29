@@ -93,7 +93,7 @@ public class LibrarySecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
-            http.cors().and().csrf().disable().antMatcher("/footprint-websocket*").authorizeRequests().anyRequest().permitAll();
+            http.cors().and().csrf().disable().antMatcher("/library-websocket*").authorizeRequests().anyRequest().permitAll();
         }
     }
 
