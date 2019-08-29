@@ -1,20 +1,18 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.entity.Announcement;
 import com.tgfc.library.entity.Employee;
 import com.tgfc.library.repository.IAnnouncementRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.service.IAnnouncementService;
+import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 
 @Service
 public class AnnouncementService implements IAnnouncementService {
@@ -36,10 +34,13 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Boolean insert(Announcement announcement) {
-        String id = "TGFC061";
+        String id = String.valueOf(ContextUtil.getPrincipal());
 
         Employee employee = employeeRepository.findById(id).get();
-        announcement.setCreateTime(new Date());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date current = new Date();
+        announcement.setCreateTime(simpleDateFormat.format(current));
+        announcement.setEndTime(simpleDateFormat.format(current));
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         return true;

@@ -13,9 +13,9 @@ public class Announcement implements Serializable {
     @Column(length = 30,nullable = false)
     private String title;
     @Column(name = "create_time",nullable = false)
-    private Date createTime;
+    private String createTime;
     @Column(name = "end_time",nullable = false)
-    private Date endTime;
+    private String endTime;
     @Column(nullable = false)
     private Boolean status;
     @Column(length = 30)
@@ -41,19 +41,19 @@ public class Announcement implements Serializable {
         this.title = title;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
