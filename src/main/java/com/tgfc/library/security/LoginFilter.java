@@ -30,7 +30,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
 
-                LoginResponse response =new LoginResponse(true,authentication.getPrincipal(),getXsfToken(httpServletRequest,httpServletResponse));
+                LoginResponse response =new LoginResponse(true,authentication.getPrincipal());
                 httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
                 httpServletResponse.getWriter().println(mapper.writeValueAsString(response));
             }
@@ -58,27 +58,27 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     }
 
-    private String getXsfToken(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse){
-        String result =null;
-        Cookie[] cookies =httpServletRequest.getCookies();
-        if(cookies!=null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("XSRF-TOKEN")) {
-                    result = cookie.getValue();
-                    break;
-                }
-            }
-        }
-        if(result==null){
-            Collection<String> headers =httpServletResponse.getHeaders("Set-Cookie");
-            for (String header : headers) {
-                if(header.contains("XSRF-TOKEN")){
-                    result =header.substring(header.indexOf("=")+1,header.indexOf(";"));
-                    break;
-                }
-            }
-        }
-        return result;
-    }
+//    private String getXsfToken(HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse){
+//        String result =null;
+//        Cookie[] cookies =httpServletRequest.getCookies();
+//        if(cookies!=null) {
+//            for (Cookie cookie : cookies) {
+//                if (cookie.getName().equals("XSRF-TOKEN")) {
+//                    result = cookie.getValue();
+//                    break;
+//                }
+//            }
+//        }
+//        if(result==null){
+//            Collection<String> headers =httpServletResponse.getHeaders("Set-Cookie");
+//            for (String header : headers) {
+//                if(header.contains("XSRF-TOKEN")){
+//                    result =header.substring(header.indexOf("=")+1,header.indexOf(";"));
+//                    break;
+//                }
+//            }
+//        }
+//        return result;
+//    }
 
 }

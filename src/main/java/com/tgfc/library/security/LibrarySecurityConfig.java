@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,25 +35,28 @@ public class LibrarySecurityConfig {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-
+            http.csrf().disable();
             http.headers().frameOptions().sameOrigin();
-            http.cors().and().antMatcher("/api/**")
+
+            http.cors().and().antMatcher("/**")
                     .authorizeRequests()
-                    .antMatchers("/api/*")
+                    .antMatchers("/*")
                     .authenticated()
                     .and()
                     .requestCache()
                     .requestCache(new NullRequestCache())
                     .and()
-                    .logout().logoutUrl("/logout").deleteCookies("JSESSIONID","XSRF-TOKEN")
+                    .logout().logoutUrl("/logout").deleteCookies("JSESSIONID")
                     .logoutSuccessHandler((HttpServletRequest var1, HttpServletResponse response, Authentication var3)->{
                         CommonResponse logoutOk =new CommonResponse(true,null,"logout ok");
                         response.setHeader("Content-type", "application/json;charset=UTF-8");
                         response.getWriter().print(mapper.writeValueAsString(logoutOk));
                     });
+
+
             http.csrf().ignoringAntMatchers("/login*");
             http.csrf().ignoringAntMatchers("/logout*");
-            http.csrf().csrfTokenRepository(new CookieCsrfTokenRepository());
+//            http.csrf().csrfTokenRepository(new CookieCsrfTokenRepository());
 
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -75,6 +77,7 @@ public class LibrarySecurityConfig {
 
         @Override
         protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
             auth.authenticationProvider(ldapAuthProvider);
         }
 
@@ -87,13 +90,16 @@ public class LibrarySecurityConfig {
     }
 
     @Configuration
+    @EnableWebSecurity
     @Order(2)
     public static class WebSocketConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
 
+            http.csrf().disable();
             http.cors().and().csrf().disable().antMatcher("/library-websocket*").authorizeRequests().anyRequest().permitAll();
+
         }
     }
 
