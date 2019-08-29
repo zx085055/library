@@ -1,16 +1,15 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Recommend;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecommendRepository;
 import com.tgfc.library.service.IRecommendService;
+import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
