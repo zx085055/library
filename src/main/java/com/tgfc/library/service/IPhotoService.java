@@ -8,5 +8,5 @@ import javax.servlet.http.HttpServletResponse;
 public interface IPhotoService  {
 
     void uploadPhoto(MultipartFile file,String newName) ;
-    byte[] getPhoto(HttpServletResponse response, String Photo) ;
+    String getPhoto(HttpServletResponse response, String Photo) ;
 }

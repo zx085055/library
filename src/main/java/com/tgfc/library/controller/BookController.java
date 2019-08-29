@@ -19,7 +19,10 @@ import org.apache.commons.io.FileUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 
 @RestController
@@ -66,11 +69,23 @@ public class BookController {
 
     }
     @RequestMapping("/getPhoto")
-    public ResponseEntity<byte[]> download(HttpServletRequest request, @RequestParam("fileName") String fileName, HttpServletResponse response)throws Exception {
-        byte[] image = photoService.getPhoto(response,fileName);
+    public String download(HttpServletRequest request, @RequestParam("fileName") String fileName, HttpServletResponse response)throws Exception {
+        String image = photoService.getPhoto(response,fileName);
+        InetAddress address = InetAddress.getLocalHost();
+  //      InetAddress[] a=address.getAllByName(image);
+    String str="";
+        try {
+            String protocol = "http";
+            String host = address.getHostAddress().toString();
+            int port = 4567;
+            String path = image;
+            URL url = new URL (protocol, host, port, path);
+            System.out.println(url.toString()+"?");
+            str=url.toString();
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        }
 
-
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-
+        return str;
     }
 }
