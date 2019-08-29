@@ -1,4 +1,4 @@
-package com.tgfc.library.com.tgfc.library.util;
+package com.tgfc.library.util;
 
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
