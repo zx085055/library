@@ -1,21 +1,20 @@
-package com.tgfc.library.service.imp;
+package com.tgfc.library.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.stereotype.Component;
 
-@Service
-public class SendMailService {
+@Component
+public class MailUtil {
 
-    @Autowired
-    private JavaMailSender mailSender; //框架自帶的
+    private static JavaMailSender mailSender = new JavaMailSenderImpl(); //框架自帶的
 
     @Value("${spring.mail.username}")  //發送人的郵箱  比如155156641XX@163.com
-    private String from;
+    private static String from;
 
-    public void sendMail(String title, String url, String email) {
+    public static void sendMail(String title, String url, String email) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from); // 發送人的郵箱
         message.setSubject(title); //標題
