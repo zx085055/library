@@ -1,18 +1,29 @@
 package com.tgfc.library.service.imp;
 
+import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.entity.Announcement;
+import com.tgfc.library.entity.Employee;
 import com.tgfc.library.repository.IAnnouncementRepository;
+import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.service.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class AnnouncementService implements IAnnouncementService {
 
     @Autowired
     IAnnouncementRepository announcementRepository;
+
+    @Autowired
+    IEmployeeRepository employeeRepository;
 
     @Override
     public Page<Announcement> select(String title, Pageable pageable) {
@@ -25,7 +36,13 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Boolean insert(Announcement announcement) {
-        return null;
+        String id = ContextUtil.getPrincipal().toString();
+
+        Employee employee = employeeRepository.getOne(id);
+        announcement.setCreateTime(new Date());
+        announcement.setEmployee(employee);
+        announcementRepository.save(announcement);
+        return true;
     }
 
     @Override
