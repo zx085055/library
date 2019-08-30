@@ -19,6 +19,6 @@ public class ReservationController {
 
     @PostMapping("/findByTimeInterval")
     public BaseResponse findByTimeIntervalBetween(@RequestBody ReservationPageRequest reservationPageRequest){
-        return reservationService.findByStartDateBetween(reservationPageRequest.getStartDate(),reservationPageRequest.getEndDate(),reservationPageRequest.getPageable());
+        return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(),reservationPageRequest.getEndDate(),reservationPageRequest.getPageable());
     }
 }

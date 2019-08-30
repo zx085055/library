@@ -14,8 +14,13 @@ import java.util.Date;
 public interface IRecordsRepository extends JpaRepository<Records,Integer> {
     @Override
     Records getOne(Integer integer);
+
     @Override
     Page<Records> findAll(Pageable pageable);
+
+//    @Query("SELECT r from Records r where r.name like CONCAT('%',?1,'%')")
+//    Page<Records> getRecordsByNameLike(String name, Pageable pageable);
+
     @Query("SELECT r from Records r where r.borrowDate<=?1 AND r.returnDate>=?2")
     Page<Reservation> findByTimeInterval(Date borrowDate, Date returnDate, Pageable pageable);
 }
