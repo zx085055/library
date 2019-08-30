@@ -21,7 +21,9 @@ public class ResponseAdvice implements ResponseBodyAdvice {
         if (o instanceof BaseResponse) {
             return o;
         } else {
-            return new BaseResponse();
+            BaseResponse response=  new BaseResponse();
+            response.setMessage("回傳物件不支援");
+            return response;
         }
 
     }

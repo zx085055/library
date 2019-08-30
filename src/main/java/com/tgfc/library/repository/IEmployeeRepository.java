@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IEmployeeRepository  extends JpaRepository<Employee,String> {
-    @Query("SELECT r from Employee r where r.email=?1")
-    Boolean existsByEmail(String email);
 }
