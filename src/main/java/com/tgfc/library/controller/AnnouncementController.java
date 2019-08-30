@@ -26,6 +26,11 @@ public class AnnouncementController {
         return announcementService.insert(announcement);
     }
 
+    @PostMapping("/update")
+    public Boolean update(@RequestBody Announcement announcement){
+        return announcementService.update(announcement);
+    }
+
     @PostMapping("/statusChange")
     public Boolean statusChange(@RequestBody Announcement announcement){
         return announcementService.statusChange(announcement);

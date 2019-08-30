@@ -6,6 +6,7 @@ import com.tgfc.library.repository.IAnnouncementRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.service.IAnnouncementService;
 import com.tgfc.library.util.ContextUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +48,15 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Boolean update(Announcement announcement) {
-        return null;
+        String id = ContextUtil.getAuthentication().getName();
+
+        Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
+        existAnnouncement.setStatus(announcement.getStatus());
+        existAnnouncement.setTitle(announcement.getTitle());
+        existAnnouncement.setContext(announcement.getContext());
+        existAnnouncement.setUpdateUsername(id);
+        announcementRepository.save(existAnnouncement);
+        return true;
     }
 
     @Override
@@ -57,10 +66,10 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Boolean statusChange(Announcement announcement) {
-        Announcement ExistAnnouncemen = announcementRepository.findById(announcement.getId()).get();
+        Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
 
-        ExistAnnouncemen.setStatus(announcement.getStatus());
-        announcementRepository.save(ExistAnnouncemen);
+        existAnnouncement.setStatus(announcement.getStatus());
+        announcementRepository.save(existAnnouncement);
         return true;
     }
 }
