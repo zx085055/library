@@ -1,38 +1,19 @@
-package com.tgfc.library.entity;
+package com.tgfc.library.request;
 
-import javax.persistence.*;
+import com.tgfc.library.entity.Book;
+import com.tgfc.library.entity.Employee;
 
-
-import java.io.Serializable;
 import java.util.Date;
 
-@Entity
-@Table(name="records")
-public class Records implements Serializable {
-
-    private static final long serialVersionUID = -2702636334338651966L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RecordsPageRequest extends PageableRequest{
     private Integer id;
-    @Column(nullable = false)
     private String borrowId;
-    @Column(nullable = false)
-    private String borrowUsername;
-    @Column(nullable = false)
     private Date borrowDate;
-    @Column(nullable = false)
     private Date returnDate;
-    @Column(length = 5,nullable = false)
     private Integer Status;
-
-    @ManyToOne
-    @JoinColumn(name = "emp_id")
     private Employee employee;
-
-    @ManyToOne
-    @JoinColumn(name = "book_id")
     private Book book;
+    private String keyword;
 
     public Integer getId() {
         return id;
@@ -48,14 +29,6 @@ public class Records implements Serializable {
 
     public void setBorrowId(String borrowId) {
         this.borrowId = borrowId;
-    }
-
-    public String getBorrowUsername() {
-        return borrowUsername;
-    }
-
-    public void setBorrowUsername(String borrowUsername) {
-        this.borrowUsername = borrowUsername;
     }
 
     public Date getBorrowDate() {
@@ -96,5 +69,13 @@ public class Records implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

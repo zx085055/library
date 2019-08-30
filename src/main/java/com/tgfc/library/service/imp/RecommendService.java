@@ -4,6 +4,7 @@ import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Recommend;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecommendRepository;
+import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecommendService;
 import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.BeanUtils;
@@ -24,46 +25,72 @@ public class RecommendService implements IRecommendService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Recommend> select(String name,Pageable pageable) {
+    public BaseResponse select(String name,Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
         if (name==null){
-            return recommendRepository.findAll(pageable);
-        }else return recommendRepository.getRecommendsByNameLike(name,pageable);
+            Page<Recommend> recommends = recommendRepository.findAll(pageable);
+            baseResponse.setData(recommends.getContent());
+        }else {
+            Page<Recommend> recommends = recommendRepository.getRecommendsByNameLike(name, pageable);
+            baseResponse.setData(recommends.getContent());
+        }
+        baseResponse.setMessage("成功查詢");
+        baseResponse.setStatus(true);
+        return baseResponse;
     }
 
     @Override
     @Transactional
-    public Boolean insert(Recommend recommend) {
-
+    public BaseResponse insert(Recommend recommend) {
+        BaseResponse baseResponse = new BaseResponse();
         Recommend ExistRecommend  = recommendRepository.getRecommendByName(recommend.getName());
         if (ExistRecommend!=null){
-            return false;
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("已存在此紀錄");
+        }else{
+            String id = ContextUtil.getPrincipal().toString();
+            Employee employee = employeeRepository.getOne(id);
+            recommend.setEmployee(employee);
+            recommendRepository.save(recommend);
+            baseResponse.setStatus(true);
+            baseResponse.setMessage("成功新增一筆");
         }
-        String id = ContextUtil.getPrincipal().toString();
-        Employee employee = employeeRepository.getOne(id);
-        recommend.setEmployee(employee);
-        recommendRepository.save(recommend);
-        return true;
+
+        return baseResponse;
     }
 
     @Override
     @Transactional
-    public Boolean update(Recommend recommend) {
-        Recommend oldRecommend = recommendRepository.getOne(recommend.getId());
-        BeanUtils.copyProperties(recommend,oldRecommend);
-        recommendRepository.save(recommend);
-        return true;
+    public BaseResponse update(Recommend recommend) {
+        BaseResponse baseResponse = new BaseResponse();
+        Boolean exist = recommendRepository.existsById(recommend.getId());
+        if (exist){
+            Recommend dateRecommend = recommendRepository.getOne(recommend.getId());
+            BeanUtils.copyProperties(recommend,dateRecommend);
+            recommendRepository.save(dateRecommend);
+            baseResponse.setStatus(true);
+            baseResponse.setMessage("成功更新一筆");
+        }else {
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("無此紀錄");
+        }
+
+        return baseResponse;
     }
 
     @Override
     @Transactional
-    public Boolean delete(Integer id) {
+    public BaseResponse delete(Integer id) {
+        BaseResponse baseResponse = new BaseResponse();
         boolean exist = recommendRepository.existsById(id);
         if (exist){
             recommendRepository.deleteById(id);
-            return true;
+            baseResponse.setStatus(true);
+            baseResponse.setMessage("成功刪除一筆");
         }else {
-            return false;
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("無此紀錄");
         }
-
+        return baseResponse;
     }
 }

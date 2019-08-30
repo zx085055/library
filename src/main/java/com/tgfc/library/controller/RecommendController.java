@@ -2,6 +2,7 @@ package com.tgfc.library.controller;
 
 import com.tgfc.library.entity.Recommend;
 import com.tgfc.library.request.RecommendPageRequest;
+import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,22 +16,22 @@ public class RecommendController {
     IRecommendService recommendService;
 
     @PostMapping("/select")
-    public Page<Recommend> select(@RequestBody RecommendPageRequest recommend){
+    public BaseResponse select(@RequestBody RecommendPageRequest recommend){
         return recommendService.select(recommend.getName(),recommend.getPageable());
     }
 
     @PostMapping("/insert")
-    public Boolean insert(@RequestBody Recommend recommend){
+    public BaseResponse insert(@RequestBody Recommend recommend){
         return recommendService.insert(recommend);
     }
 
     @PutMapping("/update")
-    public Boolean update(@RequestBody Recommend recommend){
+    public BaseResponse update(@RequestBody Recommend recommend){
         return recommendService.update(recommend);
     }
 
     @DeleteMapping("/delete")
-    public Boolean delete(@RequestParam int id){
+    public BaseResponse delete(@RequestParam int id){
         return recommendService.delete(id);
     }
 
