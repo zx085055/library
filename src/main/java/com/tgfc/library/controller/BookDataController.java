@@ -18,8 +18,8 @@ public class BookDataController {
         return bookDataService.getById(id);
     }
 
-    @PostMapping(value = "/api/update")
-    public Page<Book> getKeyWord(@RequestBody BookDataPageRequest model) {
-        return bookDataService.getBookList(model);
-    }
+//    @PostMapping(value = "/api/update")
+//    public Page<Book> getKeyWord(@RequestBody BookDataPageRequest model) {
+//        return bookDataService.getBookList(model);
+//    }
 }

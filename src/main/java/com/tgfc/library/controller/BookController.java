@@ -3,6 +3,7 @@ package com.tgfc.library.controller;
 import com.tgfc.library.entity.Book;
 import com.tgfc.library.request.AddBook;
 import com.tgfc.library.request.BookDataPageRequest;
+import com.tgfc.library.response.BooksResponse;
 import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IPhotoService;
 //import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -24,6 +25,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/book")
@@ -41,51 +43,25 @@ public class BookController {
     }
 
     @PostMapping(value = "/book")
-    public Page<Book> getKeyWord(@RequestBody BookDataPageRequest model) {
+    public List<BooksResponse> getKeyWord(@RequestBody BookDataPageRequest model) {
         return bookDataService.getBookList(model);
     }
 
-    @PostMapping(value = "/book2")
-    public void getKeyWord(@RequestParam("files") MultipartFile files) {
-       // photoService.uploadPhoto(files);
-        return ;
-    }
-
-
     @PostMapping(value = "/addBook")
-    public void addBook(@RequestParam("files") MultipartFile files, String name, String author, String isbn, String pubHouse, String intro, Integer price, Date purchaseDate,Date publishDate,String type) {
-        AddBook addBook=new AddBook();
-        addBook.setName(name);
-        addBook.setAuthor(author);
-        addBook.setIsbn(isbn);
-        addBook.setPubHouse(pubHouse);
-        addBook.setIntro(intro);
-        addBook.setPrice(price);
-        addBook.setPurchaseDate(purchaseDate);
-        addBook.setPublishDate(publishDate);
-        addBook.setType(type);
-           // photoService.uploadPhoto(files,addBook);
-        bookDataService.upData(files,addBook);
-
-    }
-    @RequestMapping("/getPhoto")
-    public String download(HttpServletRequest request, @RequestParam("fileName") String fileName, HttpServletResponse response)throws Exception {
-        String image = photoService.getPhoto(response,fileName);
-        InetAddress address = InetAddress.getLocalHost();
-  //      InetAddress[] a=address.getAllByName(image);
-    String str="";
-        try {
-            String protocol = "http";
-            String host = address.getHostAddress().toString();
-            int port = 8080;
-            String path = image;
-            URL url = new URL (protocol, host, port, path);
-            System.out.println(url.toString()+"?");
-            str=url.toString();
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
+    public boolean addBook(@RequestParam("files") MultipartFile files, AddBook addBook){
+        if(!files.getOriginalFilename().matches(".*.jpg")){
+            return false;
         }
 
-        return str;
+        if(bookDataService.upData(files,addBook))
+        return true;
+        return false;
     }
+//    @RequestMapping("/getPhoto")
+//    public String download(HttpServletRequest request, @RequestParam("fileName") String fileName, HttpServletResponse response)throws Exception {
+//        String image = photoService.getPhotoUrl(fileName);
+//
+//
+//        return image;
+//    }
 }

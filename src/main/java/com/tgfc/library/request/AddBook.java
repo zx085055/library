@@ -4,8 +4,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class AddBook {
-    @NotNull
-    private Integer bookId;
+    private Integer id;
     @NotNull
     private String name;
     @NotNull
@@ -19,29 +18,25 @@ public class AddBook {
     @NotNull
     private Integer price;
     @NotNull
-    private String photoUrl;
-    @NotNull
     private Date purchaseDate;
     @NotNull
     private Date publishDate;
     @NotNull
     private String type;
+    @NotNull
+    private String page;
+    @NotNull
+    private String language;
+    @NotNull
+    private String photoName;
 
 
-    public Integer getBookId() {
-        return bookId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setBookId(Integer bookId) {
-        this.bookId = bookId;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -114,5 +109,31 @@ public class AddBook {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 }

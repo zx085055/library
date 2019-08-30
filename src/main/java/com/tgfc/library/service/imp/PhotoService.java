@@ -4,14 +4,18 @@ import com.tgfc.library.service.IPhotoService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 
 @Service
 public class PhotoService implements IPhotoService {
 
-    String filePath2 = this.getClass().getClassLoader().getResource("").getPath() + "files/";
+    private String imageRuel = File.separator + "image" + File.separator;
 
     @Value("${file.root.path}")
     String filePath;
@@ -20,75 +24,57 @@ public class PhotoService implements IPhotoService {
     private String filePath1;
 
     @Override
-    public void uploadPhoto(MultipartFile file,String newName) {
+    public void uploadPhoto(MultipartFile file, String newName) {
 //        if(file == null || file.length == 0)
 //            throw new FileNotFoundException();
 
 
-            String fileName = file.getOriginalFilename();
-         fileName=newName+".jpg";
-            File dest = new File( this.filePath + fileName);
-            try {
-                if (!dest.getParentFile().exists()) {
-                    dest.getParentFile().mkdirs();
-                }
-                file.transferTo(dest);
-            } catch (IOException e) {
-                e.printStackTrace();
+        String fileName = file.getOriginalFilename();
+        fileName = newName + ".jpg";
+        File dest = new File(this.filePath + fileName);
+        try {
+            if (!dest.getParentFile().exists()) {
+                dest.getParentFile().mkdirs();
             }
+            file.transferTo(dest);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-    @Override
-    public String getPhoto( HttpServletResponse  response,String Photo) {
-
-
-        String path = this.filePath + Photo;
-
-        return path ;
-
-
-//        @Override
-//        public byte[] getPhoto( HttpServletResponse  response,String Photo) {
-//            String path = this.filePath + Photo;
-//            InetAddress address = InetAddress.getLocalHost();
-//            address.getHostAddress();
-//            InputStream in = null;
-//            FileInputStream fis = null;
-//            OutputStream os = null;
-//            byte[] buffer = new byte[1024 * 8];
-//            try {
-//                fis = new FileInputStream(path);
-//                os = response.getOutputStream();
-//                int count = 0;
-//                while ((count = fis.read(buffer)) != -1) {
-//                    os.write(buffer, 0, count);
-//                    os.flush();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                fis.close();
-//                os.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return buffer ;
-
-
-//        Path path = Paths.get(rpath);
-//        byte[] data = new byte[0];
-//
-//        try {
-//            data = Files.readAllBytes(path);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return data;
-
-
     }
 
+    @Override
+    public String getPhotoUrl(String photoFileName) {
+        String urlString="";
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+
+            try {
+                String protocol = "http";
+                String host = address.getHostAddress().toString();
+                int port = 8080;
+                String path = imageRuel + photoFileName;
+                URL url = new URL(protocol, host, port, path);
+                System.out.println(url.toString() + "?");
+                urlString = url.toString();
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+            }
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return urlString;
+
+    }
+    @Override
+    public boolean  deletePhoto(MultipartFile files, String newName) {
+        File file = new File(newName);
+        if (file.isFile() && file.exists()) {
+            file.delete();//"刪除單個檔案"+name+"成功！"
+            return true;
+        }//"刪除單個檔案"+name+"失敗！"
+        return false;
+
+    }
 
 }
