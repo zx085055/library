@@ -18,6 +18,8 @@ public class Records implements Serializable {
     @Column(nullable = false)
     private String borrowId;
     @Column(nullable = false)
+    private String borrowUsername;
+    @Column(nullable = false)
     private Date borrowDate;
     @Column(nullable = false)
     private Date returnDate;
@@ -46,6 +48,14 @@ public class Records implements Serializable {
 
     public void setBorrowId(String borrowId) {
         this.borrowId = borrowId;
+    }
+
+    public String getBorrowUsername() {
+        return borrowUsername;
+    }
+
+    public void setBorrowUsername(String borrowUsername) {
+        this.borrowUsername = borrowUsername;
     }
 
     public Date getBorrowDate() {
