@@ -80,7 +80,6 @@ public class AnnouncementService implements IAnnouncementService {
     }
 
     private Date StrToDate(String str) {
-
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {

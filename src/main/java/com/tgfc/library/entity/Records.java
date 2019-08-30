@@ -16,7 +16,7 @@ public class Records implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
-    private String borrowUsername;
+    private String borrowId;
     @Column(nullable = false)
     private Date borrowDate;
     @Column(nullable = false)
@@ -40,12 +40,12 @@ public class Records implements Serializable {
         this.id = id;
     }
 
-    public String getBorrowUsername() {
-        return borrowUsername;
+    public String getBorrowId() {
+        return borrowId;
     }
 
-    public void setBorrowUsername(String borrowUsername) {
-        this.borrowUsername = borrowUsername;
+    public void setBorrowId(String borrowId) {
+        this.borrowId = borrowId;
     }
 
     public Date getBorrowDate() {
