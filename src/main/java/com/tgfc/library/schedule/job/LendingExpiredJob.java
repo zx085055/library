@@ -1,5 +1,6 @@
-package com.tgfc.library.job;
+package com.tgfc.library.schedule.job;
 
+import com.tgfc.library.service.imp.ScheduleService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -14,6 +15,7 @@ public class LendingExpiredJob implements Job {
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-
+        ScheduleService scheduleService = (ScheduleService)jobExecutionContext.getMergedJobDataMap().get("service");
+        scheduleService.print();
     }
 }

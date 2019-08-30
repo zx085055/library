@@ -1,7 +1,7 @@
 package com.tgfc.library.enums;
 
 public enum ScheduleStatus {
-    ENABLE("1", "起用"),
+    ENABLE("1", "啟用"),
     DISABLE("2", "停用"),
     ;
 

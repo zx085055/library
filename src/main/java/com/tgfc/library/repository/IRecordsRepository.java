@@ -18,10 +18,7 @@ public interface IRecordsRepository extends JpaRepository<Records,Integer> {
     @Override
     Page<Records> findAll(Pageable pageable);
 
-    @Query(value = "SELECT r.*,book.`name`,book.author,book.publish_date\n" +
-            "FROM `records` AS r LEFT JOIN book ON book_id = book.id\n" +
-            "WHERE r.borrow_username like CONCAT('%',?1,'%') OR book.author like CONCAT('%',?1,'%') OR book.`name` like CONCAT('%',?1,'%')\n" +
-            "AND r.`status`=?2", nativeQuery = true)
+    @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE r.borrowUsername LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%') AND r.status=?2")
     Page<Records> getRecordsByNameLikeAndStatus(String name,Integer status, Pageable pageable);
 
     @Query("SELECT r from Records r where r.borrowDate<=?1 AND r.returnDate>=?2")

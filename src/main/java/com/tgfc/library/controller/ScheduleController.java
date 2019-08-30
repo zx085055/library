@@ -20,26 +20,19 @@ public class ScheduleController {
 
 
     /**
-     * TODO 新增排程(驗證)
-     * 傳入值:無
-     * 回傳值:字典檔 { 排程類型 ( 預約到期通知，出借即將到期通知，出借到期通知 )
-     *              ，狀態 ( 啟用，禁用 )
-     *              ，通知時間時與分的大小 }
-     */
-
-    /**
      * TODO 新增排程
      * 傳入值:SchedulePageRequset (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * 回傳值:Boolean
      */
+    @PostMapping("/schedule/create")
+    public BaseResponse create(@RequestBody SchedulePageRequset model) {
+        BaseResponse response = new BaseResponse();
+        response.setData(scheduleService.create(model));
+        response.setMessage("新增成功");
+        response.setStatus(true);
+        return response;
+    }
 
-    /**
-     * TODO 編輯排程(驗證)
-     * 傳入值:排程ID (String)
-     * 回傳值:字典檔 { 排程類型 ( 預約到期通知，出借即將到期通知，出借到期通知 )
-     *              ，狀態 ( 啟用，禁用 )
-     *              ，通知時間時與分的大小 }
-     */
 
     /**
      * TODO 編輯排程
@@ -66,6 +59,14 @@ public class ScheduleController {
      * 傳入值:排程ID
      * 回傳值:Boolean
      */
+    @DeleteMapping("/schedule/delete")
+    public BaseResponse delete(@RequestParam int id) {
+        BaseResponse response = new BaseResponse();
+        response.setData(scheduleService.delete(id));
+        response.setMessage("刪除成功");
+        response.setStatus(true);
+        return response;
+    }
 
 
     /**********測試用，不會留***********/

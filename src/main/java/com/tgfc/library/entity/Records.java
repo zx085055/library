@@ -1,5 +1,7 @@
 package com.tgfc.library.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 
@@ -15,16 +17,16 @@ public class Records implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false)
+    @Column(name="borrow_id",nullable = false)
     private String borrowId;
-    @Column(nullable = false)
+    @Column(name="borrow_username",nullable = false)
     private String borrowUsername;
-    @Column(nullable = false)
+    @Column(name="borrow_date",nullable = false)
     private Date borrowDate;
-    @Column(nullable = false)
+    @Column(name="return_date",nullable = false)
     private Date returnDate;
-    @Column(length = 5,nullable = false)
-    private Integer Status;
+    @Column(name="status",length = 5,nullable = false)
+    private Integer status;
 
     @ManyToOne
     @JoinColumn(name = "emp_id")
@@ -75,11 +77,11 @@ public class Records implements Serializable {
     }
 
     public Integer getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(Integer status) {
-        Status = status;
+        status = status;
     }
 
     public Employee getEmployee() {

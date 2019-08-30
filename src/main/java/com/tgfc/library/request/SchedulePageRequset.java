@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class SchedulePageRequset extends PageableRequest {
     private String id;
+    private String type;
     private String name;
     private Time noticeTime;
     private Date startTime;
@@ -57,5 +58,13 @@ public class SchedulePageRequset extends PageableRequest {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -1,15 +1,19 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Schedule;
+import com.tgfc.library.enums.JobTypeEnum;
 import com.tgfc.library.repository.IScheduleRepository;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.SchedulePageResponse;
+import com.tgfc.library.schedule.job.LendingNearlyExpiredJob;
+import com.tgfc.library.schedule.job.ReservationExpiredJob;
+import com.tgfc.library.schedule.scheduler.MyScheduler;
+import com.tgfc.library.schedule.trigger.OneDayOneTimeTrigger;
 import com.tgfc.library.service.IScheduleService;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
+import org.quartz.CronTrigger;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -18,8 +22,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +34,14 @@ public class ScheduleService implements IScheduleService {
 
     @Autowired
     private EntityManagerFactory emf;
+
+    @Autowired
+    OneDayOneTimeTrigger oneDayOneTimeTrigger;
+
+    @Autowired
+    MyScheduler myScheduler;
+
+
 
 
     /**
@@ -84,6 +94,46 @@ public class ScheduleService implements IScheduleService {
                 }).collect(Collectors.toList());
     }
 
+    /**
+     * 新增排程
+     */
+    @Override
+    public Boolean create(SchedulePageRequset model) {
+        try {
+            JobDetail job = JobBuilder.newJob
+                    (JobTypeEnum.RESERVATION_EXPIRED.getCode().equals(model.getType())? ReservationExpiredJob.class :
+                            JobTypeEnum.LENDING_NEARLY_EXPIRED.getCode().equals(model.getType())? LendingNearlyExpiredJob.class:
+                                    ReservationExpiredJob.class)
+                    .withIdentity(model.getName(), "group")
+                    .build();
+            job.getJobDataMap().put("service",this);
+
+            CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model.getNoticeTime());
+
+
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 刪除排程
+     */
+    @Override
+    public Boolean delete(Integer id) {
+        return null;
+    }
+
+
+
+
+
+    /**********測試用，不會留***********/
 
     @Override
     public Schedule one() {
@@ -102,6 +152,10 @@ public class ScheduleService implements IScheduleService {
     @Override
     public int xxx() {
         return (int) (Math.random() * 42 + 1);
+    }
+
+    public String print(){
+        return "xxx";
     }
 
 
