@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -40,6 +41,7 @@ public class AnnouncementService implements IAnnouncementService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date current = new Date();
         announcement.setCreateTime(simpleDateFormat.format(current));
+        announcement.setEndTime(simpleDateFormat.format(StrToDate(announcement.getEndTime())));
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         return true;
@@ -75,5 +77,17 @@ public class AnnouncementService implements IAnnouncementService {
         existAnnouncement.setStatus(announcement.getStatus());
         announcementRepository.save(existAnnouncement);
         return true;
+    }
+
+    private Date StrToDate(String str) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = null;
+        try {
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }
