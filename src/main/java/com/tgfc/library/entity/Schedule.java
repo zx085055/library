@@ -15,7 +15,7 @@ public class Schedule implements Serializable {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
     @GenericGenerator(name = "generatorName", strategy = "native")
-    private String id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -39,18 +39,18 @@ public class Schedule implements Serializable {
     private Time noticeTime;
 
     @Column(name = "job_name", nullable = false)
-    private Time jobName;
-
+    private String jobName;
 
     @ManyToOne
     @JoinColumn(name = "create_user_id")
     private Employee employee;
 
-    public String getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -118,11 +118,11 @@ public class Schedule implements Serializable {
         this.employee = employee;
     }
 
-    public Time getJobName() {
+    public String getJobName() {
         return jobName;
     }
 
-    public void setJobName(Time jobName) {
+    public void setJobName(String jobName) {
         this.jobName = jobName;
     }
 }

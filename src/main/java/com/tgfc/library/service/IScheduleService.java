@@ -1,5 +1,12 @@
 package com.tgfc.library.service;
 
+import com.tgfc.library.entity.Schedule;
+import com.tgfc.library.request.SchedulePageRequset;
+import com.tgfc.library.response.SchedulePageResponse;
+
+import java.text.ParseException;
+import java.util.List;
+
 public interface IScheduleService {
 
     /**
@@ -32,13 +39,23 @@ public interface IScheduleService {
      */
 
     /**
-     * TODO 查詢排程
-     * 邏輯:通過查詢條件回傳符合條件的排程
+     * 查詢排程
      */
+    List<SchedulePageResponse> list(SchedulePageRequset model) throws ParseException;
 
     /**
      * TODO 批量寄信
      * 邏輯:根據傳入的scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
      *      呼叫MailUtil，達成批量寄信功能
      */
+
+
+
+    /**********測試用，不會留***********/
+
+    Schedule one();
+    Schedule getone();
+    List<Schedule> findAll();
+    int xxx();
+
 }
