@@ -17,8 +17,14 @@ public class ReservationController {
         return reservationService.findByBookId(bookId);
     }
 
-    @PostMapping("/findByTimeInterval")
+    @PostMapping("/findByDate")
     public BaseResponse findByTimeIntervalBetween(@RequestBody ReservationPageRequest reservationPageRequest){
         return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(),reservationPageRequest.getEndDate(),reservationPageRequest.getPageable());
     }
+
+    @GetMapping("/cancelReservation")
+    public BaseResponse cancel(@RequestParam Integer reservId){
+        return  reservationService.cancleReservation(reservId);
+    }
+
 }

@@ -20,4 +20,5 @@ public interface IReservationRepository extends JpaRepository<Reservation,Intege
 
     @Query(value = "select r from Reservation r inner join r.book b where b.id = ?1")
     Reservation findByBookId(Integer bookId);
+
 }

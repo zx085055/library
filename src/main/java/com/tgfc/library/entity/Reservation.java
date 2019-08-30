@@ -1,11 +1,16 @@
 package com.tgfc.library.entity;
 
+
+
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "reservation")
+@DynamicUpdate(value = true)
 public class Reservation implements Serializable {
 
     private static final long serialVersionUID = -7882108325770269313L;

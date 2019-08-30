@@ -108,4 +108,17 @@ public class ReservationService implements IReservationService {
         }
         return baseResponse;
     }
+
+    @Override
+    public BaseResponse cancleReservation(Integer reservationId) {
+        BaseResponse baseResponse = new BaseResponse();
+        Boolean exist = reservationRepository.existsById(reservationId);
+        if (exist){
+            Reservation reservation = new Reservation();
+            reservation.setStatus(1);
+            reservation.setId(reservationId);
+            reservationRepository.save(reservation);
+        }
+        return null;
+    }
 }
