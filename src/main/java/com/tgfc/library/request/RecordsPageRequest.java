@@ -13,6 +13,7 @@ public class RecordsPageRequest extends PageableRequest{
     private Integer Status;
     private Employee employee;
     private Book book;
+    private String keyword;
 
     public Integer getId() {
         return id;
@@ -68,5 +69,13 @@ public class RecordsPageRequest extends PageableRequest{
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }
