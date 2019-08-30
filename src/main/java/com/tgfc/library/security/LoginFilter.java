@@ -2,9 +2,7 @@ package com.tgfc.library.security;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tgfc.library.advice.CommonResponse;
-import com.tgfc.library.advice.LoginResponse;
-import com.tgfc.library.enums.AuthenticationErrorCode;
+import com.tgfc.library.response.BaseResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +26,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
 
-                LoginResponse response =new LoginResponse(true,authentication.getPrincipal());
+                BaseResponse response =new BaseResponse();
+                response.setStatus(true);
+                response.setData(authentication.getPrincipal());
                 httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
                 httpServletResponse.getWriter().println(mapper.writeValueAsString(response));
             }
@@ -37,7 +37,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         this.setAuthenticationFailureHandler(new AuthenticationFailureHandler() {
             @Override
             public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                CommonResponse response =new CommonResponse(AuthenticationErrorCode.LOGIN_FAILED,e.getMessage());
+                BaseResponse response =new BaseResponse();
+                response.setStatus(false);
+                response.setMessage(e.getMessage());
                 httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
                 httpServletResponse.setStatus(500);
                 httpServletResponse.getWriter().println(mapper.writeValueAsString(response));

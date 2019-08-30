@@ -1,10 +1,9 @@
 package com.tgfc.library.advice;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.tgfc.library.advice.CommonResponse;
-import com.tgfc.library.enums.AuthenticationErrorCode;
 import com.tgfc.library.enums.ErrorCodeException;
 import com.tgfc.library.enums.ParamErrorCode;
+import com.tgfc.library.response.BaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -23,41 +22,50 @@ public class ExeceptionAdvice {
     @ResponseBody
     ResponseEntity handleException(Exception e) throws Exception {
 
+        BaseResponse response = new BaseResponse();
+        response.setStatus(false);
         if (e instanceof BindException) {
-            return ResponseEntity.status(400).body(new CommonResponse(false, ParamErrorCode.PARAMETER_ERROR, ((BindException) e).getFieldError().getDefaultMessage()));
+            response.setMessage(((BindException) e).getFieldError().getDefaultMessage());
+            return ResponseEntity.status(400).body(response);
         } else if(e instanceof MethodArgumentTypeMismatchException){
             //路由綁定失敗
             String  fieldName=((MethodArgumentTypeMismatchException) e).getName();
             Object value = ((MethodArgumentTypeMismatchException) e).getValue();
-            return ResponseEntity.status(400).body(new CommonResponse(false, ParamErrorCode.PARAMETER_ERROR, fieldName + " : " + value));
+            response.setMessage(fieldName + " : " + value);
+            return ResponseEntity.status(400).body(response);
         } else if (e instanceof MethodArgumentNotValidException) {
             //hibernate @Validated 驗證失敗
             FieldError fieldError = ((MethodArgumentNotValidException) e).getBindingResult().getFieldError();
             String fieldName = fieldError.getField();
-            String msg = fieldError.getDefaultMessage();
+
             try {
-                AuthenticationErrorCode auth = AuthenticationErrorCode.valueOf(msg);
-                return ResponseEntity.status(403).body(new CommonResponse(false, auth, fieldName));
+                response.setMessage(fieldName);
+                return ResponseEntity.status(403).body(response);
             } catch (IllegalArgumentException e1) {
-                return ResponseEntity.status(400).body(new CommonResponse(false, ParamErrorCode.PARAMETER_ERROR, fieldName + " : " + msg));
+                response.setMessage(fieldName);
+                return ResponseEntity.status(400).body(response);
             }
         } else if (e instanceof ErrorCodeException) {
             //自定義驗證失敗
-            return ResponseEntity.status(500).body(new CommonResponse(false, ((ErrorCodeException) e).getErrorCode(), e.getMessage()));
+            response.setMessage(e.getMessage());
+            return ResponseEntity.status(500).body(response);
         } else if (e instanceof AccessDeniedException) {
             //@PreAuthorize 驗證失敗 直接丟出統一由SecurityExceptionHandler管理
             throw e;
         } else if(e instanceof HttpMessageNotReadableException) {
             //enum convert 錯誤
             if(e.getCause() instanceof InvalidFormatException){
-                return ResponseEntity.status(400).body(new CommonResponse(false,ParamErrorCode.PARAMETER_ERROR,((InvalidFormatException) e.getCause()).getPath().get(0).getFieldName()));
+                response.setMessage(((InvalidFormatException) e.getCause()).getPath().get(0).getFieldName());
+                return ResponseEntity.status(400).body(response);
             }else{
                 e.printStackTrace();
-                return ResponseEntity.status(500).body(new CommonResponse(false, null, e.getMessage()));
+                response.setMessage(e.getMessage());
+                return ResponseEntity.status(500).body(response);
             }
         }else{
             e.printStackTrace();
-            return ResponseEntity.status(500).body(new CommonResponse(false, null, e.getMessage()));
+            response.setMessage(e.getMessage());
+            return ResponseEntity.status(500).body(response);
         }
 
     }
