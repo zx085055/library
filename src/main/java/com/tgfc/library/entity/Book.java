@@ -14,9 +14,9 @@ public class Book implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
     @GenericGenerator(name = "generatorName", strategy = "native")
     private Integer id;
-    @Column(name="name",length = 50,nullable = false)
+    @Column(name="name",length = 100,nullable = false)
     private String name;
-    @Column(name = "author",length = 30,nullable = false)
+    @Column(name = "author",length = 100,nullable = false)
     private String author;
     @Column(name = "isbn",length = 30,nullable = false)
     private String isbn;
@@ -38,7 +38,7 @@ public class Book implements Serializable {
     private String type;
     @Column(name = "page",length = 10,nullable = false)
     private String page;
-    @Column(name="language",length = 20,nullable = false)
+    @Column(name="language",length = 20,nullable = false )
     private String language;
 
     public Integer getId() {

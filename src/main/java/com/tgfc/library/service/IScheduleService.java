@@ -17,8 +17,8 @@ public interface IScheduleService {
     /**
      * TODO 新增排程
      * 邏輯:根據排程類型選擇Job，預設每日執行一次通知，
-     *      Job的name與group和Trigger的group相同，Trigger為每日x點(待確認)執行
-     *      讀取表得到需要通知的對象名單scheduleMailListModel (收件人，收件人信箱，書名，到期日期)
+     *      Job的name與group和Trigger的group相同，Trigger為每日x點x分執行
+     *      讀取表得到需要通知的對象名單scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
      */
 
     /**
@@ -38,7 +38,7 @@ public interface IScheduleService {
 
     /**
      * TODO 批量寄信
-     * 邏輯:根據傳入的scheduleMailListModel (收件人，收件人信箱，書名，到期日期)
+     * 邏輯:根據傳入的scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
      *      呼叫MailUtil，達成批量寄信功能
      */
 }

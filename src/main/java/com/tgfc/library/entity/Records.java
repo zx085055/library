@@ -16,6 +16,8 @@ public class Records implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
+    private String borrowUsername;
+    @Column(nullable = false)
     private Date borrowDate;
     @Column(nullable = false)
     private Date returnDate;
@@ -27,7 +29,7 @@ public class Records implements Serializable {
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "book_id")
     private Book book;
 
     public Integer getId() {
@@ -36,6 +38,14 @@ public class Records implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getBorrowUsername() {
+        return borrowUsername;
+    }
+
+    public void setBorrowUsername(String borrowUsername) {
+        this.borrowUsername = borrowUsername;
     }
 
     public Date getBorrowDate() {
