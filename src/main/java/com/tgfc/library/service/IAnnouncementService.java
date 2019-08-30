@@ -9,4 +9,5 @@ public interface IAnnouncementService {
     Boolean insert(Announcement announcement);
     Boolean update(Announcement announcement);
     Boolean delete(Integer id);
+    Boolean statusChange(Announcement announcement);
 }

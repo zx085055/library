@@ -34,13 +34,12 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Boolean insert(Announcement announcement) {
-        String id = String.valueOf(ContextUtil.getPrincipal());
+        String id = ContextUtil.getAuthentication().getName();
 
         Employee employee = employeeRepository.findById(id).get();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date current = new Date();
         announcement.setCreateTime(simpleDateFormat.format(current));
-        announcement.setEndTime(simpleDateFormat.format(current));
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         return true;
@@ -54,5 +53,14 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public Boolean delete(Integer id) {
         return null;
+    }
+
+    @Override
+    public Boolean statusChange(Announcement announcement) {
+        Announcement ExistAnnouncemen = announcementRepository.findById(announcement.getId()).get();
+
+        ExistAnnouncemen.setStatus(announcement.getStatus());
+        announcementRepository.save(ExistAnnouncemen);
+        return true;
     }
 }

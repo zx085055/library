@@ -3,6 +3,7 @@ package com.tgfc.library.security;
 import com.tgfc.library.entity.Employee;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.response.EmployeeResponse;
+import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -49,6 +50,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
         String[] permissions =getPermissionsList(loginUser);
         EmployeeResponse principle =EmployeeResponse.valueOf(loginUser);
         principle.setPermissions(Arrays.asList(permissions));
+        ContextUtil.setAuthentication(authentication);//TODO 測試用
         return new UsernamePasswordAuthenticationToken(principle,null, AuthorityUtils.createAuthorityList(permissions));
     }
 
