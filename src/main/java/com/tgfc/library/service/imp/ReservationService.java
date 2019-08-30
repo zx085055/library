@@ -84,7 +84,7 @@ public class ReservationService implements IReservationService {
 
 
     @Override
-    public BaseResponse findByStartDateBetween(Date startDate, Date endDate, Pageable pageable) {
+    public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate,pageable);
         baseResponse.setData(reservations.getContent());
