@@ -38,9 +38,9 @@ public class LibrarySecurityConfig {
             http.csrf().disable();
             http.headers().frameOptions().sameOrigin();
 
-            http.cors().and().antMatcher("/**")
+            http.cors().and().regexMatcher("/.*")
                     .authorizeRequests()
-                    .antMatchers("/*")
+                    .regexMatchers("/.*")
                     .authenticated()
                     .and()
                     .requestCache()
