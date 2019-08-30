@@ -9,13 +9,13 @@ public class Announcement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(length = 30,nullable = false)
+    @Column(length = 30, nullable = false)
     private String title;
     @Column(length = 100)
     private String context;
-    @Column(name = "create_time",nullable = false)
+    @Column(name = "create_time", nullable = false)
     private String createTime;
-    @Column(name = "end_time",nullable = false)
+    @Column(name = "end_time", nullable = false)
     private String endTime;
     @Column(nullable = false)
     private Boolean status;

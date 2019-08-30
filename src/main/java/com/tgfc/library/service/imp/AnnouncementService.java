@@ -6,7 +6,6 @@ import com.tgfc.library.repository.IAnnouncementRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.service.IAnnouncementService;
 import com.tgfc.library.util.ContextUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,10 +25,10 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Page<Announcement> select(String title, Pageable pageable) {
-        if (title == null){
+        if (title == null) {
             return announcementRepository.findAll(pageable);
-        }else {
-            return announcementRepository.getAnnouncementsByNameLike(title,pageable);
+        } else {
+            return announcementRepository.getAnnouncementsByNameLike(title, pageable);
         }
     }
 
@@ -61,7 +60,12 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     public Boolean delete(Integer id) {
-        return null;
+        if (!announcementRepository.existsById(id)) {
+            return false;
+        }
+
+        announcementRepository.deleteById(id);
+        return true;
     }
 
     @Override
