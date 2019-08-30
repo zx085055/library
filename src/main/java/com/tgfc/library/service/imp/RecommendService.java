@@ -48,9 +48,9 @@ public class RecommendService implements IRecommendService {
     @Override
     @Transactional
     public Boolean update(Recommend recommend) {
-        Recommend oldRecommend = recommendRepository.getOne(recommend.getId());
-        BeanUtils.copyProperties(recommend,oldRecommend);
-        recommendRepository.save(recommend);
+        Recommend dateRecommend = recommendRepository.getOne(recommend.getId());
+        BeanUtils.copyProperties(recommend,dateRecommend);
+        recommendRepository.save(dateRecommend);
         return true;
     }
 
