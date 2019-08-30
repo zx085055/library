@@ -37,9 +37,9 @@ public class SecurityConfig {
             http.csrf().disable();
             http.headers().frameOptions().sameOrigin();
 
-            http.cors().and().regexMatcher("/.*")
+            http.cors().and().antMatcher("/api/**")
                     .authorizeRequests()
-                    .regexMatchers("/.*")
+                    .antMatchers("/api/**")
                     .authenticated()
                     .and()
                     .requestCache()

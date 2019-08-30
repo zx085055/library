@@ -13,8 +13,8 @@ public class BooksResponse {
     private String pubHouse;
     private Date publishDate;
     private String type;
-
     private String originalName;
+    private String status;
 
     public Integer getId() {
         return id;
@@ -78,5 +78,13 @@ public class BooksResponse {
 
     public void setOriginalName(String originalName) {
         this.originalName = originalName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

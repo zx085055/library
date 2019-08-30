@@ -29,7 +29,16 @@ public class AddBook {
     private String language;
     @NotNull
     private String photoName;
+    @NotNull
+    private String status;
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;

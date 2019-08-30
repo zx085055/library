@@ -40,6 +40,9 @@ public class Book implements Serializable {
     private String page;
     @Column(name="language",length = 20,nullable = false )
     private String language;
+    @Column(name="status",length = 2,nullable = false )
+    private String status;
+
 
     public Integer getId() {
         return id;
@@ -159,5 +162,13 @@ public class Book implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -25,10 +25,6 @@ public class PhotoService implements IPhotoService {
 
     @Override
     public void uploadPhoto(MultipartFile file, String newName) {
-//        if(file == null || file.length == 0)
-//            throw new FileNotFoundException();
-
-
         String fileName = file.getOriginalFilename();
         fileName = newName + ".jpg";
         File dest = new File(this.filePath + fileName);

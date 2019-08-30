@@ -13,10 +13,10 @@ public class BookDataController {
     @Autowired
     IBookService bookDataService;
 
-    @GetMapping(value = "/api/update")
-    public Book get(@RequestParam("id") Integer id) {
-        return bookDataService.getById(id);
-    }
+//    @GetMapping(value = "/api/update")
+//    public BaseResponse get(@RequestParam("id") Integer id) {
+//        return bookDataService.getById(id);
+//    }
 
 //    @PostMapping(value = "/api/update")
 //    public Page<Book> getKeyWord(@RequestBody BookDataPageRequest model) {
