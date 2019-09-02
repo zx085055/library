@@ -23,7 +23,7 @@ public class Records implements Serializable {
     private String borrowUsername;
     @Column(name="borrow_date",nullable = false)
     private Date borrowDate;
-    @Column(name="return_date",nullable = false)
+    @Column(name="return_date")
     private Date returnDate;
     @Column(name="status",length = 5,nullable = false)
     private Integer status;

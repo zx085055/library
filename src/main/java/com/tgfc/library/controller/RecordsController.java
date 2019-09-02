@@ -1,5 +1,7 @@
 package com.tgfc.library.controller;
 
+import com.tgfc.library.entity.Announcement;
+import com.tgfc.library.entity.Records;
 import com.tgfc.library.request.RecordsPageRequest;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
@@ -16,6 +18,21 @@ public class RecordsController {
     @PostMapping("/select")
     public BaseResponse select(@RequestBody RecordsPageRequest records) {
         return recordsService.select(records.getKeyword(), records.getStatus(), records.getPageable());
+    }
+
+    @GetMapping("/insert")
+    public BaseResponse insert(@RequestParam String accountId) {
+        return recordsService.insert(accountId);
+    }
+
+    @PutMapping("/update")
+    public BaseResponse update(@RequestBody Records records) {
+        return recordsService.update(records);
+    }
+
+    @DeleteMapping("/delete")
+    public BaseResponse delete(@RequestParam int id){
+        return recordsService.delete(id);
     }
 
     @PostMapping("/returnNotify")

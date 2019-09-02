@@ -44,10 +44,9 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public BaseResponse insert(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
-        String id = ContextUtil.getAuthentication().getName();
+        String id = ContextUtil.getPrincipal().toString();
 
         Employee employee = employeeRepository.findById(id).get();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date current = new Date();
         announcement.setCreateTime(current);
         announcement.setEmployee(employee);
@@ -60,7 +59,7 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public BaseResponse update(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
-        String id = ContextUtil.getAuthentication().getName();
+        String id = ContextUtil.getPrincipal().toString();
 
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setStatus(announcement.getStatus());
