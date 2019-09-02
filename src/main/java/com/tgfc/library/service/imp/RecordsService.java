@@ -11,9 +11,9 @@ import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+import java.util.Date;
+
 @Service
 public class RecordsService implements IRecordsService {
     @Autowired
@@ -54,7 +54,13 @@ public class RecordsService implements IRecordsService {
     public BaseResponse returnBook(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         Records records = recordsRepository.findById(id).get();
+        Date current = new Date();
+        records.setReturnDate(current);
         records.setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
-        return null;
+        records.getBook().setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
+        baseResponse.setData(recordsRepository.save(records));
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("歸還成功");
+        return baseResponse;
     }
 }

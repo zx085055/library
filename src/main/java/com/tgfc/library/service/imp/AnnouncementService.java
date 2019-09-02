@@ -49,7 +49,7 @@ public class AnnouncementService implements IAnnouncementService {
         Employee employee = employeeRepository.findById(id).get();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date current = new Date();
-        announcement.setCreateTime(strToDate(simpleDateFormat.format(current)));
+        announcement.setCreateTime(current);
         announcement.setEmployee(employee);
         baseResponse.setData(announcementRepository.save(announcement));
         baseResponse.setStatus(true);
@@ -97,16 +97,5 @@ public class AnnouncementService implements IAnnouncementService {
         baseResponse.setStatus(true);
         baseResponse.setMessage("切換成功");
         return baseResponse;
-    }
-
-    private Date strToDate(String str) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = null;
-        try {
-            date = format.parse(str);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
     }
 }

@@ -41,7 +41,7 @@ public class Book implements Serializable {
     @Column(name="language",length = 20,nullable = false )
     private String language;
     @Column(name="status",length = 2,nullable = false )
-    private String status;
+    private Integer status;
 
 
     public Integer getId() {
@@ -164,11 +164,11 @@ public class Book implements Serializable {
         this.type = type;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }
