@@ -1,42 +1,24 @@
 package com.tgfc.library.enums;
 
 public enum BookStatus {
-    LEND("1", "出借中"),
-    INSIDE("2", "在館中"),
-    LOST("3", "遺失"),
-    BROKEN("4", "破損"),
+    BOOK_STATUS_LEND(1, "出借中"),
+    BOOK_STATUS_INSIDE(2, "在館中"),
+    BOOK_STATUS_LOST(3, "遺失"),
+    BOOK_STATUS_BROKEN(4, "破損"),
+    BOOK_STATUS_NOT_RETURNED(5, "未歸還");
 
-    NOTRETURNED("5", "未歸還");
-
-    private String code;
+    private Integer code;
     private String trans;
-    BookStatus(String code, String trans) {
+    BookStatus(Integer code, String trans) {
         this.code = code;
         this.trans = trans;
     }
 
-    public static BookStatus getStatus(String i){
-        switch(i){
-            case "1":
-                return LEND;
-            case "2":
-                return INSIDE;
-            case "3":
-                return LOST;
-            case "4":
-                return BROKEN;
-            default:
-                return null;
-        }
-    }
-
-
-
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

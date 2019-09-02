@@ -1,6 +1,7 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Records;
+import com.tgfc.library.enums.BookStatus;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecordsRepository;
 import com.tgfc.library.request.SendMailRequest;
@@ -45,5 +46,13 @@ public class RecordsService implements IRecordsService {
         baseResponse.setStatus(true);
         baseResponse.setMessage("通知成功");
         return baseResponse;
+    }
+
+    @Override
+    public BaseResponse returnBook(Integer id) {
+        BaseResponse baseResponse = new BaseResponse();
+        Records records = recordsRepository.findById(id).get();
+        records.setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
+        return null;
     }
 }
