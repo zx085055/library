@@ -62,7 +62,7 @@ public class Reservation implements Serializable {
     }
 
     public void setStatus(Integer status) {
-        status = status;
+        this.status = status;
     }
 
     public Employee getEmployee() {

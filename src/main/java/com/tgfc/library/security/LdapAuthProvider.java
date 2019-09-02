@@ -48,7 +48,9 @@ public class LdapAuthProvider implements AuthenticationProvider {
             }
         }
         String[] permissions =getPermissionsList(loginUser);
-        return new UsernamePasswordAuthenticationToken(loginUser.getId(),null, AuthorityUtils.createAuthorityList(permissions));
+        EmployeeResponse principle =EmployeeResponse.valueOf(loginUser);
+        principle.setPermissions(Arrays.asList(permissions));
+        return new UsernamePasswordAuthenticationToken(principle,null, AuthorityUtils.createAuthorityList(permissions));
     }
 
     private String[] getPermissionsList(Employee loginUser) {
