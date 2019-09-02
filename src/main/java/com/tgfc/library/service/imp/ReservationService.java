@@ -11,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -126,6 +125,16 @@ public class ReservationService implements IReservationService {
             baseResponse.setStatus(false);
             baseResponse.setMessage("無此預約");
         }
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findAll(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        Page<Reservation> all = reservationRepository.findAll(pageable);
+        baseResponse.setData(all.getContent());
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
         return baseResponse;
     }
 }

@@ -2,6 +2,7 @@ package com.tgfc.library.entity;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -25,10 +26,12 @@ public class Reservation implements Serializable {
     @Column(length = 1,nullable = false)
     private Integer status;
 
-    @ManyToOne(targetEntity = Employee.class)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "employee_id",referencedColumnName = "id")
     private Employee employee;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "book_id",referencedColumnName = "id")
     private Book book;

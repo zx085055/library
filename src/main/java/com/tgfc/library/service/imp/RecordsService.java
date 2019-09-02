@@ -102,7 +102,7 @@ public class RecordsService implements IRecordsService {
         Date current = new Date();
         records.setReturnDate(current);
         records.setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
-        records.getBook().setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
+        //records.getBook().setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
         baseResponse.setData(recordsRepository.save(records));
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");
