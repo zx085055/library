@@ -25,7 +25,7 @@ public class ContextUtil {
     }
 
     public static String getAccount (){
-        return ((EmployeeResponse)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAccount();
+        return ((EmployeeResponse)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getAccount().toUpperCase();
 
     }
 }

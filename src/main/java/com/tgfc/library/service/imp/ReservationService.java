@@ -47,7 +47,7 @@ public class ReservationService implements IReservationService {
     public BaseResponse insert(Reservation reservation) {
         BaseResponse baseResponse = new BaseResponse();
         Integer bookId = reservation.getBook().getBookId();
-        String empId = ContextUtil.getPrincipal().toString();
+        String empId = ContextUtil.getAccount();
         Reservation exist = reservationRepository.findByBookId(bookId,empId);
         if(exist!=null){
             baseResponse.setMessage("已有此預約");
