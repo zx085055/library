@@ -111,7 +111,7 @@ public class MyScheduler {
     /**
      * 刪除全部job
      */
-    public void deleteAllJobs(){
+    public Boolean deleteAllJobs(){
         try {
             for (String groupName : scheduler.getJobGroupNames()) {
                 for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
@@ -128,6 +128,7 @@ public class MyScheduler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
     }
 
 

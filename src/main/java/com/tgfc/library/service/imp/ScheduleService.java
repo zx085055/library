@@ -56,7 +56,8 @@ public class ScheduleService implements IScheduleService, Serializable {
      * 動態查詢各參數(排程名稱，起始時間，結束時間)
      */
     @Override
-    public List<SchedulePageResponse> list(SchedulePageRequset model) throws ParseException {
+    public BaseResponse list(SchedulePageRequset model) throws ParseException {
+        BaseResponse response = new BaseResponse();
         EntityManager entityManager = emf.createEntityManager();
         EntityTransaction etx = entityManager.getTransaction();
         etx.begin();
@@ -82,7 +83,10 @@ public class ScheduleService implements IScheduleService, Serializable {
 
         query = query.select(rootEntity).where(predicate);
         List<Schedule> list = entityManager.createQuery(query).getResultList();
-        return schedule2Response(list);
+        response.setData(schedule2Response(list));
+        response.setMessage("查詢成功");
+        response.setStatus(true);
+        return response;
     }
 
     /**
@@ -176,6 +180,15 @@ public class ScheduleService implements IScheduleService, Serializable {
         return response;
     }
 
+    @Override
+    public BaseResponse deleteAllJobs() {
+        BaseResponse response = new BaseResponse();
+        response.setData(myScheduler.deleteAllJobs());
+        response.setMessage("全部刪除完成");
+        response.setStatus(true);
+        return response;
+    }
+
 
     /**
      * 刪除排程
@@ -185,12 +198,7 @@ public class ScheduleService implements IScheduleService, Serializable {
         return null;
     }
 
-    /**
-     * 刪除全部排程
-     */
-    public Boolean deleteAll(Integer id) {
-        return null;
-    }
+
 
 
     /**********測試用，不會留***********/

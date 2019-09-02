@@ -45,7 +45,7 @@ public interface IScheduleService  {
     /**
      * 查詢排程
      */
-    List<SchedulePageResponse> list(SchedulePageRequset model) throws ParseException;
+    BaseResponse list(SchedulePageRequset model) throws ParseException;
 
     /**
      * TODO 批量寄信
@@ -58,6 +58,10 @@ public interface IScheduleService  {
      */
     BaseResponse changeStatus(int id);
 
+    /**
+     * 刪除全部排程
+     */
+    BaseResponse deleteAllJobs();
 
 
     /**********測試用，不會留***********/

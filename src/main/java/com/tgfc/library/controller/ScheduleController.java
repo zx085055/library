@@ -48,11 +48,7 @@ public class ScheduleController {
      */
     @PostMapping("/schedule/list")
     public BaseResponse list(@RequestBody SchedulePageRequset model) throws ParseException {
-        BaseResponse response = new BaseResponse();
-        response.setData(scheduleService.list(model));
-        response.setMessage("查詢成功");
-        response.setStatus(true);
-        return response;
+        return scheduleService.list(model);
     }
 
     /**
@@ -70,6 +66,7 @@ public class ScheduleController {
     }
 
     /**
+     * 改變排程狀態 ( 啟用 <---> 禁用 )
      * 傳入值:排程ID
      * 回傳:Boolean
      */
@@ -80,6 +77,13 @@ public class ScheduleController {
         return response;
     }
 
+    /**
+     * 刪除全部排程
+     */
+    @GetMapping("/schedule/getAll")
+    public BaseResponse getAllJobs() {
+        return scheduleService.deleteAllJobs();
+    }
 
     /**********測試用，不會留***********/
 
@@ -101,9 +105,6 @@ public class ScheduleController {
         return scheduleService.findAll();
     }
 
-    @GetMapping("/schedule/getAll")
-    public void getAllJobs() {
-        myScheduler.deleteAllJobs();
-    }
+
 
 }
