@@ -14,6 +14,7 @@ import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -119,6 +120,26 @@ public class RecordsService implements IRecordsService {
         baseResponse.setData(recordsRepository.save(records));
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findAll(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        Page<Records> records = recordsRepository.findAll(pageable);
+        baseResponse.setData(records.getContent());
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        Page<Reservation> reservations = recordsRepository.findByTimeInterval(startDate, endDate,pageable);
+        baseResponse.setData(reservations.getContent());
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
         return baseResponse;
     }
 }

@@ -1,6 +1,7 @@
 package com.tgfc.library.controller;
 
 import com.tgfc.library.entity.Records;
+import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.request.RecordsPageRequest;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
@@ -42,6 +43,16 @@ public class RecordsController {
     @GetMapping("/returnBook")
     public BaseResponse returnBook(@RequestParam Integer id) {
         return recordsService.returnBook(id);
+    }
+
+    @PostMapping("/findAll")
+    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
+        return recordsService.findAll(pageableRequest.getPageable());
+    }
+
+    @PostMapping("/findByDate")
+    public BaseResponse findByTimeIntervalBetween(@RequestBody RecordsPageRequest recordsPageRequest){
+        return recordsService.findByTimeInterval(recordsPageRequest.getBorrowDate(),recordsPageRequest.getReturnDate(),recordsPageRequest.getPageable());
     }
 
 }

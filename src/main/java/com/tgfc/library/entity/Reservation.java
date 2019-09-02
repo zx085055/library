@@ -27,12 +27,10 @@ public class Reservation implements Serializable {
     @Column(length = 30, nullable = false)
     private String reserveUsername;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
@@ -83,5 +81,13 @@ public class Reservation implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public String getReserveUsername() {
+        return reserveUsername;
+    }
+
+    public void setReserveUsername(String reserveUsername) {
+        this.reserveUsername = reserveUsername;
     }
 }
