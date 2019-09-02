@@ -13,9 +13,9 @@ public class Records implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name="borrow_id",nullable = false)
+    @Column(name="borrow_id",length = 10,nullable = false)
     private String borrowId;
-    @Column(name="borrow_username",nullable = false)
+    @Column(name="borrow_username",length = 30,nullable = false)
     private String borrowUsername;
     @Column(name="borrow_date",nullable = false)
     private Date borrowDate;
@@ -77,7 +77,7 @@ public class Records implements Serializable {
     }
 
     public void setStatus(Integer status) {
-        status = status;
+        this.status = status;
     }
 
     public Employee getEmployee() {

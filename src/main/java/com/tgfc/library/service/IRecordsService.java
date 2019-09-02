@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface IRecordsService {
     BaseResponse select(String name,Integer status, Pageable pageable);
-    BaseResponse insert(String accountId);
+    BaseResponse insert(Records records);
     BaseResponse update(Records records);
     BaseResponse delete(Integer id);
     BaseResponse returnNotify(SendMailRequest model);

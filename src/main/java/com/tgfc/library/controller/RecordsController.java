@@ -19,9 +19,9 @@ public class RecordsController {
         return recordsService.select(records.getKeyword(), records.getStatus(), records.getPageable());
     }
 
-    @GetMapping("/insert")
-    public BaseResponse insert(@RequestParam String accountId) {
-        return recordsService.insert(accountId);
+    @PostMapping("/insert")
+    public BaseResponse insert(@RequestBody Records records) {
+        return recordsService.insert(records);
     }
 
     @PutMapping("/update")

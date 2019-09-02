@@ -3,6 +3,7 @@ package com.tgfc.library.service.imp;
 import com.tgfc.library.entity.Book;
 import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Records;
+import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.BookStatus;
 import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
@@ -12,6 +13,7 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
 import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,15 +48,14 @@ public class RecordsService implements IRecordsService {
     }
 
     @Override
-    public BaseResponse insert(String accountId) {
+    public BaseResponse insert(Records records) {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
 
-        Records records = new Records();
         Employee employee = employeeRepository.findById(id).get();
         Book book = bookRepository.findById(records.getBook().getBookId()).get();
         Date current = new Date();
-        records.setBorrowUsername(employee.getName());
+        records.setBorrowUsername(employeeRepository.findById(records.getBorrowId()).get().getName());
         records.setStatus(BookStatus.BOOK_STATUS_LEND.getCode());
         records.setBorrowDate(current);
         records.setEmployee(employee);
@@ -67,7 +68,18 @@ public class RecordsService implements IRecordsService {
 
     @Override
     public BaseResponse update(Records records) {
-        return null;
+        BaseResponse baseResponse = new BaseResponse();
+        if (!recordsRepository.existsById(records.getId())){
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("無此資料");
+        }
+
+        Records dataReserv = recordsRepository.findById(records.getId()).get();
+        BeanUtils.copyProperties(records,dataReserv);
+        baseResponse.setData(recordsRepository.save(dataReserv));
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("修改成功");
+        return baseResponse;
     }
 
     @Override
