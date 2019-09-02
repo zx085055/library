@@ -26,7 +26,7 @@ public class Recommend implements Serializable {
     @Column(nullable = false)
     private Date publishDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "emp_id",referencedColumnName = "id")
     private Employee employee;
 
