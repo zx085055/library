@@ -3,6 +3,7 @@ package com.tgfc.library.service.imp;
 import com.tgfc.library.entity.Book;
 import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Records;
+import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.BookStatus;
 import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IEmployeeRepository;

@@ -74,6 +74,14 @@ public class Records implements Serializable {
         this.returnDate = returnDate;
     }
 
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -97,4 +105,5 @@ public class Records implements Serializable {
     public void setBook(Book book) {
         this.book = book;
     }
+
 }
