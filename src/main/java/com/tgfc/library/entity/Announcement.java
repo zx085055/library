@@ -2,6 +2,7 @@ package com.tgfc.library.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "announcement")
@@ -14,9 +15,9 @@ public class Announcement implements Serializable {
     @Column(length = 100)
     private String context;
     @Column(name = "create_time", nullable = false)
-    private String createTime;
+    private Date createTime;
     @Column(name = "end_time", nullable = false)
-    private String endTime;
+    private Date endTime;
     @Column(nullable = false)
     private Boolean status;
     @Column(length = 30)
@@ -50,19 +51,19 @@ public class Announcement implements Serializable {
         this.context = context;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 

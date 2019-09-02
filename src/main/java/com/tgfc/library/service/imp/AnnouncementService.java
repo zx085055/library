@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Service
 public class AnnouncementService implements IAnnouncementService {
@@ -49,8 +49,7 @@ public class AnnouncementService implements IAnnouncementService {
         Employee employee = employeeRepository.findById(id).get();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date current = new Date();
-        announcement.setCreateTime(simpleDateFormat.format(current));
-        announcement.setEndTime(simpleDateFormat.format(StrToDate(announcement.getEndTime())));
+        announcement.setCreateTime(strToDate(simpleDateFormat.format(current)));
         announcement.setEmployee(employee);
         baseResponse.setData(announcementRepository.save(announcement));
         baseResponse.setStatus(true);
@@ -100,7 +99,7 @@ public class AnnouncementService implements IAnnouncementService {
         return baseResponse;
     }
 
-    private Date StrToDate(String str) {
+    private Date strToDate(String str) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
