@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 @Service
 public class AnnouncementService implements IAnnouncementService {
@@ -44,7 +42,7 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public BaseResponse insert(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
-        String id = ContextUtil.getPrincipal().toString();
+        String id = ContextUtil.getAccount();
 
         Employee employee = employeeRepository.findById(id).get();
         Date current = new Date();
@@ -59,7 +57,7 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public BaseResponse update(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
-        String id = ContextUtil.getPrincipal().toString();
+        String id = ContextUtil.getAccount();
 
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setStatus(announcement.getStatus());

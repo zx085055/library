@@ -1,6 +1,5 @@
 package com.tgfc.library.controller;
 
-import com.tgfc.library.entity.Announcement;
 import com.tgfc.library.entity.Records;
 import com.tgfc.library.request.RecordsPageRequest;
 import com.tgfc.library.request.SendMailRequest;

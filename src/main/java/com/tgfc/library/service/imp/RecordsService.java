@@ -9,7 +9,6 @@ import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecordsRepository;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
-import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IRecordsService;
 import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
@@ -49,7 +48,7 @@ public class RecordsService implements IRecordsService {
     @Override
     public BaseResponse insert(String accountId) {
         BaseResponse baseResponse = new BaseResponse();
-        String id = ContextUtil.getPrincipal().toString();
+        String id = ContextUtil.getAccount();
 
         Records records = new Records();
         Employee employee = employeeRepository.findById(id).get();
