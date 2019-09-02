@@ -29,5 +29,19 @@ public enum BookStatus {
     public void setTrans(String trans) {
         this.trans = trans;
     }
+    public static BookStatus getStatus(String i){
+        switch(i){
+            case "1":
+                return BOOK_STATUS_LEND;
+            case "2":
+                return BOOK_STATUS_INSIDE;
+            case "3":
+                return BOOK_STATUS_LOST;
+            case "4":
+                return BOOK_STATUS_BROKEN;
+            default:
+                return null;
+        }
+    }
 
 }
