@@ -56,4 +56,9 @@ public class BookController {
     public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
         return bookDataService.findAll(pageableRequest.getPageable());
     }
+
+    @PostMapping(value = "/findByKeyword")
+    public BaseResponse findByKeyword(@RequestBody BookDataPageRequest bookDataPageRequest){
+        return bookDataService.findByKeyword(bookDataPageRequest.getKeyword(),bookDataPageRequest.getPageable());
+    }
 }
