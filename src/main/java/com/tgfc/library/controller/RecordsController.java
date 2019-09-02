@@ -30,7 +30,7 @@ public class RecordsController {
     }
 
     @DeleteMapping("/delete")
-    public BaseResponse delete(@RequestParam int id){
+    public BaseResponse delete(@RequestParam int id) {
         return recordsService.delete(id);
     }
 

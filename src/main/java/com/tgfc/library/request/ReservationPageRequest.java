@@ -1,7 +1,5 @@
 package com.tgfc.library.request;
 
-import com.tgfc.library.entity.Employee;
-
 import java.util.Date;
 
 public class ReservationPageRequest extends PageableRequest {
