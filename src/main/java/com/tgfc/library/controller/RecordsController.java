@@ -6,6 +6,7 @@ import com.tgfc.library.request.RecordsPageRequest;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
+import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

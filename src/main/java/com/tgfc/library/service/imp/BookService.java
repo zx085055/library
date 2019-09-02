@@ -94,4 +94,14 @@ public class BookService implements IBookService {
         }
             return response;
     }
+
+    @Override
+    public BaseResponse findAll(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        Page<Book> books = bookDataRepository.findAll(pageable);
+        baseResponse.setData(books.getContent());
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢完成");
+        return baseResponse;
+    }
 }
