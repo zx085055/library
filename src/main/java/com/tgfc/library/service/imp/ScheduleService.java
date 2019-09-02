@@ -1,18 +1,23 @@
 package com.tgfc.library.service.imp;
 
+import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.enums.JobTypeEnum;
+import com.tgfc.library.enums.ScheduleStatus;
+import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IScheduleRepository;
 import com.tgfc.library.request.SchedulePageRequset;
+import com.tgfc.library.response.BaseResponse;
+import com.tgfc.library.response.EmployeeResponse;
 import com.tgfc.library.response.SchedulePageResponse;
+import com.tgfc.library.schedule.job.LendingExpiredJob;
 import com.tgfc.library.schedule.job.LendingNearlyExpiredJob;
 import com.tgfc.library.schedule.job.ReservationExpiredJob;
 import com.tgfc.library.schedule.scheduler.MyScheduler;
 import com.tgfc.library.schedule.trigger.OneDayOneTimeTrigger;
 import com.tgfc.library.service.IScheduleService;
-import org.quartz.CronTrigger;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
+import com.tgfc.library.util.ContextUtil;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +25,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.*;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ScheduleService implements IScheduleService {
+public class ScheduleService implements IScheduleService, Serializable {
 
     @Autowired
     IScheduleRepository scheduleRepository;
@@ -41,7 +48,8 @@ public class ScheduleService implements IScheduleService {
     @Autowired
     MyScheduler myScheduler;
 
-
+    @Autowired
+    IEmployeeRepository employeeRepository;
 
 
     /**
@@ -100,26 +108,74 @@ public class ScheduleService implements IScheduleService {
     @Override
     public Boolean create(SchedulePageRequset model) {
         try {
-            JobDetail job = JobBuilder.newJob
-                    (JobTypeEnum.RESERVATION_EXPIRED.getCode().equals(model.getType())? ReservationExpiredJob.class :
-                            JobTypeEnum.LENDING_NEARLY_EXPIRED.getCode().equals(model.getType())? LendingNearlyExpiredJob.class:
-                                    ReservationExpiredJob.class)
-                    .withIdentity(model.getName(), "group")
-                    .build();
-            job.getJobDataMap().put("service",this);
+            Schedule schedule = model2Po(model);
+//            schedule.setEmployee(employeeRepository.findById(ContextUtil.getPrincipal().toString()).get());
+            schedule.setStatus(ScheduleStatus.DISABLE.getCode());
+            Schedule scheduleWithId = scheduleRepository.save(schedule);
+            model.setId(scheduleWithId.getId());
 
-            CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model.getNoticeTime());
-
-
-
-
-
-
+            JobDetail job = getJob(model);
+            CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
+            myScheduler.addJob(job, trigger);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    private Schedule model2Po(SchedulePageRequset model) {
+        Schedule schedule = new Schedule();
+        schedule.setName(model.getName());
+        schedule.setType(model.getType());
+        schedule.setNoticeTime(model.getNoticeTime());
+        schedule.setStartTime(model.getStartTime());
+        schedule.setEndTime(model.getEndTime());
+        schedule.setStatus(model.getScheduleStatus());
+        schedule.setJobName(JobTypeEnum.code2Trans(model.getType()));
+        return schedule;
+    }
+
+
+    private JobDetail getJob(SchedulePageRequset model) {
+        JobKey jobKey = new JobKey(model.getName(), model.getName() + model.getId());
+        JobDetail job = JobBuilder.newJob(JobTypeEnum.RESERVATION_EXPIRED.getCode().equals(model.getType()) ? ReservationExpiredJob.class :
+                JobTypeEnum.LENDING_NEARLY_EXPIRED.getCode().equals(model.getType()) ? LendingNearlyExpiredJob.class :
+                        LendingExpiredJob.class)
+                .withIdentity(jobKey)
+                .build();
+        return job;
+    }
+
+    /**
+     * 改變排程狀態 ( 啟用 <---> 禁用 )
+     */
+    @Override
+    public BaseResponse changeStatus(int id) {
+        BaseResponse response = new BaseResponse();
+        Schedule schedule = scheduleRepository.getById(id);
+        TriggerKey triggerKey = new TriggerKey("OneDayOneTime", schedule.getName() + schedule.getId());
+        schedule.setStatus(ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())
+                ? ScheduleStatus.DISABLE.getCode() : ScheduleStatus.ENABLE.getCode());
+        scheduleRepository.save(schedule);
+        if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
+            try {
+                myScheduler.unscheduleJob(triggerKey);
+            } catch (SchedulerException e) {
+                e.printStackTrace();
+            }
+        } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
+            try {
+                myScheduler.rescheduleJob(triggerKey, oneDayOneTimeTrigger.getTrigger(schedule));
+            } catch (SchedulerException e) {
+                e.printStackTrace();
+            }
+        }
+        response.setData(true);
+        response.setMessage("刪除成功");
+        response.setStatus(true);
+        return response;
+    }
+
 
     /**
      * 刪除排程
@@ -129,8 +185,12 @@ public class ScheduleService implements IScheduleService {
         return null;
     }
 
-
-
+    /**
+     * 刪除全部排程
+     */
+    public Boolean deleteAll(Integer id) {
+        return null;
+    }
 
 
     /**********測試用，不會留***********/
@@ -154,8 +214,8 @@ public class ScheduleService implements IScheduleService {
         return (int) (Math.random() * 42 + 1);
     }
 
-    public String print(){
-        return "xxx";
+    public void print() {
+        System.out.println("hello");
     }
 
 

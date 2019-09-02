@@ -2,12 +2,14 @@ package com.tgfc.library.service;
 
 import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.request.SchedulePageRequset;
+import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.SchedulePageResponse;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.List;
 
-public interface IScheduleService {
+public interface IScheduleService  {
 
     /**
      * TODO 讀取預約表，得到預約到期名單
@@ -50,6 +52,11 @@ public interface IScheduleService {
      * 邏輯:根據傳入的scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
      *      呼叫MailUtil，達成批量寄信功能
      */
+
+    /**
+     * 改變排成狀態
+     */
+    BaseResponse changeStatus(int id);
 
 
 

@@ -4,19 +4,19 @@ import java.sql.Time;
 import java.util.Date;
 
 public class SchedulePageRequset extends PageableRequest {
-    private String id;
+    private Integer id;
     private String type;
     private String name;
     private Time noticeTime;
     private Date startTime;
     private Date endTime;
-    private String status;
+    private String scheduleStatus;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -52,12 +52,12 @@ public class SchedulePageRequset extends PageableRequest {
         this.endTime = endTime;
     }
 
-    public String getStatus() {
-        return status;
+    public String getScheduleStatus() {
+        return scheduleStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setScheduleStatus(String status) {
+        this.scheduleStatus = status;
     }
 
     public String getType() {

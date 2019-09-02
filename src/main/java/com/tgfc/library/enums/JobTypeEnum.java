@@ -28,5 +28,17 @@ public enum JobTypeEnum {
     public void setTrans(String trans) {
         this.trans = trans;
     }
+
+    public static String code2Trans(String type){
+        switch (type){
+            case"1":
+                return RESERVATION_EXPIRED.getTrans();
+            case"2":
+                return LENDING_NEARLY_EXPIRED.getTrans();
+            case"3":
+                return LENDING_EXPIRED.getTrans();
+        }
+        return null;
+    }
 }
 

@@ -4,6 +4,7 @@ import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.SchedulePageResponse;
+import com.tgfc.library.schedule.scheduler.MyScheduler;
 import com.tgfc.library.service.IScheduleService;
 import com.tgfc.library.service.imp.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,9 +69,22 @@ public class ScheduleController {
         return response;
     }
 
+    /**
+     * 傳入值:排程ID
+     * 回傳:Boolean
+     */
+    @PutMapping("/schedule/changeStatus")
+    public BaseResponse changeStatus(@RequestParam int id){
+        BaseResponse response = new BaseResponse();
+        response.setData(scheduleService.changeStatus(id));
+        return response;
+    }
+
 
     /**********測試用，不會留***********/
 
+    @Autowired
+    MyScheduler myScheduler;
 
     @GetMapping("/schedule/list2")
     public Schedule list2() {
@@ -87,5 +101,9 @@ public class ScheduleController {
         return scheduleService.findAll();
     }
 
+    @GetMapping("/schedule/getAll")
+    public void getAllJobs() {
+        myScheduler.deleteAllJobs();
+    }
 
 }
