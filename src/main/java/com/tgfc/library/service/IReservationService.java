@@ -12,6 +12,5 @@ public interface IReservationService {
     BaseResponse update(Reservation reservation);
     BaseResponse delete(Integer id);
     BaseResponse findByTimeInterval(Date startDate,Date endDate,Pageable pageable);
-    BaseResponse findByBookId(Integer bookId);
     BaseResponse cancleReservation(Integer reservationId);
 }

@@ -13,11 +13,6 @@ public class ReservationController {
     @Autowired
     IReservationService reservationService;
 
-    @PostMapping("/findByBookId")
-    public BaseResponse findByBookId(@RequestBody Reservation reservation){
-        return reservationService.findByBookId(reservation.getBook().getBookId());
-    }
-
     @PostMapping("/findByDate")
     public BaseResponse findByTimeIntervalBetween(@RequestBody ReservationPageRequest reservationPageRequest){
         return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(),reservationPageRequest.getEndDate(),reservationPageRequest.getPageable());

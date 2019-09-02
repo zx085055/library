@@ -47,8 +47,7 @@ public class ReservationService implements IReservationService {
     public BaseResponse insert(Reservation reservation) {
         BaseResponse baseResponse = new BaseResponse();
         Integer bookId = reservation.getBook().getBookId();
-        String empId = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-//        String empId = "TGFC062";
+        String empId = ContextUtil.getPrincipal().toString();
         Reservation exist = reservationRepository.findByBookId(bookId,empId);
         if(exist!=null){
             baseResponse.setMessage("已有此預約");
@@ -60,7 +59,7 @@ public class ReservationService implements IReservationService {
             Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
             reservation.setStartDate(startDate);
             reservation.setEndDate(endDate);
-            reservation.setEmployee(employeeRepository.getOne(empId));
+            reservation.setEmployee(employeeRepository.findById(empId).get());
             reservationRepository.save(reservation);
             baseResponse.setMessage("成功新增一筆預約");
             baseResponse.setStatus(true);
@@ -114,23 +113,6 @@ public class ReservationService implements IReservationService {
         return baseResponse;
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public BaseResponse findByBookId(Integer bookId) {
-//        BaseResponse baseResponse = new BaseResponse();
-//        Boolean exist = reservationRepository.existsById(bookId);
-//        if (exist){
-//            Reservation reservation = reservationRepository.findByBookId(bookId);
-//            baseResponse.setMessage("成功查詢一筆");
-//            baseResponse.setStatus(true);
-//            baseResponse.setData(reservation);
-//        }else {
-//            baseResponse.setStatus(false);
-//            baseResponse.setMessage("無此預約");
-//        }
-//        return baseResponse;
-        return null;
-    }
 
     @Override
     public BaseResponse cancleReservation(Integer reservationId) {

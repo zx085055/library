@@ -25,7 +25,7 @@ public class Reservation implements Serializable {
     @Column(length = 1,nullable = false)
     private Integer status;
 
-    @ManyToOne()
+    @ManyToOne(targetEntity = Employee.class)
     @JoinColumn(name = "employee_id",referencedColumnName = "id")
     private Employee employee;
 
