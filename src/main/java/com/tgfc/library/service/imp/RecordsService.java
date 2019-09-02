@@ -60,7 +60,7 @@ public class RecordsService implements IRecordsService {
         records.setBorrowUsername(employeeRepository.findById(records.getBorrowId()).get().getName());
         records.setStatus(BookStatus.BOOK_STATUS_LEND.getCode());
         records.setBorrowDate(current);
-        records.setBorrowDate(current);
+        records.setEndDate(endDate);
         records.setEmployee(employee);
         records.setBook(book);
         baseResponse.setData(recordsRepository.save(records));
