@@ -4,7 +4,9 @@ public enum BookStatus {
     LEND("1", "出借中"),
     INSIDE("2", "在館中"),
     LOST("3", "遺失"),
-    Broken("4", "破損");
+    BROKEN("4", "破損"),
+
+    NOTRETURNED("5", "未歸還");
 
     private String code;
     private String trans;
@@ -22,7 +24,7 @@ public enum BookStatus {
             case "3":
                 return LOST;
             case "4":
-                return Broken;
+                return BROKEN;
             default:
                 return null;
         }
@@ -45,4 +47,5 @@ public enum BookStatus {
     public void setTrans(String trans) {
         this.trans = trans;
     }
+
 }

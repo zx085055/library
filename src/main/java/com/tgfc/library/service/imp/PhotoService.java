@@ -40,6 +40,7 @@ public class PhotoService implements IPhotoService {
 
     @Override
     public String getPhotoUrl(String photoFileName) {
+        String a = imageRuel;
         String urlString="";
         try {
             InetAddress address = InetAddress.getLocalHost();
