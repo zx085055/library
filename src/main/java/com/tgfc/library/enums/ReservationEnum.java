@@ -1,22 +1,22 @@
 package com.tgfc.library.enums;
 
 public enum ReservationEnum {
-    RESERVATION_ALIVE("1","預約未到期"),
-    RESERVATION_DEAD("2","預約已到期");
+    RESERVATION_ALIVE(1,"預約未到期"),
+    RESERVATION_DEAD(2,"預約已到期");
 
-    private String code;
+    private Integer code;
     private String trans;
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    ReservationEnum(String code, String trans){
+    ReservationEnum(Integer code, String trans){
         this.code = code;
         this.trans = trans;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

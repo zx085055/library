@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Service
 public class RecommendService implements IRecommendService {
 
@@ -40,7 +41,6 @@ public class RecommendService implements IRecommendService {
     }
 
     @Override
-    @Transactional
     public BaseResponse insert(Recommend recommend) {
         BaseResponse baseResponse = new BaseResponse();
         Recommend ExistRecommend  = recommendRepository.getRecommendByName(recommend.getName());
@@ -48,8 +48,8 @@ public class RecommendService implements IRecommendService {
             baseResponse.setStatus(false);
             baseResponse.setMessage("已存在此紀錄");
         }else{
-            String id = ContextUtil.getPrincipal().toString();
-            Employee employee = employeeRepository.getOne(id);
+            //String id = ContextUtil.getPrincipal().toString();
+            Employee employee = employeeRepository.getOne("TGFC062");
             recommend.setEmployee(employee);
             recommendRepository.save(recommend);
             baseResponse.setStatus(true);
@@ -60,7 +60,6 @@ public class RecommendService implements IRecommendService {
     }
 
     @Override
-    @Transactional
     public BaseResponse update(Recommend recommend) {
         BaseResponse baseResponse = new BaseResponse();
         Boolean exist = recommendRepository.existsById(recommend.getId());
@@ -79,7 +78,6 @@ public class RecommendService implements IRecommendService {
     }
 
     @Override
-    @Transactional
     public BaseResponse delete(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         boolean exist = recommendRepository.existsById(id);

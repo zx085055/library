@@ -6,7 +6,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 public class ContextUtil {
-    private static Authentication authentication; //TODO 測試用
 
     public static SecurityContext getContext(){
         return SecurityContextHolder.getContext();
@@ -17,10 +16,10 @@ public class ContextUtil {
     }
 
     public static Authentication getAuthentication() {//TODO 測試用
-        return authentication;
+        return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    public static void setAuthentication(Authentication authentication) {//TODO 測試用
-        ContextUtil.authentication = authentication;
+    public static void setAuthentication(Authentication authentication) {
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }

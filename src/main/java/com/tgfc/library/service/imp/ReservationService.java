@@ -1,24 +1,34 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Reservation;
+import com.tgfc.library.enums.ReservationEnum;
+import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
+import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
 @Service
+@Transactional
 public class ReservationService implements IReservationService {
 
     @Autowired
     IReservationRepository reservationRepository;
 
+    @Autowired
+    IEmployeeRepository employeeRepository;
+
     @Override
+    @Transactional(readOnly = true)
     public BaseResponse select(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         Reservation reserv = reservationRepository.getOne(id);
@@ -36,13 +46,23 @@ public class ReservationService implements IReservationService {
     @Override
     public BaseResponse insert(Reservation reservation) {
         BaseResponse baseResponse = new BaseResponse();
-        Reservation exist = reservationRepository.findByBookId(reservation.getBook().getBookId());
+        Integer bookId = reservation.getBook().getBookId();
+        String empId = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+//        String empId = "TGFC062";
+        Reservation exist = reservationRepository.findByBookId(bookId,empId);
         if(exist!=null){
-            baseResponse.setMessage("已有此推薦");
+            baseResponse.setMessage("已有此預約");
             baseResponse.setStatus(false);
         }else{
+            reservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
+            String id = ContextUtil.getPrincipal().toString();
+            Date startDate = new Date();
+            Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
+            reservation.setStartDate(startDate);
+            reservation.setEndDate(endDate);
+            reservation.setEmployee(employeeRepository.getOne(empId));
             reservationRepository.save(reservation);
-            baseResponse.setMessage("成功新增一筆推薦");
+            baseResponse.setMessage("成功新增一筆預約");
             baseResponse.setStatus(true);
         }
         return baseResponse;
@@ -84,6 +104,7 @@ public class ReservationService implements IReservationService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate,pageable);
@@ -94,19 +115,21 @@ public class ReservationService implements IReservationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public BaseResponse findByBookId(Integer bookId) {
-        BaseResponse baseResponse = new BaseResponse();
-        Boolean exist = reservationRepository.existsById(bookId);
-        if (exist){
-            Reservation reservation = reservationRepository.findByBookId(bookId);
-            baseResponse.setMessage("成功查詢一筆");
-            baseResponse.setStatus(true);
-            baseResponse.setData(reservation);
-        }else {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("無此預約");
-        }
-        return baseResponse;
+//        BaseResponse baseResponse = new BaseResponse();
+//        Boolean exist = reservationRepository.existsById(bookId);
+//        if (exist){
+//            Reservation reservation = reservationRepository.findByBookId(bookId);
+//            baseResponse.setMessage("成功查詢一筆");
+//            baseResponse.setStatus(true);
+//            baseResponse.setData(reservation);
+//        }else {
+//            baseResponse.setStatus(false);
+//            baseResponse.setMessage("無此預約");
+//        }
+//        return baseResponse;
+        return null;
     }
 
     @Override
@@ -114,11 +137,13 @@ public class ReservationService implements IReservationService {
         BaseResponse baseResponse = new BaseResponse();
         Boolean exist = reservationRepository.existsById(reservationId);
         if (exist){
-            Reservation reservation = new Reservation();
-            reservation.setStatus(1);
-            reservation.setId(reservationId);
-            reservationRepository.save(reservation);
+            reservationRepository.cancleReservation(reservationId);
+            baseResponse.setStatus(true);
+            baseResponse.setMessage("成功更新一筆");
+        }else{
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("無此預約");
         }
-        return null;
+        return baseResponse;
     }
 }

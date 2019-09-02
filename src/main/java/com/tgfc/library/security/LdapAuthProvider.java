@@ -50,7 +50,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
         String[] permissions =getPermissionsList(loginUser);
         EmployeeResponse principle =EmployeeResponse.valueOf(loginUser);
         principle.setPermissions(Arrays.asList(permissions));
-        ContextUtil.setAuthentication(authentication);//TODO 測試用
+//        ContextUtil.setAuthentication(authentication);
         return new UsernamePasswordAuthenticationToken(principle,null, AuthorityUtils.createAuthorityList(permissions));
     }
 

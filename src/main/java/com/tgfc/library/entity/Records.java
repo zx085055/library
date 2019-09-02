@@ -29,11 +29,11 @@ public class Records implements Serializable {
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "emp_id")
+    @JoinColumn(name = "emp_id",referencedColumnName = "id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id",referencedColumnName = "id")
     private Book book;
 
     public Integer getId() {

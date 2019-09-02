@@ -1,5 +1,6 @@
 package com.tgfc.library.controller;
 
+import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.request.ReservationPageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
@@ -12,9 +13,9 @@ public class ReservationController {
     @Autowired
     IReservationService reservationService;
 
-    @GetMapping("/findByBookId")
-    public BaseResponse findByBookId(@RequestParam Integer bookId){
-        return reservationService.findByBookId(bookId);
+    @PostMapping("/findByBookId")
+    public BaseResponse findByBookId(@RequestBody Reservation reservation){
+        return reservationService.findByBookId(reservation.getBook().getBookId());
     }
 
     @PostMapping("/findByDate")
@@ -22,9 +23,14 @@ public class ReservationController {
         return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(),reservationPageRequest.getEndDate(),reservationPageRequest.getPageable());
     }
 
-    @GetMapping("/cancelReservation")
-    public BaseResponse cancel(@RequestParam Integer reservId){
-        return  reservationService.cancleReservation(reservId);
+    @PostMapping("/cancelReservation")
+    public BaseResponse cancel(@RequestBody Reservation reservation){
+        return  reservationService.cancleReservation(reservation.getId());
+    }
+
+    @PostMapping("/insert")
+    public BaseResponse insert(@RequestBody Reservation reservation){
+        return reservationService.insert(reservation);
     }
 
 }

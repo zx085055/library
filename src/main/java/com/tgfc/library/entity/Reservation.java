@@ -22,15 +22,15 @@ public class Reservation implements Serializable {
     private Date startDate;
     @Column(nullable = false)
     private Date endDate;
-    @Column(length = 5,nullable = false)
-    private Integer Status;
+    @Column(length = 1,nullable = false)
+    private Integer status;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @ManyToOne()
+    @JoinColumn(name = "employee_id",referencedColumnName = "id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_id",referencedColumnName = "id")
     private Book book;
 
     public Integer getId() {
@@ -58,11 +58,11 @@ public class Reservation implements Serializable {
     }
 
     public Integer getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(Integer status) {
-        Status = status;
+        status = status;
     }
 
     public Employee getEmployee() {
