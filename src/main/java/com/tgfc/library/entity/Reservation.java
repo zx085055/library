@@ -25,6 +25,8 @@ public class Reservation implements Serializable {
     private Date endDate;
     @Column(length = 1,nullable = false)
     private Integer status;
+    @Column(length = 30,nullable = false)
+    private String reserveUsername;
 
     @JsonIgnore
     @ManyToOne

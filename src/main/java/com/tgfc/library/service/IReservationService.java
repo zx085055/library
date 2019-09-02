@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 
 public interface IReservationService {
-    BaseResponse select(Integer id);
+    BaseResponse select(String keyword, Pageable pageable);
     BaseResponse insert(Reservation reservation);
     BaseResponse update(Reservation reservation);
     BaseResponse delete(Integer id);

@@ -28,18 +28,19 @@ public class ReservationService implements IReservationService {
 
     @Override
     @Transactional(readOnly = true)
-    public BaseResponse select(Integer id) {
+    public BaseResponse select(String keyword, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-        Reservation reserv = reservationRepository.getOne(id);
-        if (reserv!=null){
-            baseResponse.setData(reserv);
-            baseResponse.setStatus(true);
+        if (keyword == null) {
+            baseResponse.setData(reservationRepository.findAll(pageable));
             baseResponse.setMessage("查詢成功");
-        }else{
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("無此資料");
+            baseResponse.setStatus(true);
+            return baseResponse;
+        } else {
+            baseResponse.setData(reservationRepository.getRecordsByNameLikeAndStatus(keyword, pageable));
+            baseResponse.setMessage("查詢成功");
+            baseResponse.setStatus(true);
+            return baseResponse;
         }
-        return baseResponse;
     }
 
     @Override
