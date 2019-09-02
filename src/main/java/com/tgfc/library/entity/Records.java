@@ -25,7 +25,7 @@ public class Records implements Serializable {
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "emp_id",referencedColumnName = "id")
+    @JoinColumn(name = "employee_id",referencedColumnName = "id")
     private Employee employee;
 
     @ManyToOne
