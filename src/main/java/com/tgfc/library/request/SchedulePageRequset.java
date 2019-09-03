@@ -67,4 +67,5 @@ public class SchedulePageRequset extends PageableRequest {
     public void setType(String type) {
         this.type = type;
     }
+
 }

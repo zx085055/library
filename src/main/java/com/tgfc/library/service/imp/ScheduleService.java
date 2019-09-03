@@ -118,10 +118,10 @@ public class ScheduleService implements IScheduleService, Serializable {
             schedule.setStatus(ScheduleStatus.ENABLE.getCode());
             Schedule scheduleWithId = scheduleRepository.save(schedule);
             model.setId(scheduleWithId.getId());
-
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
+            scheduleRepository.setGroup(model.getName() + model.getId(), model.getId());
             response.setData(true);
             response.setMessage("新增成功");
             response.setStatus(true);
@@ -177,8 +177,8 @@ public class ScheduleService implements IScheduleService, Serializable {
         JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
 //        TriggerKey triggerKey = new TriggerKey("OneDayOneTime", schedule.getName() + schedule.getId());
         if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
-                myScheduler.pauseJob(jobKey);
-                scheduleRepository.unscheduleJob(id);
+            myScheduler.pauseJob(jobKey);
+            scheduleRepository.unscheduleJob(id);
         } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
             myScheduler.resumeJob(jobKey);
             scheduleRepository.rescheduleJob(id);

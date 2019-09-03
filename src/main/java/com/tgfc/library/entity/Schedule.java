@@ -41,6 +41,9 @@ public class Schedule implements Serializable {
     @Column(name = "job_name")
     private String jobName;
 
+    @Column(name = "group")
+    private String group;
+
     @ManyToOne
     @JoinColumn(name = "create_user_id")
     private Employee employee;
@@ -124,5 +127,13 @@ public class Schedule implements Serializable {
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }

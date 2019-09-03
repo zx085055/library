@@ -39,9 +39,13 @@ public interface IScheduleRepository extends JpaRepository<Schedule,Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "update Schedule r set r.id=(?1-1) where  r.id=?1")
-    int idMinusOne (int id);
+    @Query(value = "update Schedule r set r.id=?2 where  r.group=?1")
+    int idMinusOne (String group,int id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "update Schedule r set r.group=?1 where r.id=?2")
+    int setGroup (String group,int id);
 
 
 
