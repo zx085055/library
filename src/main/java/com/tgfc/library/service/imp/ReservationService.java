@@ -54,7 +54,7 @@ public class ReservationService implements IReservationService {
             baseResponse.setStatus(false);
         }else{
             reservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
-            String id = ContextUtil.getPrincipal().toString();
+            String id = ContextUtil.getAccount();
             Date startDate = new Date();
             Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
             reservation.setStartDate(startDate);
