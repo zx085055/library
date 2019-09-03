@@ -3,7 +3,8 @@ package com.tgfc.library.enums;
 public enum ReservationEnum {
     RESERVATION_ALIVE(1,"預約未到期"),
     RESERVATION_DEAD(2,"預約已到期"),
-    RESERVATION_WAIT(3,"排隊預約中");
+    RESERVATION_WAIT(3,"排隊預約中"),
+    RESERVATION_CANCLE(4,"預約已取消");
 
     private Integer code;
     private String trans;

@@ -53,15 +53,22 @@ public class ReservationService implements IReservationService {
             baseResponse.setMessage("已有此預約");
             baseResponse.setStatus(false);
         }else{
-            reservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
-            String id = ContextUtil.getAccount();
-            Date startDate = new Date();
-            Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
-            reservation.setStartDate(startDate);
-            reservation.setEndDate(endDate);
+            Integer count = reservationRepository.reservationStatusCount(bookId,ReservationEnum.RESERVATION_ALIVE.getCode());
+            Integer status;
+            if (count>=1){
+                status = ReservationEnum.RESERVATION_WAIT.getCode();
+                baseResponse.setMessage("此本書有人預約,已加入排隊");
+            }else{
+                status = ReservationEnum.RESERVATION_ALIVE.getCode();
+                Date startDate = new Date();
+                Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
+                reservation.setStartDate(startDate);
+                reservation.setEndDate(endDate);
+                baseResponse.setMessage("成功新增一筆預約");
+            }
+            reservation.setStatus(status);
             reservation.setEmployee(employeeRepository.findById(empId).get());
             reservationRepository.save(reservation);
-            baseResponse.setMessage("成功新增一筆預約");
             baseResponse.setStatus(true);
         }
         return baseResponse;
@@ -119,7 +126,7 @@ public class ReservationService implements IReservationService {
         BaseResponse baseResponse = new BaseResponse();
         Boolean exist = reservationRepository.existsById(reservationId);
         if (exist){
-            reservationRepository.cancleReservation(reservationId);
+            reservationRepository.changeReservationStatus(ReservationEnum.RESERVATION_CANCLE.getCode(),reservationId);
             baseResponse.setStatus(true);
             baseResponse.setMessage("成功更新一筆");
         }else{

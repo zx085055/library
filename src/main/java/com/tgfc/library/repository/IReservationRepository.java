@@ -24,9 +24,13 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     Reservation findByBookId(Integer bookId, String empId);
 
     @Modifying
-    @Query(value = "update Reservation r set r.status=2 where r.id=?1")
-    int cancleReservation(Integer reservationId);
+    @Query(value = "update Reservation r set r.status=?1 where r.id=?2")
+    int changeReservationStatus(Integer status,Integer reservationId);
 
-    @Query(value = "select r from Reservation r where r.endDate>=?1 AND r.endDate<=?2")
-    List<Reservation> reservationExpiredList(Date startDate, Date endDate);
+    @Query(value = "select r from Reservation r where r.endDate>=?1")
+    List<Reservation> reservationExpiredList(Date endDate);
+
+    @Query(value = "select count(r) from Reservation r inner join  r.book b where b.id = ?1 and r.status = ?2")
+    Integer reservationStatusCount(Integer bookId,Integer status);
+
 }
