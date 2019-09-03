@@ -30,7 +30,8 @@ public class ReservationExpiredJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        scheduleService.print();
+//        scheduleService.print();
+        System.out.println("ReservationExpiredJob is run");
     }
 
 //    private List<Reservation> getList(){

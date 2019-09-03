@@ -29,7 +29,7 @@ public interface IScheduleService  {
      *      Job的name與group和Trigger的group相同，Trigger為每日x點x分執行
      *      讀取表得到需要通知的對象名單scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
      */
-    Boolean create(SchedulePageRequset model);
+    BaseResponse create(SchedulePageRequset model);
 
     /**
      * TODO 刪除排程

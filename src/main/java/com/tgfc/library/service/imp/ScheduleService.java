@@ -110,21 +110,25 @@ public class ScheduleService implements IScheduleService, Serializable {
      * 新增排程
      */
     @Override
-    public Boolean create(SchedulePageRequset model) {
+    public BaseResponse create(SchedulePageRequset model) {
+        BaseResponse response = new BaseResponse();
         try {
             Schedule schedule = model2Po(model);
             schedule.setEmployee(employeeRepository.findById(ContextUtil.getAccount()).get());
-            schedule.setStatus(ScheduleStatus.DISABLE.getCode());
+            schedule.setStatus(ScheduleStatus.ENABLE.getCode());
             Schedule scheduleWithId = scheduleRepository.save(schedule);
             model.setId(scheduleWithId.getId());
 
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
+            response.setData(true);
+            response.setMessage("新增成功");
+            response.setStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return response;
     }
 
     private Schedule model2Po(SchedulePageRequset model) {
@@ -137,6 +141,18 @@ public class ScheduleService implements IScheduleService, Serializable {
         schedule.setStatus(model.getScheduleStatus());
         schedule.setJobName(JobTypeEnum.code2Trans(model.getType()));
         return schedule;
+    }
+
+    private SchedulePageRequset po2Model(Schedule schedule) {
+        SchedulePageRequset model = new SchedulePageRequset();
+        model.setName(schedule.getName());
+        model.setType(schedule.getType());
+        model.setNoticeTime(schedule.getNoticeTime());
+        model.setStartTime(schedule.getStartTime());
+        model.setEndTime(schedule.getEndTime());
+        model.setId(schedule.getId());
+        model.setScheduleStatus(schedule.getStatus());
+        return model;
     }
 
 
@@ -158,22 +174,14 @@ public class ScheduleService implements IScheduleService, Serializable {
     public BaseResponse changeStatus(int id) {
         BaseResponse response = new BaseResponse();
         Schedule schedule = scheduleRepository.getById(id);
-        TriggerKey triggerKey = new TriggerKey("OneDayOneTime", schedule.getName() + schedule.getId());
-        schedule.setStatus(ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())
-                ? ScheduleStatus.DISABLE.getCode() : ScheduleStatus.ENABLE.getCode());
-        scheduleRepository.save(schedule);
+        JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
+//        TriggerKey triggerKey = new TriggerKey("OneDayOneTime", schedule.getName() + schedule.getId());
         if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
-            try {
-                myScheduler.unscheduleJob(triggerKey);
-            } catch (SchedulerException e) {
-                e.printStackTrace();
-            }
+                myScheduler.pauseJob(jobKey);
+                scheduleRepository.unscheduleJob(id);
         } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
-            try {
-                myScheduler.rescheduleJob(triggerKey, oneDayOneTimeTrigger.getTrigger(schedule));
-            } catch (SchedulerException e) {
-                e.printStackTrace();
-            }
+            myScheduler.resumeJob(jobKey);
+            scheduleRepository.rescheduleJob(id);
         }
         response.setData(true);
         response.setMessage("狀態改變成功");

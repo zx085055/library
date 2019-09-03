@@ -27,11 +27,7 @@ public class ScheduleController {
      */
     @PostMapping("/schedule/create")
     public BaseResponse create(@RequestBody SchedulePageRequset model) {
-        BaseResponse response = new BaseResponse();
-        response.setData(scheduleService.create(model));
-        response.setMessage("新增成功");
-        response.setStatus(true);
-        return response;
+        return scheduleService.create(model);
     }
 
 
@@ -87,7 +83,7 @@ public class ScheduleController {
     }
 
     /**
-     * 恢復全部排程
+     * 恢復全部被暫停排程
      */
     @PutMapping("/schedule/resumeAll")
     public BaseResponse resumeAll() {

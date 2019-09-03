@@ -132,5 +132,21 @@ public class MyScheduler {
     }
 
 
+    public void pauseJob(JobKey jobKey){
+        try {
+            scheduler.pauseJob(jobKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void resumeJob(JobKey jobKey){
+        try {
+            scheduler.resumeJob(jobKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
