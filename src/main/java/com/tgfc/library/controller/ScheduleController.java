@@ -78,9 +78,21 @@ public class ScheduleController {
         return scheduleService.deleteAllJobs();
     }
 
+    /**
+     * 暫停全部排程
+     */
+    @PutMapping("/schedule/pauseAll")
+    public BaseResponse pauseAll(){
+        return scheduleService.pauseAll();
+    }
 
-
-
+    /**
+     * 恢復全部排程
+     */
+    @PutMapping("/schedule/resumeAll")
+    public BaseResponse resumeAll() {
+        return scheduleService.resumeAll();
+    }
 
 
 
