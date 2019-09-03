@@ -5,6 +5,7 @@ import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Records;
 import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.BookStatus;
+import com.tgfc.library.enums.RecordsStatusEnum;
 import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecordsRepository;
@@ -13,7 +14,6 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
 import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +49,7 @@ public class RecordsService implements IRecordsService {
     }
 
     @Override
-    public BaseResponse insert(Records records) {
+    public BaseResponse getBook(Records records) {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
 
@@ -58,30 +58,15 @@ public class RecordsService implements IRecordsService {
         Date current = new Date();
         Date endDate = new Date(current.getTime() + 14 * 24 * 60 * 60 * 1000);
         records.setBorrowUsername(employeeRepository.findById(records.getBorrowId()).get().getName());
-        records.setStatus(BookStatus.BOOK_STATUS_LEND.getCode());
+        book.setStatus(BookStatus.BOOK_STATUS_LEND.getCode());
+        records.setStatus(RecordsStatusEnum.RECORDSSTATUS_BORROWING.getCode());
         records.setBorrowDate(current);
         records.setEndDate(endDate);
         records.setEmployee(employee);
         records.setBook(book);
         baseResponse.setData(recordsRepository.save(records));
         baseResponse.setStatus(true);
-        baseResponse.setMessage("新增成功");
-        return baseResponse;
-    }
-
-    @Override
-    public BaseResponse update(Records records) {
-        BaseResponse baseResponse = new BaseResponse();
-        if (!recordsRepository.existsById(records.getId())) {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("無此資料");
-        }
-
-        Records dataReserv = recordsRepository.findById(records.getId()).get();
-        BeanUtils.copyProperties(records, dataReserv);
-        baseResponse.setData(recordsRepository.save(dataReserv));
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("修改成功");
+        baseResponse.setMessage("取書成功");
         return baseResponse;
     }
 
@@ -93,7 +78,7 @@ public class RecordsService implements IRecordsService {
             baseResponse.setStatus(false);
         }
         recordsRepository.deleteById(id);
-        baseResponse.setMessage("成功刪除一筆");
+        baseResponse.setMessage("刪除成功");
         baseResponse.setStatus(true);
         return baseResponse;
     }
@@ -102,7 +87,7 @@ public class RecordsService implements IRecordsService {
     public BaseResponse returnNotify(SendMailRequest model) {
         BaseResponse baseResponse = new BaseResponse();
         Records records = recordsRepository.findById(model.getId()).get();
-        model.setEmail(employeeRepository.getOne(records.getBorrowId()).getEmail());
+        model.setEmail(employeeRepository.findById(records.getBorrowId()).get().getEmail());
         MailUtil.sendMail(model.getTitle(), model.getContext(), model.getEmail());
         baseResponse.setData(model);
         baseResponse.setStatus(true);
@@ -116,8 +101,8 @@ public class RecordsService implements IRecordsService {
         Records records = recordsRepository.findById(id).get();
         Date current = new Date();
         records.setReturnDate(current);
-        records.setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
-        //records.getBook().setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
+        records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
+        records.getBook().setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
         baseResponse.setData(recordsRepository.save(records));
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");

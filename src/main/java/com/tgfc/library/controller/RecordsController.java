@@ -6,7 +6,6 @@ import com.tgfc.library.request.RecordsPageRequest;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
-import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +20,9 @@ public class RecordsController {
         return recordsService.select(records.getKeyword(), records.getStatus(), records.getPageable());
     }
 
-    @PostMapping("/insert")
-    public BaseResponse insert(@RequestBody Records records) {
-        return recordsService.insert(records);
-    }
-
-    @PutMapping("/update")
-    public BaseResponse update(@RequestBody Records records) {
-        return recordsService.update(records);
+    @PostMapping("/getBook")
+    public BaseResponse getBook(@RequestBody Records records) {
+        return recordsService.getBook(records);
     }
 
     @DeleteMapping("/delete")
@@ -47,13 +41,13 @@ public class RecordsController {
     }
 
     @PostMapping("/findAll")
-    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
+    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest) {
         return recordsService.findAll(pageableRequest.getPageable());
     }
 
     @PostMapping("/findByDate")
-    public BaseResponse findByTimeIntervalBetween(@RequestBody RecordsPageRequest recordsPageRequest){
-        return recordsService.findByTimeInterval(recordsPageRequest.getBorrowDate(),recordsPageRequest.getReturnDate(),recordsPageRequest.getPageable());
+    public BaseResponse findByTimeIntervalBetween(@RequestBody RecordsPageRequest recordsPageRequest) {
+        return recordsService.findByTimeInterval(recordsPageRequest.getBorrowDate(), recordsPageRequest.getReturnDate(), recordsPageRequest.getPageable());
     }
 
 }
