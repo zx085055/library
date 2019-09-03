@@ -51,7 +51,7 @@ public class MyScheduler {
     }
 
     /**
-     * 关闭调度信息
+     * 关闭调度器
      */
     public  void shutdown() throws SchedulerException   {
         scheduler.shutdown();
@@ -147,6 +147,8 @@ public class MyScheduler {
             e.printStackTrace();
         }
     }
+
+
 
 
 }

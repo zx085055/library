@@ -249,6 +249,16 @@ public class ScheduleService implements IScheduleService, Serializable {
         return response;
     }
 
+    @Override
+    public BaseResponse edit(SchedulePageRequset model) {
+        BaseResponse response = new BaseResponse();
+        scheduleRepository.deleteById(model.getId());
+        response.setData(this.create(model).getStatus());
+        response.setMessage("修改成功");
+        response.setStatus(true);
+        return response;
+    }
+
 
     /**********測試用，不會留***********/
 

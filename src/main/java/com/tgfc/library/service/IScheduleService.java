@@ -41,6 +41,7 @@ public interface IScheduleService  {
      * TODO 編輯排程
      * 邏輯:通過排程ID編輯該排程
      */
+    BaseResponse edit(SchedulePageRequset model);
 
     /**
      * 查詢排程

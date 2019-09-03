@@ -37,6 +37,11 @@ public interface IScheduleRepository extends JpaRepository<Schedule,Integer> {
     @Query(value = "update Schedule r set r.status='1' where r.status='2' and r.id=?1")
     int rescheduleJob(int id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "update Schedule r set r.id=(?1-1) where  r.id=?1")
+    int idMinusOne (int id);
+
 
 
 
