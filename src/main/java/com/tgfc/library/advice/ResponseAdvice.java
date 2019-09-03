@@ -44,10 +44,9 @@ public class ResponseAdvice implements ResponseBodyAdvice {
 
         BaseResponse response = new BaseResponse();
         response.setStatus(false);
-
-            e.printStackTrace();
-            response.setMessage(e.getMessage());
-            return ResponseEntity.status(500).body(response);//如果都不屬上面的錯，就直拉報500錯誤
+        e.printStackTrace();
+        response.setMessage(e.getMessage());
+        return ResponseEntity.status(500).body(response);
         }
 
 
