@@ -83,7 +83,7 @@ public class ScheduleService implements IScheduleService, Serializable {
 
         query = query.select(rootEntity).where(predicate);
         List<Schedule> list = entityManager.createQuery(query).getResultList();
-        response.setData(schedule2Response(list));
+        response.setData(scheduleList2Response(list));
         response.setMessage("查詢成功");
         response.setStatus(true);
         return response;
@@ -92,7 +92,7 @@ public class ScheduleService implements IScheduleService, Serializable {
     /**
      * schedule轉為SchedulePageResponse
      */
-    private List<SchedulePageResponse> schedule2Response(List<Schedule> list) {
+    private List<SchedulePageResponse> scheduleList2Response(List<Schedule> list) {
         return list.stream()
                 .map(schedule -> {
                     SchedulePageResponse schedulePageResponse = new SchedulePageResponse();
@@ -123,7 +123,7 @@ public class ScheduleService implements IScheduleService, Serializable {
             myScheduler.addJob(job, trigger);
             scheduleRepository.setGroup(model.getName() + model.getId(), model.getId());
             response.setData(true);
-            response.setMessage("新增成功");
+            response.setMessage("新增排程no."+model.getId()+"成功");
             response.setStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,13 +178,14 @@ public class ScheduleService implements IScheduleService, Serializable {
 //        TriggerKey triggerKey = new TriggerKey("OneDayOneTime", schedule.getName() + schedule.getId());
         if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
             myScheduler.pauseJob(jobKey);
-            scheduleRepository.unscheduleJob(id);
+            scheduleRepository.pauseJob(id);
+            response.setMessage("狀態改變成功，排程"+id+"由"+ScheduleStatus.ENABLE.getTrans()+"變為"+ScheduleStatus.DISABLE.getTrans());
         } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
             myScheduler.resumeJob(jobKey);
-            scheduleRepository.rescheduleJob(id);
+            scheduleRepository.resumeJob(id);
+            response.setMessage("狀態改變成功，排程"+id+"由"+ScheduleStatus.DISABLE.getTrans()+"變為"+ScheduleStatus.ENABLE.getTrans());
         }
         response.setData(true);
-        response.setMessage("狀態改變成功");
         response.setStatus(true);
         return response;
     }

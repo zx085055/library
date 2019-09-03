@@ -30,12 +30,12 @@ public interface IScheduleRepository extends JpaRepository<Schedule,Integer> {
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status='2' where r.status='1' and r.id=?1")
-    int unscheduleJob(int id);
+    int pauseJob(int id);
 
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status='1' where r.status='2' and r.id=?1")
-    int rescheduleJob(int id);
+    int resumeJob(int id);
 
     @Modifying
     @Transactional

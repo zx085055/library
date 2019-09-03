@@ -32,7 +32,7 @@ public class ScheduleController {
 
 
     /**
-     * TODO 編輯排程
+     * 編輯排程
      * 傳入值:SchedulePageRequset (id，排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * 回傳值:Boolean
      */
