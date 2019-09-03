@@ -191,6 +191,36 @@ public class ScheduleService implements IScheduleService, Serializable {
         return response;
     }
 
+    @Override
+    public BaseResponse pauseAll() {
+        BaseResponse response = new BaseResponse();
+        try {
+            myScheduler.pauseAll();
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        scheduleRepository.pauseAll();
+        response.setData(true);
+        response.setMessage("全部排程暫停");
+        response.setStatus(true);
+        return response;
+    }
+
+    @Override
+    public BaseResponse resumeAll() {
+        BaseResponse response = new BaseResponse();
+        try {
+            myScheduler.resumeAll();
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        scheduleRepository.resumeAll();
+        response.setData(true);
+        response.setMessage("全部暫停排程恢復");
+        response.setStatus(true);
+        return response;
+    }
+
 
     /**
      * 刪除排程
@@ -210,14 +240,6 @@ public class ScheduleService implements IScheduleService, Serializable {
         response.setStatus(true);
         return response;
     }
-
-
-
-
-
-
-
-
 
 
     /**********測試用，不會留***********/

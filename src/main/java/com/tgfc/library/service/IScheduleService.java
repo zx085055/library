@@ -63,6 +63,16 @@ public interface IScheduleService  {
      */
     BaseResponse deleteAllJobs();
 
+    /**
+     * 暫停全部排程
+     */
+    BaseResponse pauseAll();
+
+    /**
+     * 恢復全部被暫停排程
+     */
+    BaseResponse resumeAll();
+
 
 
     /**********測試用，不會留***********/
