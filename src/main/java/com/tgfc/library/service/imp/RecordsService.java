@@ -6,9 +6,11 @@ import com.tgfc.library.entity.Records;
 import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.BookStatus;
 import com.tgfc.library.enums.RecordsStatusEnum;
+import com.tgfc.library.enums.ReservationEnum;
 import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecordsRepository;
+import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
@@ -19,7 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class RecordsService implements IRecordsService {
@@ -31,6 +35,9 @@ public class RecordsService implements IRecordsService {
 
     @Autowired
     IBookRepository bookRepository;
+
+    @Autowired
+    IReservationRepository reservationRepository;
 
     @Override
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
@@ -77,11 +84,14 @@ public class RecordsService implements IRecordsService {
     public BaseResponse returnBook(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         Records records = recordsRepository.findById(id).get();
+        Reservation nextReservation = reservationRepository.getReservatonByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), records.getBook().getId());
+        nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
         Date current = new Date();
         records.setReturnDate(current);
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
         records.getBook().setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
-        baseResponse.setData(recordsRepository.save(records));
+        List<Object> result = Arrays.asList(recordsRepository.save(records),reservationRepository.save(nextReservation));
+        baseResponse.setData(result);
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");
         return baseResponse;
