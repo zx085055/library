@@ -25,17 +25,4 @@ public class OneDayOneTimeTrigger {
 //                                + Integer.toString(model.getNoticeTime().getHours()) + " * * * ?"))
                 .build();
     }
-
-    public CronTrigger getTrigger(Schedule schedule) {
-        Date startTime = DateBuilder.nextGivenSecondDate(null, 1);
-        return TriggerBuilder
-                .newTrigger()
-                .withIdentity("OneDayOneTime", schedule.getName()+schedule.getId())
-                .startAt(startTime)
-                .withSchedule(CronScheduleBuilder.cronSchedule("* * * * * ?"))
-//                .withSchedule(CronScheduleBuilder.cronSchedule(
-//                        Integer.toString(model.getNoticeTime().getMinutes()) + " "
-//                                + Integer.toString(model.getNoticeTime().getHours()) + " * * * ?"))
-                .build();
-    }
 }
