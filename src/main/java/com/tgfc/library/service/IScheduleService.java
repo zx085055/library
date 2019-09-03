@@ -35,7 +35,7 @@ public interface IScheduleService  {
      * TODO 刪除排程
      * 邏輯:通過排程ID刪除該排程
      */
-    Boolean delete(Integer id);
+    BaseResponse delete(int id);
 
     /**
      * TODO 編輯排程
@@ -62,6 +62,7 @@ public interface IScheduleService  {
      * 刪除全部排程
      */
     BaseResponse deleteAllJobs();
+
 
 
     /**********測試用，不會留***********/

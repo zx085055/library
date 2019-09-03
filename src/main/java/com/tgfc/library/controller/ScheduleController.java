@@ -52,17 +52,12 @@ public class ScheduleController {
     }
 
     /**
-     * TODO 刪除排程
      * 傳入值:排程ID
      * 回傳值:Boolean
      */
     @DeleteMapping("/schedule/delete")
-    public BaseResponse delete(@RequestParam int id) {
-        BaseResponse response = new BaseResponse();
-        response.setData(scheduleService.delete(id));
-        response.setMessage("刪除成功");
-        response.setStatus(true);
-        return response;
+    public BaseResponse delete(@RequestParam int id){
+        return scheduleService.delete(id);
     }
 
     /**
@@ -72,18 +67,22 @@ public class ScheduleController {
      */
     @PutMapping("/schedule/changeStatus")
     public BaseResponse changeStatus(@RequestParam int id){
-        BaseResponse response = new BaseResponse();
-        response.setData(scheduleService.changeStatus(id));
-        return response;
+        return scheduleService.changeStatus(id);
     }
 
     /**
      * 刪除全部排程
      */
-    @GetMapping("/schedule/getAll")
-    public BaseResponse getAllJobs() {
+    @DeleteMapping("/schedule/deleteAllJobs")
+    public BaseResponse deleteAllJobs() {
         return scheduleService.deleteAllJobs();
     }
+
+
+
+
+
+
 
     /**********測試用，不會留***********/
 

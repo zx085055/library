@@ -113,7 +113,7 @@ public class ScheduleService implements IScheduleService, Serializable {
     public Boolean create(SchedulePageRequset model) {
         try {
             Schedule schedule = model2Po(model);
-//            schedule.setEmployee(employeeRepository.findById(ContextUtil.getPrincipal().toString()).get());
+            schedule.setEmployee(employeeRepository.findById(ContextUtil.getAccount()).get());
             schedule.setStatus(ScheduleStatus.DISABLE.getCode());
             Schedule scheduleWithId = scheduleRepository.save(schedule);
             model.setId(scheduleWithId.getId());
@@ -147,6 +147,7 @@ public class ScheduleService implements IScheduleService, Serializable {
                         LendingExpiredJob.class)
                 .withIdentity(jobKey)
                 .build();
+//        job.getJobDataMap("startDate");
         return job;
     }
 
@@ -175,7 +176,7 @@ public class ScheduleService implements IScheduleService, Serializable {
             }
         }
         response.setData(true);
-        response.setMessage("刪除成功");
+        response.setMessage("狀態改變成功");
         response.setStatus(true);
         return response;
     }
@@ -184,6 +185,7 @@ public class ScheduleService implements IScheduleService, Serializable {
     public BaseResponse deleteAllJobs() {
         BaseResponse response = new BaseResponse();
         response.setData(myScheduler.deleteAllJobs());
+        scheduleRepository.deleteAll();
         response.setMessage("全部刪除完成");
         response.setStatus(true);
         return response;
@@ -194,9 +196,26 @@ public class ScheduleService implements IScheduleService, Serializable {
      * 刪除排程
      */
     @Override
-    public Boolean delete(Integer id) {
-        return null;
+    public BaseResponse delete(int id) {
+        BaseResponse response = new BaseResponse();
+        Schedule schedule = scheduleRepository.getById(id);
+        JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
+        try {
+            response.setData(myScheduler.deleteJob(jobKey));
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        scheduleRepository.deleteById(id);
+        response.setMessage("刪除指定排程成功");
+        response.setStatus(true);
+        return response;
     }
+
+
+
+
+
+
 
 
 
