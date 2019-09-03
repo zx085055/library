@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 
     @Configuration
-    @Order(1)
     @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
     public static class ApiConfig extends WebSecurityConfigurerAdapter {
 
@@ -87,18 +86,6 @@ public class SecurityConfig {
         }
     }
 
-    @Configuration
-    @EnableWebSecurity
-    @Order(2)
-    public static class WebSocketConfig extends WebSecurityConfigurerAdapter {
 
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-
-            http.csrf().disable();
-            http.cors().and().csrf().disable().antMatcher("/library-websocket*").authorizeRequests().anyRequest().permitAll();
-
-        }
-    }
 
 }
