@@ -89,8 +89,10 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public BaseResponse statusChange(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
+        String id = ContextUtil.getAccount();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
 
+        existAnnouncement.setUpdateUsername(id);
         existAnnouncement.setStatus(announcement.getStatus());
         baseResponse.setData(announcementRepository.save(existAnnouncement));
         baseResponse.setStatus(true);
