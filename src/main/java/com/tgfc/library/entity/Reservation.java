@@ -1,7 +1,6 @@
 package com.tgfc.library.entity;
 
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -17,23 +16,21 @@ public class Reservation implements Serializable {
     private static final long serialVersionUID = -7882108325770269313L;
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(nullable = false)
     private Date startDate;
     @Column(nullable = false)
     private Date endDate;
-    @Column(length = 1,nullable = false)
+    @Column(length = 1, nullable = false)
     private Integer status;
 
-    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "employee_id",referencedColumnName = "id")
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
-    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "book_id",referencedColumnName = "id")
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
     public Integer getId() {

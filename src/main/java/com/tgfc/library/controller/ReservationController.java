@@ -6,7 +6,10 @@ import com.tgfc.library.request.ReservationPageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/reservation")
@@ -14,23 +17,28 @@ public class ReservationController {
     @Autowired
     IReservationService reservationService;
 
+    @PostMapping("/select")
+    public BaseResponse select(@RequestBody ReservationPageRequest reservationPageRequest) {
+        return reservationService.select(reservationPageRequest.getKeyword(), reservationPageRequest.getPageable());
+    }
+
     @PostMapping("/findByDate")
-    public BaseResponse findByTimeIntervalBetween(@RequestBody ReservationPageRequest reservationPageRequest){
-        return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(),reservationPageRequest.getEndDate(),reservationPageRequest.getPageable());
+    public BaseResponse findByTimeIntervalBetween(@RequestBody ReservationPageRequest reservationPageRequest) {
+        return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(), reservationPageRequest.getEndDate(), reservationPageRequest.getPageable());
     }
 
     @PostMapping("/cancelReservation")
-    public BaseResponse cancel(@RequestBody Reservation reservation){
-        return  reservationService.cancleReservation(reservation.getId());
+    public BaseResponse cancel(@RequestBody Reservation reservation) {
+        return reservationService.cancleReservation(reservation.getId());
     }
 
     @PostMapping("/insert")
-    public BaseResponse insert(@RequestBody Reservation reservation){
+    public BaseResponse insert(@RequestBody Reservation reservation) {
         return reservationService.insert(reservation);
     }
 
     @PostMapping("/findAll")
-    public  BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
+    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest) {
         return reservationService.findAll(pageableRequest.getPageable());
     }
 

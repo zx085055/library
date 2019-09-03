@@ -4,6 +4,7 @@ import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.SchedulePageResponse;
+import com.tgfc.library.schedule.scheduler.MyScheduler;
 import com.tgfc.library.service.IScheduleService;
 import com.tgfc.library.service.imp.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,11 +48,7 @@ public class ScheduleController {
      */
     @PostMapping("/schedule/list")
     public BaseResponse list(@RequestBody SchedulePageRequset model) throws ParseException {
-        BaseResponse response = new BaseResponse();
-        response.setData(scheduleService.list(model));
-        response.setMessage("查詢成功");
-        response.setStatus(true);
-        return response;
+        return scheduleService.list(model);
     }
 
     /**
@@ -68,9 +65,30 @@ public class ScheduleController {
         return response;
     }
 
+    /**
+     * 改變排程狀態 ( 啟用 <---> 禁用 )
+     * 傳入值:排程ID
+     * 回傳:Boolean
+     */
+    @PutMapping("/schedule/changeStatus")
+    public BaseResponse changeStatus(@RequestParam int id){
+        BaseResponse response = new BaseResponse();
+        response.setData(scheduleService.changeStatus(id));
+        return response;
+    }
+
+    /**
+     * 刪除全部排程
+     */
+    @GetMapping("/schedule/getAll")
+    public BaseResponse getAllJobs() {
+        return scheduleService.deleteAllJobs();
+    }
 
     /**********測試用，不會留***********/
 
+    @Autowired
+    MyScheduler myScheduler;
 
     @GetMapping("/schedule/list2")
     public Schedule list2() {
@@ -86,6 +104,7 @@ public class ScheduleController {
     public List<Schedule> list3() {
         return scheduleService.findAll();
     }
+
 
 
 }

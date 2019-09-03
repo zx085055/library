@@ -6,8 +6,12 @@ import org.springframework.data.domain.Pageable;
 
 public interface IAnnouncementService {
     BaseResponse select(String name, Pageable pageable);
+
     BaseResponse insert(Announcement announcement);
+
     BaseResponse update(Announcement announcement);
+
     BaseResponse delete(Integer id);
+
     BaseResponse statusChange(Announcement announcement);
 }

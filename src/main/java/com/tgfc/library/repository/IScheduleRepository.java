@@ -14,5 +14,8 @@ public interface IScheduleRepository extends JpaRepository<Schedule,Integer> {
     Schedule getById(int id);
 
 //    @Query("SELECT r from Schedule r where r.id=?1 ")
+//    int getById(int id);
+
+//    @Query("SELECT r from Schedule r where r.id=?1 ")
 //    Page<Schedule> getList();
 }

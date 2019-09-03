@@ -1,5 +1,7 @@
 package com.tgfc.library.schedule.trigger;
 
+import com.tgfc.library.entity.Schedule;
+import com.tgfc.library.request.SchedulePageRequset;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.DateBuilder;
@@ -11,15 +13,29 @@ import java.util.Date;
 
 @Component
 public class OneDayOneTimeTrigger {
-    public CronTrigger getTrigger(Time time){
+    public CronTrigger getTrigger(SchedulePageRequset model) {
         Date startTime = DateBuilder.nextGivenSecondDate(null, 1);
-        return  TriggerBuilder
+        return TriggerBuilder
                 .newTrigger()
-                .withIdentity("OneDayOneTime", "group")
+                .withIdentity("OneDayOneTime", model.getName()+model.getId())
                 .startAt(startTime)
-//                    .withSchedule(CronScheduleBuilder.cronSchedule("0 9 * * * ?"))
-                .withSchedule(CronScheduleBuilder.cronSchedule(
-                        Integer.toString(time.getMinutes())+" "+Integer.toString(time.getHours())+" * * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("* * * * * ?"))
+//                .withSchedule(CronScheduleBuilder.cronSchedule(
+//                        Integer.toString(model.getNoticeTime().getMinutes()) + " "
+//                                + Integer.toString(model.getNoticeTime().getHours()) + " * * * ?"))
+                .build();
+    }
+
+    public CronTrigger getTrigger(Schedule schedule) {
+        Date startTime = DateBuilder.nextGivenSecondDate(null, 1);
+        return TriggerBuilder
+                .newTrigger()
+                .withIdentity("OneDayOneTime", schedule.getName()+schedule.getId())
+                .startAt(startTime)
+                .withSchedule(CronScheduleBuilder.cronSchedule("* * * * * ?"))
+//                .withSchedule(CronScheduleBuilder.cronSchedule(
+//                        Integer.toString(model.getNoticeTime().getMinutes()) + " "
+//                                + Integer.toString(model.getNoticeTime().getHours()) + " * * * ?"))
                 .build();
     }
 }

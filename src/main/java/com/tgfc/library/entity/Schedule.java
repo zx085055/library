@@ -38,7 +38,7 @@ public class Schedule implements Serializable {
     @Column(name = "notice_time", nullable = false)
     private Time noticeTime;
 
-    @Column(name = "job_name", nullable = false)
+    @Column(name = "job_name")
     private String jobName;
 
     @ManyToOne

@@ -2,6 +2,7 @@ package com.tgfc.library.controller;
 
 import com.tgfc.library.request.AddBook;
 import com.tgfc.library.request.BookDataPageRequest;
+import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IPhotoService;
@@ -50,4 +51,14 @@ public class BookController {
 //
 //        return image;
 //    }
+
+    @PostMapping(value = "/findAll")
+    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
+        return bookDataService.findAll(pageableRequest.getPageable());
+    }
+
+    @PostMapping(value = "/findByKeyword")
+    public BaseResponse findByKeyword(@RequestBody BookDataPageRequest bookDataPageRequest){
+        return bookDataService.findByKeyword(bookDataPageRequest.getKeyword(),bookDataPageRequest.getPageable());
+    }
 }

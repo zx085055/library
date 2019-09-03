@@ -15,6 +15,7 @@ import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -55,9 +56,11 @@ public class RecordsService implements IRecordsService {
         Employee employee = employeeRepository.findById(id).get();
         Book book = bookRepository.findById(records.getBook().getBookId()).get();
         Date current = new Date();
+        Date endDate = new Date(current.getTime() + 14 * 24 * 60 * 60 * 1000);
         records.setBorrowUsername(employeeRepository.findById(records.getBorrowId()).get().getName());
         records.setStatus(BookStatus.BOOK_STATUS_LEND.getCode());
         records.setBorrowDate(current);
+        records.setEndDate(endDate);
         records.setEmployee(employee);
         records.setBook(book);
         baseResponse.setData(recordsRepository.save(records));
@@ -69,13 +72,13 @@ public class RecordsService implements IRecordsService {
     @Override
     public BaseResponse update(Records records) {
         BaseResponse baseResponse = new BaseResponse();
-        if (!recordsRepository.existsById(records.getId())){
+        if (!recordsRepository.existsById(records.getId())) {
             baseResponse.setStatus(false);
             baseResponse.setMessage("無此資料");
         }
 
         Records dataReserv = recordsRepository.findById(records.getId()).get();
-        BeanUtils.copyProperties(records,dataReserv);
+        BeanUtils.copyProperties(records, dataReserv);
         baseResponse.setData(recordsRepository.save(dataReserv));
         baseResponse.setStatus(true);
         baseResponse.setMessage("修改成功");
@@ -85,7 +88,7 @@ public class RecordsService implements IRecordsService {
     @Override
     public BaseResponse delete(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
-        if (!recordsRepository.existsById(id)){
+        if (!recordsRepository.existsById(id)) {
             baseResponse.setMessage("無此資料");
             baseResponse.setStatus(false);
         }
@@ -118,6 +121,26 @@ public class RecordsService implements IRecordsService {
         baseResponse.setData(recordsRepository.save(records));
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findAll(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        Page<Records> records = recordsRepository.findAll(pageable);
+        baseResponse.setData(records.getContent());
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        Page<Reservation> reservations = recordsRepository.findByTimeInterval(startDate, endDate,pageable);
+        baseResponse.setData(reservations.getContent());
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
         return baseResponse;
     }
 }

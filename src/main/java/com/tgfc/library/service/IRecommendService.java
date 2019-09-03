@@ -10,4 +10,5 @@ public interface IRecommendService {
     BaseResponse insert(Recommend recommend);
     BaseResponse update(Recommend recommend);
     BaseResponse delete(Integer id);
+    BaseResponse findAll(Pageable pageable);
 }

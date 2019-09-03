@@ -1,18 +1,23 @@
 package com.tgfc.library.service;
 
 import com.tgfc.library.entity.Reservation;
-import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.response.BaseResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 
 public interface IReservationService {
-    BaseResponse select(Integer id);
+    BaseResponse select(String keyword, Pageable pageable);
+
     BaseResponse insert(Reservation reservation);
+
     BaseResponse update(Reservation reservation);
+
     BaseResponse delete(Integer id);
-    BaseResponse findByTimeInterval(Date startDate,Date endDate,Pageable pageable);
+
+    BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable);
+
     BaseResponse cancleReservation(Integer reservationId);
+
     BaseResponse findAll(Pageable pageable);
 }

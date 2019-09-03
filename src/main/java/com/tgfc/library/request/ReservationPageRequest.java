@@ -1,7 +1,5 @@
 package com.tgfc.library.request;
 
-import com.tgfc.library.entity.Employee;
-
 import java.util.Date;
 
 public class ReservationPageRequest extends PageableRequest {
@@ -12,6 +10,7 @@ public class ReservationPageRequest extends PageableRequest {
     private Integer Status;
     private Integer empId;
     private Integer bookId;
+    private String keyword;
 
     public Integer getId() {
         return id;
@@ -59,5 +58,13 @@ public class ReservationPageRequest extends PageableRequest {
 
     public void setBookId(Integer bookId) {
         this.bookId = bookId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

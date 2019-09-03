@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name="records")
+@Table(name = "records")
 public class Records implements Serializable {
 
     private static final long serialVersionUID = -2702636334338651966L;
@@ -13,23 +13,25 @@ public class Records implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name="borrow_id",length = 10,nullable = false)
+    @Column(name = "borrow_id", length = 10, nullable = false)
     private String borrowId;
-    @Column(name="borrow_username",length = 30,nullable = false)
+    @Column(name = "borrow_username", length = 30, nullable = false)
     private String borrowUsername;
-    @Column(name="borrow_date",nullable = false)
+    @Column(name = "borrow_date", nullable = false)
     private Date borrowDate;
-    @Column(name="return_date")
+    @Column(name = "return_date")
     private Date returnDate;
-    @Column(name="status",length = 5,nullable = false)
+    @Column(name = "end_date", nullable = false)
+    private Date endDate;
+    @Column(name = "status", length = 5, nullable = false)
     private Integer status;
 
     @ManyToOne
-    @JoinColumn(name = "emp_id",referencedColumnName = "id")
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = "book_id",referencedColumnName = "id")
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
     public Integer getId() {
@@ -72,6 +74,14 @@ public class Records implements Serializable {
         this.returnDate = returnDate;
     }
 
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -95,4 +105,5 @@ public class Records implements Serializable {
     public void setBook(Book book) {
         this.book = book;
     }
+
 }

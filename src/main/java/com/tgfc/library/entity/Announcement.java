@@ -24,7 +24,7 @@ public class Announcement implements Serializable {
     private String updateUsername;
 
     @ManyToOne
-    @JoinColumn(name = "emp_id")
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
 
     public Integer getId() {
