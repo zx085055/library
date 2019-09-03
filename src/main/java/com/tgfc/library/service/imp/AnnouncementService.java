@@ -59,11 +59,12 @@ public class AnnouncementService implements IAnnouncementService {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
 
+        Employee employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setStatus(announcement.getStatus());
         existAnnouncement.setTitle(announcement.getTitle());
         existAnnouncement.setContext(announcement.getContext());
-        existAnnouncement.setUpdateUsername(id);
+        announcement.setEmployee(employee);
         existAnnouncement.setCreateTime(announcement.getCreateTime());
         existAnnouncement.setEndTime(announcement.getEndTime());
         baseResponse.setData(announcementRepository.save(existAnnouncement));
@@ -90,9 +91,10 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse statusChange(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
-        Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
 
-        existAnnouncement.setUpdateUsername(id);
+        Employee employee = employeeRepository.findById(id).get();
+        Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
+        announcement.setEmployee(employee);
         existAnnouncement.setStatus(announcement.getStatus());
         baseResponse.setData(announcementRepository.save(existAnnouncement));
         baseResponse.setStatus(true);

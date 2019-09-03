@@ -30,13 +30,14 @@ public class ReservationService implements IReservationService {
     @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
+        Integer status = ReservationEnum.RESERVATION_WAIT.getCode();
         if (keyword == null) {
             baseResponse.setData(reservationRepository.findAll(pageable));
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
             return baseResponse;
         } else {
-            baseResponse.setData(reservationRepository.getRecordsByNameLikeAndStatus(keyword, pageable));
+            baseResponse.setData(reservationRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable));
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
             return baseResponse;

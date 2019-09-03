@@ -14,8 +14,8 @@ import java.util.List;
 @Repository
 public interface IReservationRepository extends JpaRepository<Reservation, Integer> {
 
-    @Query("SELECT r FROM Reservation r LEFT JOIN r.book b LEFT JOIN r.employee e WHERE r.employee.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')")
-    Page<Reservation> getRecordsByNameLikeAndStatus(String keyword, Pageable pageable);
+    @Query("SELECT r FROM Reservation r LEFT JOIN r.book b LEFT JOIN r.employee e WHERE r.employee.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%') AND r.status=?2 GROUP BY r.book.id ORDER BY r.startDate ASC")
+    Page<Reservation> getRecordsByNameLikeAndStatus(String keyword, Integer status, Pageable pageable);
 
     @Query("SELECT r from Reservation r where r.startDate>=?1 AND r.endDate<=?2")
     Page<Reservation> findByTimeInterval(Date startDate, Date endDate, Pageable pageable);
@@ -25,12 +25,12 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
 
     @Modifying
     @Query(value = "update Reservation r set r.status=?1 where r.id=?2")
-    int changeReservationStatus(Integer status,Integer reservationId);
+    int changeReservationStatus(Integer status, Integer reservationId);
 
     @Query(value = "select r from Reservation r where r.endDate>=?1")
     List<Reservation> reservationExpiredList(Date endDate);
 
     @Query(value = "select count(r) from Reservation r inner join  r.book b where b.id = ?1 and r.status = ?2")
-    Integer reservationStatusCount(Integer bookId,Integer status);
+    Integer reservationStatusCount(Integer bookId, Integer status);
 
 }

@@ -20,8 +20,6 @@ public class Announcement implements Serializable {
     private Date endTime;
     @Column(nullable = false)
     private Boolean status;
-    @Column(length = 30)
-    private String updateUsername;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
@@ -73,14 +71,6 @@ public class Announcement implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public String getUpdateUsername() {
-        return updateUsername;
-    }
-
-    public void setUpdateUsername(String updateUsername) {
-        this.updateUsername = updateUsername;
     }
 
     public Employee getEmployee() {
