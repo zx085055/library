@@ -7,9 +7,12 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 //import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -45,13 +48,13 @@ public class BookController {
         baseResponse=bookDataService.upData(files,addBook);
         return baseResponse;
     }
-//    @RequestMapping("/getPhoto")
-//    public String download(HttpServletRequest request, @RequestParam("fileName") String fileName, HttpServletResponse response)throws Exception {
-//        String image = photoService.getPhotoUrl(fileName);
-//
-//
-//        return image;
-//    }
+    @RequestMapping("/getPhoto")
+    public ResponseEntity<byte[]> download( @RequestParam("fileName") String fileName)throws Exception {
+        
+            byte[] image = photoService.getPhoto(fileName);
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
+
+    }
 
     @PostMapping(value = "/findAll")
     public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){

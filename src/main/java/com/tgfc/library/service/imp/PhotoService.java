@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class PhotoService implements IPhotoService {
@@ -41,7 +45,7 @@ public class PhotoService implements IPhotoService {
 
     @Override
     public String getPhotoUrl(String photoFileName)throws IOException {
-        String a = imageRuel;
+
         String urlString="";
         try {
             InetAddress address = InetAddress.getLocalHost();
@@ -78,5 +82,18 @@ public class PhotoService implements IPhotoService {
         return false;
 
     }
+    @Override
+    public byte[] getPhoto(String fileName) throws FileNotFoundException {
+        String rpath = this.filePath + fileName;
+        Path path = Paths.get(rpath);
+        byte[] data = new byte[0];
+        try {
+            data = Files.readAllBytes(path);
+            return data;
+        } catch (IOException e) {
+            throw new FileNotFoundException();
+        }
+    }
+
 
 }
