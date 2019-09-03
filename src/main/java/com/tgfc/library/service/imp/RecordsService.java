@@ -49,28 +49,6 @@ public class RecordsService implements IRecordsService {
     }
 
     @Override
-    public BaseResponse getBook(Records records) {
-        BaseResponse baseResponse = new BaseResponse();
-        String id = ContextUtil.getAccount();
-
-        Employee employee = employeeRepository.findById(id).get();
-        Book book = bookRepository.findById(records.getBook().getBookId()).get();
-        Date current = new Date();
-        Date endDate = new Date(current.getTime() + 14 * 24 * 60 * 60 * 1000);
-        records.setBorrowUsername(employeeRepository.findById(records.getBorrowId()).get().getName());
-        book.setStatus(BookStatus.BOOK_STATUS_LEND.getCode());
-        records.setStatus(RecordsStatusEnum.RECORDSSTATUS_BORROWING.getCode());
-        records.setBorrowDate(current);
-        records.setEndDate(endDate);
-        records.setEmployee(employee);
-        records.setBook(book);
-        baseResponse.setData(recordsRepository.save(records));
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("取書成功");
-        return baseResponse;
-    }
-
-    @Override
     public BaseResponse delete(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         if (!recordsRepository.existsById(id)) {

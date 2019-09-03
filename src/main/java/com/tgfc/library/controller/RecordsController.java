@@ -20,11 +20,6 @@ public class RecordsController {
         return recordsService.select(records.getKeyword(), records.getStatus(), records.getPageable());
     }
 
-    @PostMapping("/getBook")
-    public BaseResponse getBook(@RequestBody Records records) {
-        return recordsService.getBook(records);
-    }
-
     @DeleteMapping("/delete")
     public BaseResponse delete(@RequestParam int id) {
         return recordsService.delete(id);

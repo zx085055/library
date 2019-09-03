@@ -1,8 +1,15 @@
 package com.tgfc.library.service.imp;
 
+import com.tgfc.library.entity.Book;
+import com.tgfc.library.entity.Employee;
+import com.tgfc.library.entity.Records;
 import com.tgfc.library.entity.Reservation;
+import com.tgfc.library.enums.BookStatus;
+import com.tgfc.library.enums.RecordsStatusEnum;
 import com.tgfc.library.enums.ReservationEnum;
+import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
+import com.tgfc.library.repository.IRecordsRepository;
 import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
@@ -14,7 +21,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -25,6 +35,12 @@ public class ReservationService implements IReservationService {
 
     @Autowired
     IEmployeeRepository employeeRepository;
+
+    @Autowired
+    IRecordsRepository recordsRepository;
+
+    @Autowired
+    IBookRepository bookRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -144,6 +160,34 @@ public class ReservationService implements IReservationService {
         baseResponse.setData(all.getContent());
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse getBook(Integer id) {
+        BaseResponse baseResponse = new BaseResponse();
+        String operatorId = ContextUtil.getAccount();
+
+        Reservation reservation = reservationRepository.findById(id).get();
+        reservation.setStatus(ReservationEnum.RESERVATION_SUCCESS.getCode());
+        Records records = new Records();
+        Employee employee = employeeRepository.findById(reservation.getEmployee().getId()).get();
+        Book book = bookRepository.findById(reservation.getBook().getId()).get();
+        Date current = new Date();
+        Date endDate = new Date(current.getTime() + 14 * 24 * 60 * 60 * 1000);
+        book.setStatus(BookStatus.BOOK_STATUS_LEND.getCode());
+        records.setStatus(RecordsStatusEnum.RECORDSSTATUS_BORROWING.getCode());
+        records.setBorrowId(employee.getId());
+        records.setBorrowUsername(employee.getName());
+        records.setBorrowDate(current);
+        records.setEndDate(endDate);
+        records.setEmployee(employeeRepository.findById(operatorId).get());
+        records.setBook(book);
+
+        List<Object> result = Arrays.asList(recordsRepository.save(records),reservationRepository.save(reservation));
+        baseResponse.setData(result);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("取書成功");
         return baseResponse;
     }
 }

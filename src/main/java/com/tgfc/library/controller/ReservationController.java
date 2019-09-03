@@ -6,10 +6,7 @@ import com.tgfc.library.request.ReservationPageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reservation")
@@ -42,4 +39,8 @@ public class ReservationController {
         return reservationService.findAll(pageableRequest.getPageable());
     }
 
+    @GetMapping("/getBook")
+    public BaseResponse getBook(@RequestParam Integer id) {
+        return reservationService.getBook(id);
+    }
 }

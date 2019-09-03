@@ -1,5 +1,6 @@
 package com.tgfc.library.service;
 
+import com.tgfc.library.entity.Records;
 import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.response.BaseResponse;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,6 @@ public interface IReservationService {
     BaseResponse cancleReservation(Integer reservationId);
 
     BaseResponse findAll(Pageable pageable);
+
+    BaseResponse getBook(Integer id);
 }
