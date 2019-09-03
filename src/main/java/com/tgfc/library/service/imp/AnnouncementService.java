@@ -64,6 +64,8 @@ public class AnnouncementService implements IAnnouncementService {
         existAnnouncement.setTitle(announcement.getTitle());
         existAnnouncement.setContext(announcement.getContext());
         existAnnouncement.setUpdateUsername(id);
+        existAnnouncement.setCreateTime(announcement.getCreateTime());
+        existAnnouncement.setEndTime(announcement.getEndTime());
         baseResponse.setData(announcementRepository.save(existAnnouncement));
         baseResponse.setStatus(true);
         baseResponse.setMessage("編輯成功");
