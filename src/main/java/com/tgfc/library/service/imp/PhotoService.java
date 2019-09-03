@@ -1,5 +1,6 @@
 package com.tgfc.library.service.imp;
 
+import com.mysql.fabric.Server;
 import com.tgfc.library.service.IPhotoService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -7,10 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
 
 @Service
 public class PhotoService implements IPhotoService {
@@ -19,15 +17,18 @@ public class PhotoService implements IPhotoService {
 
     @Value("${file.root.path}")
     String filePath;
+    @Value("${file.root.port}")
+    String filePort;
 
     @Value("${file.path}")
     private String filePath1;
 
     @Override
     public void uploadPhoto(MultipartFile file, String newName) {
-        String fileName = file.getOriginalFilename();
-        fileName = newName + ".jpg";
+        String fileName = newName + ".jpg";
         File dest = new File(this.filePath + fileName);
+
+
         try {
             if (!dest.getParentFile().exists()) {
                 dest.getParentFile().mkdirs();
@@ -39,18 +40,22 @@ public class PhotoService implements IPhotoService {
     }
 
     @Override
-    public String getPhotoUrl(String photoFileName) {
+    public String getPhotoUrl(String photoFileName)throws IOException {
         String a = imageRuel;
         String urlString="";
         try {
             InetAddress address = InetAddress.getLocalHost();
 
             try {
+
                 String protocol = "http";
-                String host = address.getHostAddress().toString();
-                int port = 8080;
+                String host = address.getHostAddress();
+                Socket  point = new Socket();
+                //point.getLocalPort();
+
+
                 String path = imageRuel + photoFileName;
-                URL url = new URL(protocol, host, port, path);
+                URL url = new URL(protocol, host, point.getLocalPort(), path);
                 System.out.println(url.toString() + "?");
                 urlString = url.toString();
             } catch (MalformedURLException ex) {
@@ -64,8 +69,8 @@ public class PhotoService implements IPhotoService {
 
     }
     @Override
-    public boolean  deletePhoto(MultipartFile files, String newName) {
-        File file = new File(newName);
+    public boolean  deletePhoto( String newName) {
+        File file = new File(this.filePath + newName);
         if (file.isFile() && file.exists()) {
             file.delete();//"刪除單個檔案"+name+"成功！"
             return true;

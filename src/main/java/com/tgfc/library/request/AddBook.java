@@ -31,6 +31,7 @@ public class AddBook {
     private String photoName;
     @NotNull
     private String status;
+    private String originalName;
 
     public String getStatus() {
         return status;
@@ -144,5 +145,13 @@ public class AddBook {
 
     public void setPhotoName(String photoName) {
         this.photoName = photoName;
+    }
+
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
     }
 }

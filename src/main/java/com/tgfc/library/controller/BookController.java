@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 //import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 @RestController
@@ -24,20 +26,19 @@ public class BookController {
     IPhotoService photoService;
 
     @GetMapping(value = "/find")
-    public BaseResponse get(@RequestParam("id") Integer id) {
+    public BaseResponse get(@RequestParam("id") Integer id) throws IOException{
         return bookDataService.getById(id);
     }
 
     @PostMapping(value = "/books")
-    public BaseResponse getKeyWord(@RequestBody BookDataPageRequest model) {
+    public BaseResponse getKeyWord(@RequestBody BookDataPageRequest model) throws IOException {
         return bookDataService.getBookList(model);
     }
 
     @PostMapping(value = "/addBook")
-    public BaseResponse addBook(@RequestParam("files") MultipartFile files, AddBook addBook){
+    public BaseResponse addBook( MultipartFile files, AddBook addBook){
         BaseResponse baseResponse=new BaseResponse();
-        baseResponse.setStatus(false);
-        if(!files.getOriginalFilename().matches(".*.jpg")){
+        if(files!=null&&!files.getOriginalFilename().matches(".*.jpg")){
             baseResponse.setMessage("上傳格式錯誤");
             return baseResponse;
         }

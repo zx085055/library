@@ -12,11 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IBookService {
-    BaseResponse getBookList(BookDataPageRequest model) ;
-    BaseResponse getById(int storeId);
+    BaseResponse getBookList(BookDataPageRequest model) throws IOException;
+    BaseResponse getById(int storeId)throws IOException;
     BaseResponse upData(MultipartFile files,  AddBook addBook);
     BaseResponse findAll(Pageable pageable);
     BaseResponse findByKeyword(String keyword,Pageable pageable);

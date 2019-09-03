@@ -13,10 +13,12 @@ public interface IBookRepository extends JpaRepository<Book,Integer> {
 
     @Override
     public Book getOne(Integer id);
-    @Query(value = "SELECT u FROM Book u WHERE u.name LIKE :keyword")
+
+    @Query(value = "SELECT u FROM Book u WHERE u.name LIKE :keyword or u.author LIKE :keyword or u.pubHouse LIKE :keyword ")
     Page<Book> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
-    @Query(value = "SELECT u FROM Book u WHERE u.id = :keyword")
-    Book getById( Integer keyword);
+
+    @Query(value = "SELECT u FROM Book u WHERE u.id = :id")
+    Book getById( Integer id);
 
     @Query(value = "SELECT u FROM Book u WHERE u.isbn LIKE :Isbn")
     Book findByIsbn(@Param("Isbn") String Isbn);
