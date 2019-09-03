@@ -24,8 +24,6 @@ public class Reservation implements Serializable {
     private Date endDate;
     @Column(length = 1, nullable = false)
     private Integer status;
-    @Column(length = 30, nullable = false)
-    private String reserveUsername;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
@@ -81,13 +79,5 @@ public class Reservation implements Serializable {
 
     public void setBook(Book book) {
         this.book = book;
-    }
-
-    public String getReserveUsername() {
-        return reserveUsername;
-    }
-
-    public void setReserveUsername(String reserveUsername) {
-        this.reserveUsername = reserveUsername;
     }
 }
