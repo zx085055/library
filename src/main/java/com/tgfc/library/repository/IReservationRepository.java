@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface IReservationRepository extends JpaRepository<Reservation, Integer> {
 
-    @Query("SELECT r FROM Reservation r LEFT JOIN r.book b LEFT JOIN r.employee e WHERE r.employee.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%') AND r.status=?2 GROUP BY r.book.id ORDER BY r.startDate ASC")
+    @Query("SELECT r FROM Reservation r LEFT JOIN r.book b LEFT JOIN r.employee e WHERE (r.employee.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')) AND r.status=?2 GROUP BY r.book.id ORDER BY r.startDate ASC")
     Page<Reservation> getRecordsByNameLikeAndStatus(String keyword, Integer status, Pageable pageable);
 
     @Query("SELECT r from Reservation r where r.startDate>=?1 AND r.endDate<=?2")
