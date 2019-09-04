@@ -1,6 +1,8 @@
 package com.tgfc.library.conf;
 
 
+import com.tgfc.library.entity.Schedule;
+import org.quartz.Scheduler;
 import org.quartz.spi.JobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -27,6 +29,7 @@ public class QuartzConfiguration {
     public SchedulerFactoryBean schedulerFactoryBean(@Autowired JobFactory jobFactory) throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setJobFactory(jobFactory);
+        factory.setAutoStartup(true);
         factory.setQuartzProperties(quartzProperties());
         return factory;
     }
@@ -37,5 +40,10 @@ public class QuartzConfiguration {
         Properties properties = new Properties();
         properties.load(propertyStream);
         return properties;
+    }
+
+    @Bean
+    public Scheduler scheduler(@Autowired SchedulerFactoryBean schedulerFactoryBean){
+        return schedulerFactoryBean.getScheduler();
     }
 }

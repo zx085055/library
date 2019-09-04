@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
@@ -16,19 +17,8 @@ import java.util.Properties;
 @Component
 public class MyScheduler {
 
-    private Scheduler scheduler;
-
     @Autowired
-    SchedulerFactoryBean schedulerFactoryBean;
-
-    MyScheduler() {
-//        scheduler = schedulerFactoryBean.getScheduler();
-//        try {
-//            scheduler.start();
-//        } catch (SchedulerException e) {
-//            e.printStackTrace();
-//        }
-    }
+    private Scheduler scheduler;
 
     /**
      *
@@ -148,7 +138,8 @@ public class MyScheduler {
         }
     }
 
-
-
-
+    @PreDestroy
+    public void preDestroy() throws SchedulerException {
+        scheduler.shutdown();
+    }
 }
