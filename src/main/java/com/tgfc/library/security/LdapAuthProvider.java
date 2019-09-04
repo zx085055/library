@@ -74,6 +74,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
         traceUser.setPassword(encoder.encode(password));
         traceUser.setName(ldapUser.getName());
         traceUser.setEmail(ldapUser.getEmail());
+        traceUser.setDepartment(ldapUser.getDepartment());
         employeeRepository.save(traceUser);
         return traceUser;
     }

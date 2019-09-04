@@ -15,6 +15,15 @@ public class EmployeeResponse {
     private String email;
     private String password;
     private List<String> permissions;
+    private String department;
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
     public List<String> getPermissions() {
         return permissions;
@@ -62,6 +71,7 @@ public class EmployeeResponse {
         response.setName(user.getName());
         response.setEmail(user.getEmail());
         response.setPassword(user.getPassword());
+        response.setDepartment(user.getDepartment());
         return response;
     }
 }

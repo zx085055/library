@@ -20,6 +20,16 @@ public class Employee implements Serializable {
     private String email;
     @Column(name="password",length = 100,nullable = false)
     private String password;
+    @Column(name="department",length = 100,nullable = false)
+    private String department;
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
 
     public String getId() {
         return id;
