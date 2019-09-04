@@ -1,6 +1,7 @@
 package com.tgfc.library.security;
 
 import com.tgfc.library.entity.Employee;
+import com.tgfc.library.enums.PermissionEnum;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.response.EmployeeResponse;
 import com.tgfc.library.util.ContextUtil;
@@ -56,11 +57,10 @@ public class LdapAuthProvider implements AuthenticationProvider {
     private String[] getPermissionsList(Employee loginUser) {
         List<String> permissions = new ArrayList<>();
         if (loginUser.getDepartment().equals("管理部")) {
-            permissions.add("ROLE_BACK");
+            permissions.add(PermissionEnum.Role.ADMIN);
         } else {
-            permissions.add("ROLE_FRONT");
+            permissions.add(PermissionEnum.Role.USER);
         }
-        permissions.add("ROLE_NORMAL");
 
         return permissions.toArray(new String[permissions.size()]);
     }
