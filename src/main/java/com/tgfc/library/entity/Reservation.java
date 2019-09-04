@@ -1,7 +1,6 @@
 package com.tgfc.library.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
