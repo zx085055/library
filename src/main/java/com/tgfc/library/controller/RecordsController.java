@@ -41,11 +41,13 @@ public class RecordsController {
         return recordsService.returnBook(id);
     }
 
+    @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/findAll")
     public BaseResponse findAll(@RequestBody PageableRequest pageableRequest) {
         return recordsService.findAll(pageableRequest.getPageable());
     }
 
+    @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/findByDate")
     public BaseResponse findByTimeIntervalBetween(@RequestBody RecordsPageRequest recordsPageRequest) {
         return recordsService.findByTimeInterval(recordsPageRequest.getBorrowDate(), recordsPageRequest.getReturnDate(), recordsPageRequest.getPageable());

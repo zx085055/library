@@ -17,7 +17,7 @@ public class ReservationController {
     @Autowired
     IReservationService reservationService;
 
-
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/select")
     public BaseResponse select(@RequestBody ReservationPageRequest reservationPageRequest) {
         return reservationService.select(reservationPageRequest.getKeyword(), reservationPageRequest.getPageable());
