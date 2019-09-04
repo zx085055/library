@@ -44,7 +44,7 @@ public class SecurityConfig {
                     .requestCache()
                     .requestCache(new NullRequestCache())
                     .and()
-                    .logout().logoutUrl("/logout").deleteCookies("JSESSIONID")
+                    .logout().logoutUrl("/logout").logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
                     .logoutSuccessHandler((HttpServletRequest var1, HttpServletResponse response, Authentication var3)->{
                         BaseResponse logoutOk =new BaseResponse();
                         logoutOk.setStatus(true);
