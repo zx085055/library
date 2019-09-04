@@ -48,12 +48,12 @@ public class MailService implements IMailService {
      * 批量寄信
      */
     @Override
-    public Boolean batchMailing(List<Map<String,String>> list) {
+    public Boolean batchMailing(List<Map<String, String>> list) {
         list.stream().forEach(map -> {
             String title = map.get("title");
-            String context =map.get("context");
-            String email =map.get("email");
-            MailUtil.sendMail(title,context,email);
+            String context = map.get("context");
+            String email = map.get("email");
+            MailUtil.sendMail(title, context, email);
         });
         return true;
     }
