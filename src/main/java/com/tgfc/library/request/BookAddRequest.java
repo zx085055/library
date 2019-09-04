@@ -27,17 +27,24 @@ public class BookAddRequest {
     private String page;
     @NotNull
     private String language;
-    @NotNull
     private String photoName;
     @NotNull
-    private String status;
+    private Integer status;
     private String originalName;
 
-    public String getStatus() {
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
+
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -147,11 +154,5 @@ public class BookAddRequest {
         this.photoName = photoName;
     }
 
-    public String getOriginalName() {
-        return originalName;
-    }
 
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
-    }
 }

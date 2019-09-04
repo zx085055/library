@@ -27,6 +27,9 @@ public class PhotoService implements IPhotoService {
     @Value("${file.path}")
     private String filePath1;
 
+    @Value("${file.photo.path}")
+     String urlString;
+
     @Override
     public void uploadPhoto(MultipartFile file, String newName) {
         String fileName = newName + ".jpg";
@@ -94,6 +97,13 @@ public class PhotoService implements IPhotoService {
             throw new FileNotFoundException();
         }
     }
+    @Override
+    public String getApiPhotoUrl(String photoFileName)throws IOException {
+       String url =urlString+photoFileName;
 
+
+        return url;
+
+    }
 
 }

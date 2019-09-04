@@ -29,15 +29,16 @@ public enum BookStatusEnum {
     public void setTrans(String trans) {
         this.trans = trans;
     }
-    public static BookStatusEnum getStatus(String i){
+
+    public static BookStatusEnum getStatus(Integer i){
         switch(i){
-            case "1":
+            case 1:
                 return BOOK_STATUS_LEND;
-            case "2":
+            case 2:
                 return BOOK_STATUS_INSIDE;
-            case "3":
+            case 3:
                 return BOOK_STATUS_LOST;
-            case "4":
+            case 4:
                 return BOOK_STATUS_BROKEN;
             default:
                 return null;

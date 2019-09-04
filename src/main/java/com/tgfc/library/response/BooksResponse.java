@@ -14,7 +14,7 @@ public class BooksResponse {
     private Date publishDate;
     private String type;
     private String originalName;
-    private String status;
+    private Integer status;
 
     public Integer getId() {
         return id;
@@ -80,11 +80,11 @@ public class BooksResponse {
         this.originalName = originalName;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }

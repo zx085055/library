@@ -11,4 +11,5 @@ public interface IPhotoService  {
     String getPhotoUrl( String Photo) throws IOException;
     public boolean deletePhoto( String newName);
     public byte[] getPhoto(String fileName) throws FileNotFoundException;
+    public String getApiPhotoUrl(String photoFileName)throws IOException;
 }
