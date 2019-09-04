@@ -158,14 +158,12 @@ public class ScheduleService implements IScheduleService {
 
     private JobDetail getJob(SchedulePageRequset model) {
         JobKey jobKey = new JobKey(model.getName(), model.getName() + model.getId());
-        JobDetail job = JobBuilder.newJob(JobTypeEnum.RESERVATION_EXPIRED.getCode().equals(model.getType()) ? ReservationExpiredJob.class :
-                JobTypeEnum.LENDING_NEARLY_EXPIRED.getCode().equals(model.getType()) ? LendingNearlyExpiredJob.class :
-                        LendingExpiredJob.class)
+        JobDetail job = JobBuilder.newJob(JobTypeEnum.code2Class(model.getType()))
                 .withIdentity(jobKey)
                 .build();
-        JobDataMap jobDataMap = job.getJobDataMap();
-        jobDataMap.put("startTime", model.getStartTime());
-        jobDataMap.put("endTime", model.getEndTime());
+//        JobDataMap jobDataMap = job.getJobDataMap();
+//        jobDataMap.put("startTime", model.getStartTime());
+//        jobDataMap.put("endTime", model.getEndTime());
         return job;
     }
 

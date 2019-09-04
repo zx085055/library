@@ -14,15 +14,21 @@ import java.util.Date;
 @Component
 public class OneDayOneTimeTrigger {
     public CronTrigger getTrigger(SchedulePageRequset model) {
-        Date startTime = DateBuilder.nextGivenSecondDate(null, 1);
-        return TriggerBuilder
+
+        String minutes = Integer.toString(model.getNoticeTime().getMinutes());
+        String hours = Integer.toString(model.getNoticeTime().getHours());
+
+        Date startTime = DateBuilder.nextGivenSecondDate(model.getStartTime(), 0);
+        Date endTime = DateBuilder.nextGivenSecondDate(model.getEndTime(), 0);
+
+        CronTrigger trigger = TriggerBuilder
                 .newTrigger()
-                .withIdentity("OneDayOneTime", model.getName()+model.getId())
+                .withIdentity("OneDayOneTime", model.getName() + model.getId())
                 .startAt(startTime)
-                .withSchedule(CronScheduleBuilder.cronSchedule("* * * * * ?"))
-//                .withSchedule(CronScheduleBuilder.cronSchedule(
-//                        Integer.toString(model.getNoticeTime().getMinutes()) + " "
-//                                + Integer.toString(model.getNoticeTime().getHours()) + " * * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 "+minutes+" "+hours+" * * ?"))
+                .endAt(endTime)
                 .build();
+
+        return trigger;
     }
 }

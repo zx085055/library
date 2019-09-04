@@ -29,8 +29,7 @@ public class LendingExpiredJob implements Job {
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
-        List<MailResponse> list = mailService.getLendingExpiredJobList((Date)dataMap.get("startTime"), (Date)dataMap.get("endTime"));
+        List<MailResponse> list = mailService.getLendingExpiredJobList();
         List<Map<String, String>> collect = list.stream().map(mailResponse -> {
             Map<String, String> map = new HashMap<>();
             map.put("title", "借書過期通知");

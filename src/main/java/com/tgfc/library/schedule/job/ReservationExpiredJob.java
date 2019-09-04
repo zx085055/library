@@ -33,8 +33,7 @@ public class ReservationExpiredJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
-        List<MailResponse> list = mailService.getReservationExpiredList((Date)dataMap.get("startTime"), (Date)dataMap.get("endTime"));
+        List<MailResponse> list = mailService.getReservationExpiredList();
         List<Map<String, String>> collect = list.stream().map(mailResponse -> {
             Map<String, String> map = new HashMap<>();
             map.put("title", "預約過期通知");

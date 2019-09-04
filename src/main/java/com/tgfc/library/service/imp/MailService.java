@@ -28,20 +28,19 @@ public class MailService implements IMailService {
 
 
     @Override
-    public List<MailResponse> getReservationExpiredList(Date startTime, Date endTime) {
-        return reservation2Model(reservationRepository.getReservationExpiredList(startTime, endTime));
+    public List<MailResponse> getReservationExpiredList() {
+        return reservation2Model(reservationRepository.getReservationExpiredList(new java.util.Date()));
     }
 
     @Override
-    public List<MailResponse> getLendingNearlyExpiredList(Date startTime, Date endTime) {
-        startTime = addThreeDays(startTime);
-        endTime = addThreeDays(endTime);
-        return records2Model(recordsRepository.getLendingExpiredList(startTime, endTime));
+    public List<MailResponse> getLendingNearlyExpiredList() {
+        java.util.Date date = addThreeDays(new java.util.Date());
+        return records2Model(recordsRepository.getLendingExpiredList(date));
     }
 
     @Override
-    public List<MailResponse> getLendingExpiredJobList(Date startTime, Date endTime) {
-        return records2Model(recordsRepository.getLendingExpiredList(startTime, endTime));
+    public List<MailResponse> getLendingExpiredJobList() {
+        return records2Model(recordsRepository.getLendingExpiredList(new java.util.Date()));
     }
 
     /**
@@ -86,7 +85,7 @@ public class MailService implements IMailService {
     /**
      * 計算出借即將到期的時間(3天)
      */
-    private Date addThreeDays(Date date) {
+    private Date addThreeDays(java.util.Date date) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(calendar.DATE, 3);

@@ -12,17 +12,17 @@ public interface IMailService {
     /**
      * 讀取預約過期名單
      */
-    List<MailResponse> getReservationExpiredList(Date startTime, Date endTime);
+    List<MailResponse> getReservationExpiredList();
 
     /**
      * 讀取借書即將過期名單
      */
-    List<MailResponse> getLendingNearlyExpiredList(Date startTime,Date endTime);
+    List<MailResponse> getLendingNearlyExpiredList();
 
     /**
      * 讀取借書過期名單
      */
-    List<MailResponse> getLendingExpiredJobList(Date startTime, Date endTime);
+    List<MailResponse> getLendingExpiredJobList();
 
     /**
      * 批量寄信

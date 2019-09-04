@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,11 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Query(value = "select count(r) from Reservation r inner join  r.book b where b.id = ?1 and r.status = ?2")
     Integer reservationStatusCount(Integer bookId, Integer status);
 
-    @Query(value = "select r from Reservation r where r.endDate>=?1 and r.endDate<=?2")
-    List<Reservation> getReservationExpiredList(Date startTime, Date endTime);
+    @Query(value = "select r from Reservation r where r.endDate<=?1")
+    List<Reservation> getReservationExpiredList(Date currentDate);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update Reservation r set r.status=2 where r.endDate<=?1 and r.status=1")
+    int reservationExpiredStatus(Date currentDate);
 }
