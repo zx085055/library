@@ -8,12 +8,15 @@ import com.tgfc.library.service.IRecommendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 @RestController
 @RequestMapping("/recommend")
 public class RecommendController {
     @Autowired
     IRecommendService recommendService;
 
+    @RolesAllowed({ "ROLE_FRONT", "ROLE_BACK" })
     @PostMapping("/select")
     public BaseResponse select(@RequestBody RecommendPageRequest recommend){
         return recommendService.select(recommend.getName(),recommend.getPageable());
@@ -35,7 +38,7 @@ public class RecommendController {
     }
 
     @PostMapping("/findAll")
-    public  BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
+    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
         return  recommendService.findAll(pageableRequest.getPageable());
     }
 

@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +20,7 @@ public class QuartzConfiguration {
 
     @Bean
     public JobFactory jobFactory(ApplicationContext applicationContext) {
-        CustomSpringBeanJobFactory jobFactory = new CustomSpringBeanJobFactory();
+        SpringBeanJobFactory jobFactory = new SpringBeanJobFactory();
         jobFactory.setApplicationContext(applicationContext);
 
         return jobFactory;

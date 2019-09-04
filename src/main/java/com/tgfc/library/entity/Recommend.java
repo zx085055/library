@@ -1,6 +1,7 @@
 package com.tgfc.library.entity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,6 +26,8 @@ public class Recommend implements Serializable {
     private String reason;
     @Column(nullable = false)
     private Date publishDate;
+    @Column(nullable = false)
+    private Integer status;
 
     @ManyToOne
     @JoinColumn(name = "emp_id",referencedColumnName = "id")
@@ -92,5 +95,13 @@ public class Recommend implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

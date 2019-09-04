@@ -2,6 +2,7 @@ package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Recommend;
+import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecommendRepository;
 import com.tgfc.library.response.BaseResponse;
@@ -24,6 +25,9 @@ public class RecommendService implements IRecommendService {
     @Autowired
     IEmployeeRepository employeeRepository;
 
+    @Autowired
+    IBookRepository bookRepository;
+
     @Override
     @Transactional(readOnly = true)
     public BaseResponse select(String name,Pageable pageable) {
@@ -43,13 +47,16 @@ public class RecommendService implements IRecommendService {
     @Override
     public BaseResponse insert(Recommend recommend) {
         BaseResponse baseResponse = new BaseResponse();
-        Recommend ExistRecommend  = recommendRepository.getRecommendByName(recommend.getName());
-        if (ExistRecommend!=null){
+        Recommend existRecommend  = recommendRepository.getRecommendByName(recommend.getName());
+        if (existRecommend!=null){
             baseResponse.setStatus(false);
-            baseResponse.setMessage("已存在此紀錄");
-        }else{
-            //String id = ContextUtil.getPrincipal().toString();
-            Employee employee = employeeRepository.getOne("TGFC062");
+            baseResponse.setMessage("已存在此推薦");
+        }else if (bookRepository.findByIsbn(recommend.getIsbn())!=null){
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("已存在此本書籍");
+        }else {
+            String id = ContextUtil.getAccount();
+            Employee employee = employeeRepository.findById(id).get();
             recommend.setEmployee(employee);
             recommendRepository.save(recommend);
             baseResponse.setStatus(true);
@@ -71,7 +78,7 @@ public class RecommendService implements IRecommendService {
             baseResponse.setMessage("成功更新一筆");
         }else {
             baseResponse.setStatus(false);
-            baseResponse.setMessage("無此紀錄");
+            baseResponse.setMessage("無此推薦");
         }
 
         return baseResponse;
@@ -87,7 +94,7 @@ public class RecommendService implements IRecommendService {
             baseResponse.setMessage("成功刪除一筆");
         }else {
             baseResponse.setStatus(false);
-            baseResponse.setMessage("無此紀錄");
+            baseResponse.setMessage("無此推薦");
         }
         return baseResponse;
     }
