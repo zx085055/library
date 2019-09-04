@@ -60,6 +60,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
         } else {
             permissions.add("ROLE_FRONT");
         }
+        permissions.add("ROLE_NORMAL");
 
         return permissions.toArray(new String[permissions.size()]);
     }

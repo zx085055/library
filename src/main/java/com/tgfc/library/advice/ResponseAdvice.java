@@ -45,7 +45,11 @@ public class ResponseAdvice implements ResponseBodyAdvice {
         BaseResponse response = new BaseResponse();
         response.setStatus(false);
         e.printStackTrace();
-        response.setMessage(e.getMessage());
+        if (e instanceof AccessDeniedException){
+            response.setMessage("權限不足,請檢查授權");
+            return  ResponseEntity.status(403).body(response);
+        }
+        response.setMessage(e.getLocalizedMessage());
         return ResponseEntity.status(500).body(response);
         }
 

@@ -2,6 +2,7 @@ package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Recommend;
+import com.tgfc.library.enums.RecommendEnum;
 import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecommendRepository;
@@ -58,6 +59,7 @@ public class RecommendService implements IRecommendService {
             String id = ContextUtil.getAccount();
             Employee employee = employeeRepository.findById(id).get();
             recommend.setEmployee(employee);
+            recommend.setStatus(RecommendEnum.RECOMMEND_ALIVE.getCode());
             recommendRepository.save(recommend);
             baseResponse.setStatus(true);
             baseResponse.setMessage("成功新增一筆");
