@@ -1,6 +1,5 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.enums.JobTypeEnum;
 import com.tgfc.library.enums.ScheduleStatus;
@@ -8,11 +7,7 @@ import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IScheduleRepository;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.BaseResponse;
-import com.tgfc.library.response.EmployeeResponse;
 import com.tgfc.library.response.SchedulePageResponse;
-import com.tgfc.library.schedule.job.LendingExpiredJob;
-import com.tgfc.library.schedule.job.LendingNearlyExpiredJob;
-import com.tgfc.library.schedule.job.ReservationExpiredJob;
 import com.tgfc.library.schedule.scheduler.MyScheduler;
 import com.tgfc.library.schedule.trigger.OneDayOneTimeTrigger;
 import com.tgfc.library.service.IScheduleService;
@@ -25,12 +20,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.*;
-import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -167,9 +160,6 @@ public class ScheduleService implements IScheduleService {
         JobDetail job = JobBuilder.newJob(JobTypeEnum.code2Class(model.getType()))
                 .withIdentity(jobKey)
                 .build();
-//        JobDataMap jobDataMap = job.getJobDataMap();
-//        jobDataMap.put("startTime", model.getStartTime());
-//        jobDataMap.put("endTime", model.getEndTime());
         return job;
     }
 
@@ -181,7 +171,6 @@ public class ScheduleService implements IScheduleService {
         BaseResponse response = new BaseResponse();
         Schedule schedule = scheduleRepository.getById(id);
         JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
-//        TriggerKey triggerKey = new TriggerKey("OneDayOneTime", schedule.getName() + schedule.getId());
         if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
             myScheduler.pauseJob(jobKey);
             scheduleRepository.pauseJob(id);
@@ -265,32 +254,4 @@ public class ScheduleService implements IScheduleService {
         response.setStatus(true);
         return response;
     }
-
-
-    /**********測試用，不會留***********/
-
-    @Override
-    public Schedule one() {
-        return scheduleRepository.getById(2);
-    }
-
-    public List<Schedule> findAll() {
-        return scheduleRepository.findAll();
-    }
-
-    @Override
-    public Schedule getone() {
-        return scheduleRepository.getOne(1);
-    }
-
-    @Override
-    public int xxx() {
-        return (int) (Math.random() * 42 + 1);
-    }
-
-    public void print() {
-        System.out.println("hello");
-    }
-
-
 }

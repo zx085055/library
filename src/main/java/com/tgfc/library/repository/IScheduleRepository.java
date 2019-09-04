@@ -17,31 +17,41 @@ public interface IScheduleRepository extends JpaRepository<Schedule,Integer> {
     @Query("SELECT r from Schedule r where r.id=?1 ")
     Schedule getById(int id);
 
+    /**
+     * 恢復全部暫停job時變更狀態
+     */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status='1' where r.status='2'")
     int resumeAll();
 
+    /**
+     * 暫停全部job時變更狀態
+     */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status='2' where r.status='1'")
     int pauseAll();
 
+    /**
+     * 暫停job時變更狀態
+     */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status='2' where r.status='1' and r.id=?1")
     int pauseJob(int id);
 
+    /**
+     * 恢復暫停job時變更狀態
+     */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status='1' where r.status='2' and r.id=?1")
     int resumeJob(int id);
 
-    @Modifying
-    @Transactional
-    @Query(value = "update Schedule r set r.id=?2 where  r.group=?1")
-    int idMinusOne (String group,int id);
-
+    /**
+     * 設定Group
+     */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.group=?1 where r.id=?2")

@@ -121,7 +121,9 @@ public class MyScheduler {
         return true;
     }
 
-
+    /**
+     * 暫停指定Job
+     */
     public void pauseJob(JobKey jobKey){
         try {
             scheduler.pauseJob(jobKey);
@@ -130,6 +132,9 @@ public class MyScheduler {
         }
     }
 
+    /**
+     * 恢復指定Job
+     */
     public void resumeJob(JobKey jobKey){
         try {
             scheduler.resumeJob(jobKey);

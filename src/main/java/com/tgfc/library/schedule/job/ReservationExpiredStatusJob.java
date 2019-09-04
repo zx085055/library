@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 
+/**
+ * 檢查預約過期名單，並變更過期狀態Job
+ */
 public class ReservationExpiredStatusJob implements Job {
     @Autowired
     IReservationRepository reservationRepository;
