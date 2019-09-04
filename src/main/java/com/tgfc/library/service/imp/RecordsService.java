@@ -2,7 +2,7 @@ package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Records;
 import com.tgfc.library.entity.Reservation;
-import com.tgfc.library.enums.BookStatus;
+import com.tgfc.library.enums.BookStatusEnum;
 import com.tgfc.library.enums.RecordsStatusEnum;
 import com.tgfc.library.enums.ReservationEnum;
 import com.tgfc.library.repository.IBookRepository;
@@ -87,7 +87,7 @@ public class RecordsService implements IRecordsService {
         Date current = new Date();
         records.setReturnDate(current);
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
-        records.getBook().setStatus(BookStatus.BOOK_STATUS_INSIDE.getCode());
+        records.getBook().setStatus(BookStatusEnum.BOOK_STATUS_INSIDE.getCode());
         List<Object> result = Arrays.asList(recordsRepository.save(records),reservationRepository.save(nextReservation));
         baseResponse.setData(result);
         baseResponse.setStatus(true);

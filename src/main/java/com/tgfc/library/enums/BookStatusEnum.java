@@ -1,6 +1,6 @@
 package com.tgfc.library.enums;
 
-public enum BookStatus {
+public enum BookStatusEnum {
     BOOK_STATUS_LEND(1, "出借中"),
     BOOK_STATUS_INSIDE(2, "在館中"),
     BOOK_STATUS_LOST(3, "遺失"),
@@ -9,7 +9,7 @@ public enum BookStatus {
 
     private Integer code;
     private String trans;
-    BookStatus(Integer code, String trans) {
+    BookStatusEnum(Integer code, String trans) {
         this.code = code;
         this.trans = trans;
     }
@@ -29,7 +29,7 @@ public enum BookStatus {
     public void setTrans(String trans) {
         this.trans = trans;
     }
-    public static BookStatus getStatus(String i){
+    public static BookStatusEnum getStatus(String i){
         switch(i){
             case "1":
                 return BOOK_STATUS_LEND;

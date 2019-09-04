@@ -1,9 +1,9 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Book;
-import com.tgfc.library.enums.BookStatus;
+import com.tgfc.library.enums.BookStatusEnum;
 import com.tgfc.library.repository.IBookRepository;
-import com.tgfc.library.request.AddBook;
+import com.tgfc.library.request.BookAddRequest;
 import com.tgfc.library.request.BookDataPageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.BooksResponse;
@@ -64,12 +64,12 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public BaseResponse upData(MultipartFile files, AddBook addBook) {
+    public BaseResponse upData(MultipartFile files, BookAddRequest bookAddRequest) {
         BaseResponse response = new BaseResponse();
         //判斷status是否正確
-        if (BookStatus.getStatus(addBook.getStatus()) != null) {
+        if (BookStatusEnum.getStatus(bookAddRequest.getStatus()) != null) {
             //用Id去資料庫找出舊資料
-            Book book = bookDataRepository.getById(addBook.getId());
+            Book book = bookDataRepository.getById(bookAddRequest.getId());
 
             if (book == null) {
                 book = new Book();
@@ -78,18 +78,18 @@ public class BookService implements IBookService {
             //是否有傳入檔案
             if (files != null) {
                 //設定PhotoName
-                addBook.setPhotoName(files.getOriginalFilename());
+                bookAddRequest.setPhotoName(files.getOriginalFilename());
                 //存檔案
                 photoService.uploadPhoto(files, book.getId().toString());
                 //將Id設定成OriginalName
-                addBook.setOriginalName(book.getId() + ".jpg");
+                bookAddRequest.setOriginalName(book.getId() + ".jpg");
 
-            } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
+            } else if (bookAddRequest.getPhotoName() == null || bookAddRequest.getPhotoName().length() == 0) {
                 photoService.deletePhoto( book.getOriginalName());
-                addBook.setOriginalName(null);
+                bookAddRequest.setOriginalName(null);
             }
             try {
-                BeanUtils.copyProperties(addBook, book);
+                BeanUtils.copyProperties(bookAddRequest, book);
             } catch (BeansException e) {
                 e.printStackTrace();
             }

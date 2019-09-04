@@ -1,6 +1,6 @@
 package com.tgfc.library.controller;
 
-import com.tgfc.library.request.AddBook;
+import com.tgfc.library.request.BookAddRequest;
 import com.tgfc.library.request.BookDataPageRequest;
 import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.response.BaseResponse;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 //import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -39,13 +38,13 @@ public class BookController {
     }
 
     @PostMapping(value = "/addBook")
-    public BaseResponse addBook( MultipartFile files, AddBook addBook){
+    public BaseResponse addBook( MultipartFile files, BookAddRequest bookAddRequest){
         BaseResponse baseResponse=new BaseResponse();
         if(files!=null&&!files.getOriginalFilename().matches(".*.jpg")){
             baseResponse.setMessage("上傳格式錯誤");
             return baseResponse;
         }
-        baseResponse=bookDataService.upData(files,addBook);
+        baseResponse=bookDataService.upData(files, bookAddRequest);
         return baseResponse;
     }
     @RequestMapping("/getPhoto")

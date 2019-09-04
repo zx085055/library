@@ -3,7 +3,7 @@ package com.tgfc.library.request;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-public class AddBook {
+public class BookAddRequest {
     private Integer id;
     @NotNull
     private String name;
