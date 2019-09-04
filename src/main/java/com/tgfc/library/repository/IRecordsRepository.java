@@ -2,6 +2,7 @@ package com.tgfc.library.repository;
 
 import com.tgfc.library.entity.Records;
 import com.tgfc.library.entity.Reservation;
+import com.tgfc.library.response.MailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface IRecordsRepository extends JpaRepository<Records, Integer> {
@@ -23,4 +25,7 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
 
     @Query("SELECT r from Records r where r.borrowDate>=?1 AND r.returnDate<=?2")
     Page<Records> findByTimeInterval(Date borrowDate, Date returnDate, Pageable pageable);
+
+    @Query(value = "select r from Records r where r.endDate>=?1 and r.endDate<=?2")
+    List<Records> getLendingExpiredList(Date startTime, Date endTime);
 }

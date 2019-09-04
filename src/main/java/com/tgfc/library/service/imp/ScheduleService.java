@@ -34,7 +34,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class ScheduleService implements IScheduleService, Serializable {
+public class ScheduleService implements IScheduleService {
 
     @Autowired
     IScheduleRepository scheduleRepository;

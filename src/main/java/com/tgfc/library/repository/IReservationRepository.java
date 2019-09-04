@@ -1,6 +1,7 @@
 package com.tgfc.library.repository;
 
 import com.tgfc.library.entity.Reservation;
+import com.tgfc.library.response.MailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,4 +37,6 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Query(value = "select count(r) from Reservation r inner join  r.book b where b.id = ?1 and r.status = ?2")
     Integer reservationStatusCount(Integer bookId, Integer status);
 
+    @Query(value = "select r from Reservation r where r.endDate>=?1 and r.endDate<=?2")
+    List<Reservation> getReservationExpiredList(Date startTime, Date endTime);
 }
