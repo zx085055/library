@@ -17,34 +17,34 @@ public class RecommendController {
     @Autowired
     IRecommendService recommendService;
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @PostMapping("/select")
-    public BaseResponse select(@RequestBody RecommendPageRequest recommend){
-        return recommendService.select(recommend.getName(),recommend.getPageable());
+    public BaseResponse select(@RequestBody RecommendPageRequest recommend) {
+        return recommendService.select(recommend.getName(), recommend.getPageable());
     }
 
-    @RolesAllowed({ PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/insert")
-    public BaseResponse insert(@RequestBody Recommend recommend){
+    public BaseResponse insert(@RequestBody Recommend recommend) {
         return recommendService.insert(recommend);
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/update")
-    public BaseResponse update(@RequestBody Recommend recommend){
+    public BaseResponse update(@RequestBody Recommend recommend) {
         return recommendService.update(recommend);
     }
 
-    @RolesAllowed({  PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @DeleteMapping("/delete")
-    public BaseResponse delete(@RequestParam int id){
+    public BaseResponse delete(@RequestParam int id) {
         return recommendService.delete(id);
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @PostMapping("/findAll")
-    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
-        return  recommendService.findAll(pageableRequest.getPageable());
+    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest) {
+        return recommendService.findAll(pageableRequest.getPageable());
     }
 
 }
