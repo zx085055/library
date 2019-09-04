@@ -1,7 +1,7 @@
 package com.tgfc.library.request;
 
 import java.sql.Time;
-import java.sql.Date;
+import java.util.Date;
 
 public class SchedulePageRequset extends PageableRequest {
     private Integer id;

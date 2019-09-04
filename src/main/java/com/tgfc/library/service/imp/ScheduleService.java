@@ -26,9 +26,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,8 +70,8 @@ public class ScheduleService implements IScheduleService {
         Path<Date> endTime = rootEntity.<Date>get("endTime");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = (Date)sdf.parse("1970-01-01");
-        Date endDate = (Date)sdf.parse("2099-01-01");
+        Date startDate = (Date) sdf.parse("1970-01-01");
+        Date endDate = (Date) sdf.parse("2099-01-01");
 
         model.setName(model.getName() == null ? "%" : "%" + model.getName() + "%");
         model.setStartTime(model.getStartTime() == null ? startDate : model.getStartTime());
@@ -82,7 +82,10 @@ public class ScheduleService implements IScheduleService {
                 criteriaBuilder.lessThanOrEqualTo(endTime, model.getEndTime()));
 
         query = query.select(rootEntity).where(predicate);
-        List<Schedule> list = entityManager.createQuery(query).getResultList();
+        List<Schedule> list = entityManager.createQuery(query)
+                .setFirstResult((model.getPageNumber() - 1) * model.getPageSize())
+                .setMaxResults((model.getPageNumber() - 1) * model.getPageSize() + model.getPageSize())
+                .getResultList();
         response.setData(scheduleList2Response(list));
         response.setMessage("查詢成功");
         response.setStatus(true);
@@ -115,15 +118,18 @@ public class ScheduleService implements IScheduleService {
         try {
             Schedule schedule = model2Po(model);
             schedule.setEmployee(employeeRepository.findById(ContextUtil.getAccount()).get());
-            schedule.setStatus(ScheduleStatus.ENABLE.getCode());
+            schedule.setStatus(model.getScheduleStatus());
             Schedule scheduleWithId = scheduleRepository.save(schedule);
             model.setId(scheduleWithId.getId());
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
+            if (ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
+                this.changeStatus(model.getId());
+            }
             scheduleRepository.setGroup(model.getName() + model.getId(), model.getId());
             response.setData(true);
-            response.setMessage("新增排程no."+model.getId()+"成功");
+            response.setMessage("新增排程no." + model.getId() + "成功");
             response.setStatus(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -179,11 +185,11 @@ public class ScheduleService implements IScheduleService {
         if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
             myScheduler.pauseJob(jobKey);
             scheduleRepository.pauseJob(id);
-            response.setMessage("狀態改變成功，排程"+id+"由"+ScheduleStatus.ENABLE.getTrans()+"變為"+ScheduleStatus.DISABLE.getTrans());
+            response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.ENABLE.getTrans() + "變為" + ScheduleStatus.DISABLE.getTrans());
         } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
             myScheduler.resumeJob(jobKey);
             scheduleRepository.resumeJob(id);
-            response.setMessage("狀態改變成功，排程"+id+"由"+ScheduleStatus.DISABLE.getTrans()+"變為"+ScheduleStatus.ENABLE.getTrans());
+            response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.DISABLE.getTrans() + "變為" + ScheduleStatus.ENABLE.getTrans());
         }
         response.setData(true);
         response.setStatus(true);
