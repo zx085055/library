@@ -22,12 +22,12 @@ public class MyScheduler {
     SchedulerFactoryBean schedulerFactoryBean;
 
     MyScheduler() {
-        scheduler = schedulerFactoryBean.getScheduler();
-        try {
-            scheduler.start();
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+//        scheduler = schedulerFactoryBean.getScheduler();
+//        try {
+//            scheduler.start();
+//        } catch (SchedulerException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
