@@ -3,6 +3,8 @@ package com.tgfc.library.schedule.scheduler;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
@@ -14,18 +16,16 @@ import java.util.Properties;
 @Component
 public class MyScheduler {
 
-    private static Scheduler scheduler;
+    private Scheduler scheduler;
+
+    @Autowired
+    SchedulerFactoryBean schedulerFactoryBean;
 
     MyScheduler() {
-        InputStream propertyStream = ClassLoader.getSystemClassLoader().getResourceAsStream("quartz.properties");
-        Properties properties = new Properties();
-
+        scheduler = schedulerFactoryBean.getScheduler();
         try {
-            properties.load(propertyStream);
-            SchedulerFactory sf = new StdSchedulerFactory(properties);
-            scheduler = sf.getScheduler();
             scheduler.start();
-        } catch (Exception e) {
+        } catch (SchedulerException e) {
             e.printStackTrace();
         }
     }
