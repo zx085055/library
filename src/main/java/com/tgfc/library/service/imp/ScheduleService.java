@@ -26,9 +26,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.criteria.*;
 import java.io.Serializable;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -70,8 +70,8 @@ public class ScheduleService implements IScheduleService {
         Path<Date> endTime = rootEntity.<Date>get("endTime");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = sdf.parse("1970-01-01");
-        Date endDate = sdf.parse("2099-01-01");
+        Date startDate = (Date)sdf.parse("1970-01-01");
+        Date endDate = (Date)sdf.parse("2099-01-01");
 
         model.setName(model.getName() == null ? "%" : "%" + model.getName() + "%");
         model.setStartTime(model.getStartTime() == null ? startDate : model.getStartTime());
@@ -163,7 +163,9 @@ public class ScheduleService implements IScheduleService {
                         LendingExpiredJob.class)
                 .withIdentity(jobKey)
                 .build();
-//        job.getJobDataMap("startDate");
+        JobDataMap jobDataMap = job.getJobDataMap();
+        jobDataMap.put("startTime", model.getStartTime());
+        jobDataMap.put("endTime", model.getEndTime());
         return job;
     }
 

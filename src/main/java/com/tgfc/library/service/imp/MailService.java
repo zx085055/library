@@ -28,20 +28,20 @@ public class MailService implements IMailService {
 
 
     @Override
-    public List<Reservation> getReservationExpiredList(Date startTime, Date endTime) {
-        return reservationRepository.getReservationExpiredList(startTime, endTime);
+    public List<MailResponse> getReservationExpiredList(Date startTime, Date endTime) {
+        return reservation2Model(reservationRepository.getReservationExpiredList(startTime, endTime));
     }
 
     @Override
-    public List<Records> getLendingNearlyExpiredList(Date startTime, Date endTime) {
+    public List<MailResponse> getLendingNearlyExpiredList(Date startTime, Date endTime) {
         startTime = addThreeDays(startTime);
         endTime = addThreeDays(endTime);
-        return recordsRepository.getLendingExpiredList(startTime, endTime);
+        return records2Model(recordsRepository.getLendingExpiredList(startTime, endTime));
     }
 
     @Override
-    public List<Records> getLendingExpiredJobList(Date startTime, Date endTime) {
-        return recordsRepository.getLendingExpiredList(startTime, endTime);
+    public List<MailResponse> getLendingExpiredJobList(Date startTime, Date endTime) {
+        return records2Model(recordsRepository.getLendingExpiredList(startTime, endTime));
     }
 
     /**
@@ -53,7 +53,8 @@ public class MailService implements IMailService {
             String title = map.get("title");
             String context = map.get("context");
             String email = map.get("email");
-            MailUtil.sendMail(title, context, email);
+//            MailUtil.sendMail(title, context, email);
+            System.out.println(title+" "+context+" "+email);
         });
         return true;
     }
@@ -76,7 +77,7 @@ public class MailService implements IMailService {
                     mailResponse.setEmployee(reservation.getEmployee().getName());
                     mailResponse.setBookName(reservation.getBook().getName());
                     mailResponse.setEmail(reservation.getEmployee().getEmail());
-                    mailResponse.setEndDate((Date) reservation.getEndDate());
+                    mailResponse.setEndDate( new Date (reservation.getEndDate().getTime()));
                     return mailResponse;
                 }
         ).collect(Collectors.toList());
