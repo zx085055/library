@@ -38,26 +38,26 @@ public class LdapAuthProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String account = authentication.getPrincipal().toString();//讀取輸入的帳號
         String password = authentication.getCredentials().toString();//讀取輸入的密碼
-        Employee loginUser =null;//宣告一個變數用來存使用者的資料
-        if(!employeeRepository.existsById(account)){ //如果帳號不存在的話
-            loginUser =findUserByLDAp(account,password);
-        }else{//如果帳號存在
-            loginUser =employeeRepository.findById(account).get();//讀取所有該帳號的相關資料
-            if(!encoder.matches(password,loginUser.getPassword())){//比對密碼是否相符
+        Employee loginUser = null;//宣告一個變數用來存使用者的資料
+        if (!employeeRepository.existsById(account)) { //如果帳號不存在的話
+            loginUser = findUserByLDAp(account, password);
+        } else {//如果帳號存在
+            loginUser = employeeRepository.findById(account).get();//讀取所有該帳號的相關資料
+            if (!encoder.matches(password, loginUser.getPassword())) {//比對密碼是否相符
                 throw new BadCredentialsException("plz check account or password");//如果不相符會丟出一個錯誤訊息
             }
         }
-        String[] permissions =getPermissionsList(loginUser);
-        EmployeeResponse principle =EmployeeResponse.valueOf(loginUser);
+        String[] permissions = getPermissionsList(loginUser);
+        EmployeeResponse principle = EmployeeResponse.valueOf(loginUser);
         principle.setPermissions(Arrays.asList(permissions));
-        return new UsernamePasswordAuthenticationToken(principle,null, AuthorityUtils.createAuthorityList(permissions));
+        return new UsernamePasswordAuthenticationToken(principle, null, AuthorityUtils.createAuthorityList(permissions));
     }
 
     private String[] getPermissionsList(Employee loginUser) {
-        List<String> permissions =new ArrayList<>();
-        if (loginUser.getDepartment().equals("管理部")){
+        List<String> permissions = new ArrayList<>();
+        if (loginUser.getDepartment().equals("管理部")) {
             permissions.add("ROLE_BACK");
-        }else {
+        } else {
             permissions.add("ROLE_FRONT");
         }
 
@@ -65,15 +65,15 @@ public class LdapAuthProvider implements AuthenticationProvider {
     }
 
     private Employee findUserByLDAp(String account, String password) {
-        LdapUser ldapUser =ldapService.authenticate(account,password);
-        if(ldapUser==null){
+        LdapUser ldapUser = ldapService.authenticate(account, password);
+        if (ldapUser == null) {
             throw new BadCredentialsException("plz check account or password");
         }
-        return addUserToDataBase(ldapUser,password);
+        return addUserToDataBase(ldapUser, password);
     }
 
-    private Employee addUserToDataBase(LdapUser ldapUser,String password){
-        Employee traceUser =new Employee();
+    private Employee addUserToDataBase(LdapUser ldapUser, String password) {
+        Employee traceUser = new Employee();
         traceUser.setId(ldapUser.getAccount());
         traceUser.setPassword(encoder.encode(password));
         traceUser.setName(ldapUser.getName());

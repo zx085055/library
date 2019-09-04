@@ -14,13 +14,13 @@ public class Employee implements Serializable {
     private static final long serialVersionUID = 6535024363806436052L;
     @Id
     private String id;
-    @Column(name="name",length = 20,nullable = false)
+    @Column(name = "name", length = 20, nullable = false)
     private String name;
-    @Column(name="email",length = 50,nullable = false)
+    @Column(name = "email", length = 50, nullable = false)
     private String email;
-    @Column(name="password",length = 100,nullable = false)
+    @Column(name = "password", length = 100, nullable = false)
     private String password;
-    @Column(name="department",length = 100,nullable = false)
+    @Column(name = "department", length = 100, nullable = false)
     private String department;
 
     public String getDepartment() {

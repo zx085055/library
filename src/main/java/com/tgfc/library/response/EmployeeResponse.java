@@ -9,7 +9,6 @@ import java.util.List;
 public class EmployeeResponse {
 
 
-
     private String account;
     private String name;
     private String email;

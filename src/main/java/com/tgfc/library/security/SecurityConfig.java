@@ -22,13 +22,13 @@ import javax.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 
     @Configuration
-    @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true)
+    @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
     public static class ApiConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
         LdapAuthProvider ldapAuthProvider;
 
-        private ObjectMapper mapper =new ObjectMapper();
+        private ObjectMapper mapper = new ObjectMapper();
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -44,8 +44,8 @@ public class SecurityConfig {
                     .requestCache(new NullRequestCache())
                     .and()
                     .logout().logoutUrl("/logout").logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
-                    .logoutSuccessHandler((HttpServletRequest var1, HttpServletResponse response, Authentication var3)->{
-                        BaseResponse logoutOk =new BaseResponse();
+                    .logoutSuccessHandler((HttpServletRequest var1, HttpServletResponse response, Authentication var3) -> {
+                        BaseResponse logoutOk = new BaseResponse();
                         logoutOk.setStatus(true);
                         logoutOk.setMessage("logout ok");
                         response.setHeader("Content-type", "application/json;charset=UTF-8");
@@ -55,14 +55,14 @@ public class SecurityConfig {
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 
             http.exceptionHandling()
-                    .authenticationEntryPoint((request,response,exception)->{
+                    .authenticationEntryPoint((request, response, exception) -> {
                         BaseResponse mustLogin = new BaseResponse();
                         mustLogin.setMessage(exception.getMessage());
                         response.setStatus(401);
                         response.setHeader("Content-type", "application/json;charset=UTF-8");
                         response.getWriter().print(mapper.writeValueAsString(mustLogin));
                     })
-                    .accessDeniedHandler((request, response,accessDeniedException) -> {
+                    .accessDeniedHandler((request, response, accessDeniedException) -> {
                         BaseResponse permission_denied = new BaseResponse();
                         permission_denied.setMessage(accessDeniedException.getMessage());
                         response.setStatus(403);
@@ -72,7 +72,7 @@ public class SecurityConfig {
         }
 
         @Override
-        protected void configure(AuthenticationManagerBuilder auth){
+        protected void configure(AuthenticationManagerBuilder auth) {
             auth.authenticationProvider(ldapAuthProvider);
         }
 
@@ -83,7 +83,6 @@ public class SecurityConfig {
             return filter;
         }
     }
-
 
 
 }

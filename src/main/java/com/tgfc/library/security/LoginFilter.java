@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    private ObjectMapper mapper =new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper();
 
     public LoginFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
@@ -26,7 +26,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             @Override
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
 
-                BaseResponse response =new BaseResponse();
+                BaseResponse response = new BaseResponse();
                 response.setStatus(true);
                 response.setData(authentication.getPrincipal());
                 httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
@@ -37,7 +37,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         this.setAuthenticationFailureHandler(new AuthenticationFailureHandler() {
             @Override
             public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                BaseResponse response =new BaseResponse();
+                BaseResponse response = new BaseResponse();
                 response.setStatus(false);
                 response.setMessage(e.getMessage());
                 httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
@@ -49,10 +49,10 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
-        if (httpServletRequest.getMethod().equals("POST")&&httpServletRequest.getContentType().startsWith("application/json")) {
-            JsonNode root =mapper.readTree(httpServletRequest.getInputStream());
-            return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(root.get("account").asText(),root.get("password").asText()));
-        }else{
+        if (httpServletRequest.getMethod().equals("POST") && httpServletRequest.getContentType().startsWith("application/json")) {
+            JsonNode root = mapper.readTree(httpServletRequest.getInputStream());
+            return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(root.get("account").asText(), root.get("password").asText()));
+        } else {
             throw new BadCredentialsException("method not support");
         }
 
