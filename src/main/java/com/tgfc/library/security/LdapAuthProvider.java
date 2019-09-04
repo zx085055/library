@@ -70,11 +70,6 @@ public class LdapAuthProvider implements AuthenticationProvider {
             permissions.add(PermissionEnum.ROLE_USER.name());
         }
 
-        if (loginUser.getId().equals("ROOT")){
-            permissions.add(PermissionEnum.ROLE_ADMIN.name());
-            permissions.add(PermissionEnum.ROLE_USER.name());
-        }
-
         return permissions.toArray(new String[permissions.size()]);
     }
 
