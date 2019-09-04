@@ -18,8 +18,8 @@ public class OneDayOneTimeTrigger {
         String minutes = Integer.toString(model.getNoticeTime().getMinutes());
         String hours = Integer.toString(model.getNoticeTime().getHours());
 
-        Date startTime = DateBuilder.nextGivenSecondDate(model.getStartTime(), 0);
-        Date endTime = DateBuilder.nextGivenSecondDate(model.getEndTime(), 0);
+        Date startTime = DateBuilder.nextGivenSecondDate(model.getStartTime(), 1);
+        Date endTime = DateBuilder.nextGivenSecondDate(model.getEndTime(), 1);
 
         CronTrigger trigger = TriggerBuilder
                 .newTrigger()

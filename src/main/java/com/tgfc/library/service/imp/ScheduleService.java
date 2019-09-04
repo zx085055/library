@@ -115,12 +115,15 @@ public class ScheduleService implements IScheduleService {
         try {
             Schedule schedule = model2Po(model);
             schedule.setEmployee(employeeRepository.findById(ContextUtil.getAccount()).get());
-            schedule.setStatus(ScheduleStatus.ENABLE.getCode());
+            schedule.setStatus(model.getScheduleStatus());
             Schedule scheduleWithId = scheduleRepository.save(schedule);
             model.setId(scheduleWithId.getId());
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
+            if(ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
+                this.changeStatus(model.getId());
+            }
             scheduleRepository.setGroup(model.getName() + model.getId(), model.getId());
             response.setData(true);
             response.setMessage("新增排程no."+model.getId()+"成功");
