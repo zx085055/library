@@ -1,7 +1,6 @@
 package com.tgfc.library.repository;
 
 import com.tgfc.library.entity.Reservation;
-import com.tgfc.library.response.MailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
