@@ -57,9 +57,9 @@ public class LdapAuthProvider implements AuthenticationProvider {
     private String[] getPermissionsList(Employee loginUser) {
         List<String> permissions = new ArrayList<>();
         if (loginUser.getDepartment().equals("管理部")) {
-            permissions.add(PermissionEnum.Role.ADMIN);
+            permissions.add(PermissionEnum.ROLE_ADMIN.name());
         } else {
-            permissions.add(PermissionEnum.Role.USER);
+            permissions.add(PermissionEnum.ROLE_USER.name());
         }
 
         return permissions.toArray(new String[permissions.size()]);
