@@ -61,13 +61,6 @@ public class SecurityConfig {
                         response.setStatus(401);
                         response.setHeader("Content-type", "application/json;charset=UTF-8");
                         response.getWriter().print(mapper.writeValueAsString(mustLogin));
-                    })
-                    .accessDeniedHandler((request, response, accessDeniedException) -> {
-                        BaseResponse permission_denied = new BaseResponse();
-                        permission_denied.setMessage(accessDeniedException.getMessage());
-                        response.setStatus(403);
-                        response.setHeader("Content-type", "application/json;charset=UTF-8");
-                        response.getWriter().print(mapper.writeValueAsString(permission_denied));
                     });
         }
 
