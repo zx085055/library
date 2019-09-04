@@ -1,17 +1,12 @@
 package com.tgfc.library.controller;
 
-import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.BaseResponse;
-import com.tgfc.library.response.SchedulePageResponse;
-import com.tgfc.library.schedule.scheduler.MyScheduler;
 import com.tgfc.library.service.IScheduleService;
-import com.tgfc.library.service.imp.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.util.List;
 
 @RestController
 public class ScheduleController {
@@ -21,7 +16,7 @@ public class ScheduleController {
 
 
     /**
-     * TODO 新增排程
+     * 新增排程
      * 傳入值:SchedulePageRequset (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * 回傳值:Boolean
      */
@@ -29,7 +24,6 @@ public class ScheduleController {
     public BaseResponse create(@RequestBody SchedulePageRequset model) {
         return scheduleService.create(model);
     }
-
 
     /**
      * 編輯排程
@@ -93,29 +87,5 @@ public class ScheduleController {
     public BaseResponse resumeAll() {
         return scheduleService.resumeAll();
     }
-
-
-
-    /**********測試用，不會留***********/
-
-    @Autowired
-    MyScheduler myScheduler;
-
-    @GetMapping("/schedule/list2")
-    public Schedule list2() {
-        return scheduleService.one();
-    }
-
-    @GetMapping("/schedule/list4")
-    public Schedule list4() {
-        return scheduleService.getone();
-    }
-
-    @GetMapping("/schedule/list3")
-    public List<Schedule> list3() {
-        return scheduleService.findAll();
-    }
-
-
 
 }

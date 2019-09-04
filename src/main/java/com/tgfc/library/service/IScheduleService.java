@@ -37,12 +37,6 @@ public interface IScheduleService  {
     BaseResponse list(SchedulePageRequset model) throws ParseException;
 
     /**
-     * TODO 批量寄信
-     * 邏輯:根據傳入的scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
-     *      呼叫MailUtil，達成批量寄信功能
-     */
-
-    /**
      * 改變排成狀態
      */
     BaseResponse changeStatus(int id);
@@ -61,14 +55,5 @@ public interface IScheduleService  {
      * 恢復全部被暫停排程
      */
     BaseResponse resumeAll();
-
-
-
-    /**********測試用，不會留***********/
-
-    Schedule one();
-    Schedule getone();
-    List<Schedule> findAll();
-    int xxx();
 
 }

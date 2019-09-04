@@ -1,33 +1,26 @@
 package com.tgfc.library.schedule.job;
 
-import com.tgfc.library.entity.Reservation;
-import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.response.MailResponse;
 import com.tgfc.library.service.imp.MailService;
-import com.tgfc.library.service.imp.ScheduleService;
-import com.tgfc.library.util.MailUtil;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * TODO 預約到期通知 - type 1
+ * 預約過期通知Job
+ * 邏輯:呼叫MailService的getReservationExpiredList取得出借過期列表 (MailResponse : 收件人，收件人信箱，書名，到期日期)
+ * 通過model組成文本，呼叫MailService的batchMailing進行批量寄信通知
  */
 @Service
 public class ReservationExpiredJob implements Job {
-    /**
-     * 傳入值:scheduleMailListModel (收件人，收件人信箱，書名，到期日期)
-     * 邏輯:通過model組成文本，呼叫ScheduleService的批量寄信通知
-     */
+
     @Autowired
     MailService mailService;
 
