@@ -47,6 +47,7 @@ public class ReservationController {
         return reservationService.findAll(pageableRequest.getPageable());
     }
 
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @GetMapping("/getBook")
     public BaseResponse getBook(@RequestParam Integer id) {
         return reservationService.getBook(id);
