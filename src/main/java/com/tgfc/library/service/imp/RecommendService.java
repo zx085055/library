@@ -48,7 +48,7 @@ public class RecommendService implements IRecommendService {
     @Override
     public BaseResponse insert(Recommend recommend) {
         BaseResponse baseResponse = new BaseResponse();
-        Recommend existRecommend  = recommendRepository.getRecommendByName(recommend.getName());
+        Recommend existRecommend  = recommendRepository.findRecommendByIsbn(recommend.getIsbn());
         if (existRecommend!=null){
             baseResponse.setStatus(false);
             baseResponse.setMessage("已存在此推薦");
