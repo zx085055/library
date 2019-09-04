@@ -111,7 +111,7 @@ public class RecordsService implements IRecordsService {
     @Override
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-        Page<Reservation> reservations = recordsRepository.findByTimeInterval(startDate, endDate,pageable);
+        Page<Records> reservations = recordsRepository.findByTimeInterval(startDate, endDate,pageable);
         baseResponse.setData(reservations.getContent());
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");

@@ -73,13 +73,14 @@ public class ReservationService implements IReservationService {
         }else{
             Integer count = reservationRepository.reservationStatusCount(bookId,ReservationEnum.RESERVATION_ALIVE.getCode());
             Integer status;
+            Date startDate = new Date();
+            Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
             if (count>=1){
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 baseResponse.setMessage("此本書有人預約,已加入排隊");
+                reservation.setStartDate(startDate);
             }else{
                 status = ReservationEnum.RESERVATION_ALIVE.getCode();
-                Date startDate = new Date();
-                Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
                 reservation.setStartDate(startDate);
                 reservation.setEndDate(endDate);
                 baseResponse.setMessage("成功新增一筆預約");
