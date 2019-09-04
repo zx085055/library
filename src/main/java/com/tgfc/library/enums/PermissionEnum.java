@@ -1,8 +1,8 @@
 package com.tgfc.library.enums;
 
 public enum PermissionEnum {
-    ROLE_USER(Role.ADMIN),
-    ROLE_ADMIN(Role.USER);
+    ROLE_ADMIN(Role.ADMIN),
+    ROLE_USER(Role.USER);
 
     public class Role{
         public static final String USER = "ROLE_USER";
