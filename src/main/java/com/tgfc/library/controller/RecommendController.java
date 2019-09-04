@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/recommend")
@@ -19,19 +20,19 @@ public class RecommendController {
 
     @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @PostMapping("/select")
-    public BaseResponse select(@RequestBody RecommendPageRequest recommend) {
+    public BaseResponse select(@Valid @RequestBody RecommendPageRequest recommend) {
         return recommendService.select(recommend.getName(), recommend.getPageable());
     }
 
     @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/insert")
-    public BaseResponse insert(@RequestBody Recommend recommend) {
+    public BaseResponse insert(@Valid @RequestBody Recommend recommend) {
         return recommendService.insert(recommend);
     }
 
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/update")
-    public BaseResponse update(@RequestBody Recommend recommend) {
+    public BaseResponse update(@Valid @RequestBody Recommend recommend) {
         return recommendService.update(recommend);
     }
 
@@ -43,7 +44,7 @@ public class RecommendController {
 
     @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @PostMapping("/findAll")
-    public BaseResponse findAll(@RequestBody PageableRequest pageableRequest) {
+    public BaseResponse findAll(@Valid @RequestBody PageableRequest pageableRequest) {
         return recommendService.findAll(pageableRequest.getPageable());
     }
 

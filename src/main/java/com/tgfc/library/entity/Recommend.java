@@ -2,6 +2,9 @@ package com.tgfc.library.entity;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,6 +20,7 @@ public class Recommend implements Serializable {
     @Column(length = 30,nullable = false)
     private String name;
     @Column(length = 30,nullable = false)
+    @Pattern(regexp = "^[0-9X]{10,13}")
     private String isbn;
     @Column(length = 30,nullable = false)
     private String pubHouse;
