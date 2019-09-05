@@ -58,7 +58,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
         List<String> permissions = new ArrayList<>();
 
         //測試帳號的授權
-        if (loginUser.getId().equals("ROOT")){
+        if (loginUser.getId().equals("ROOT")) {
             permissions.add(PermissionEnum.ROLE_ADMIN.name());
             permissions.add(PermissionEnum.ROLE_USER.name());
             return permissions.toArray(new String[permissions.size()]);
@@ -66,10 +66,9 @@ public class LdapAuthProvider implements AuthenticationProvider {
 
         if (loginUser.getDepartment().equals("管理部")) {
             permissions.add(PermissionEnum.ROLE_ADMIN.name());
-            permissions.add(PermissionEnum.ROLE_USER.name());
         }
 
-
+        permissions.add(PermissionEnum.ROLE_USER.name());
 
         return permissions.toArray(new String[permissions.size()]);
     }
