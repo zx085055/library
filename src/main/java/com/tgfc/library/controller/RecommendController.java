@@ -42,10 +42,5 @@ public class RecommendController {
         return recommendService.delete(id);
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
-    @PostMapping("/findAll")
-    public BaseResponse findAll(@Valid @RequestBody PageableRequest pageableRequest) {
-        return recommendService.findAll(pageableRequest.getPageable());
-    }
 
 }

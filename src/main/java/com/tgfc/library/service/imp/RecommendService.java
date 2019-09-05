@@ -100,14 +100,4 @@ public class RecommendService implements IRecommendService {
         }
         return baseResponse;
     }
-
-    @Override
-    public BaseResponse findAll(Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
-        Page<Recommend> recommends = recommendRepository.findAll(pageable);
-        baseResponse.setData(recommends.getContent());
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("成功查詢");
-        return baseResponse;
-    }
 }
