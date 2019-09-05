@@ -4,6 +4,7 @@ import com.tgfc.library.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -26,5 +27,9 @@ public interface IBookRepository extends JpaRepository<Book,Integer> {
     @Query(value = "SELECT b From Book b where b.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.pubHouse LIKE CONCAT('%',?1,'%')")
     Page<Book> findBookByKeyWord (String keyWord,Pageable pageable);
 
+//    @Override
+//    void delete(Book book);
 
+    @Query(value = "delete from book  where id LIKE :id ", nativeQuery = true)
+    void deleteById(@Param("id") Integer id);
 }

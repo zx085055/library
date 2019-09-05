@@ -17,5 +17,6 @@ public interface IBookService {
     BaseResponse upData(MultipartFile files,  BookAddRequest bookAddRequest);
     BaseResponse findAll(Pageable pageable);
     BaseResponse findByKeyword(String keyword,Pageable pageable);
+    BaseResponse deleteBook(Integer id);
 }
 

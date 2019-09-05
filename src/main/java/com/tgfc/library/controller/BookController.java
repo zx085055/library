@@ -51,13 +51,20 @@ public class BookController {
         return baseResponse;
     }
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @GetMapping(value = "/deleteBook")
+    public BaseResponse deleteBook(@RequestParam("id") Integer id) throws IOException{
+        return bookDataService.deleteBook(id);
+    }
+
+    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @RequestMapping("/getPhoto")
-    public ResponseEntity<byte[]> download( @RequestParam("fileName") String fileName)throws Exception {
+    public ResponseEntity<byte[]> showPhoto( @RequestParam("fileName") String fileName)throws Exception {
         
             byte[] image = photoService.getPhoto(fileName);
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
 
     }
+
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @PostMapping(value = "/findAll")
     public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){

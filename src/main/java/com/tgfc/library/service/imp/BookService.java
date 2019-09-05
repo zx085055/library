@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +35,7 @@ public class BookService implements IBookService {
     PhotoService photoService;
     @Autowired
     IRecommendRepository iRecommendRepository;
+
 
     @Override
     public BaseResponse getBookList(BookDataPageRequest model) throws IOException{
@@ -79,6 +81,7 @@ public class BookService implements IBookService {
         if (BookStatusEnum.getStatus(addBook.getStatus()) != null) {
             //用Id去資料庫找出舊資料
             Book book = bookDataRepository.getById(addBook.getId());
+
             if (book == null) {
                 book=new Book();
                 try {
@@ -92,14 +95,21 @@ public class BookService implements IBookService {
             //是否有傳入檔案
             if (files != null) {
                 //設定PhotoName
-                book.setPhotoName(files.getOriginalFilename());
+                addBook.setPhotoName(files.getOriginalFilename());
                 //存檔案
                 photoService.uploadPhoto(files, book.getId().toString());
                 //將Id設定成OriginalName
-                book.setOriginalName(book.getId() + ".jpg");
+                addBook.setOriginalName(book.getId() + ".jpg");
             } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
                 photoService.deletePhoto( book.getOriginalName());
-                book.setOriginalName(null);
+                addBook.setOriginalName(null);
+            }else{
+                addBook.setOriginalName(book.getOriginalName());
+            }
+            try {
+                addBook.setId(book.getId());
+                BeanUtils.copyProperties(addBook, book);
+            } catch (BeansException e) {
             }
             if (bookDataRepository.save(book) != null)
                 response.setStatus(true);
@@ -109,6 +119,17 @@ public class BookService implements IBookService {
         return response;
     }
 
+    @Override
+    public BaseResponse deleteBook(Integer id) {
+        BaseResponse baseResponse = new BaseResponse();
+        Book book=bookDataRepository.getById(id);
+        bookDataRepository.deleteById(id);
+        if(bookDataRepository.getById(id)==null){
+            baseResponse.setStatus(true);
+            photoService.deletePhoto(book.getOriginalName());
+        }
+        return baseResponse;
+    }
     @Override
     public BaseResponse findAll(Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
@@ -128,4 +149,6 @@ public class BookService implements IBookService {
         baseResponse.setMessage("查詢成功");
         return baseResponse;
     }
+
+
 }
