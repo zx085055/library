@@ -14,8 +14,8 @@ public class Announcement implements Serializable {
     private String title;
     @Column(length = 100)
     private String context;
-    @Column(name = "create_time", nullable = false)
-    private Date createTime;
+    @Column(name = "start_time", nullable = false)
+    private Date startTime;
     @Column(name = "end_time", nullable = false)
     private Date endTime;
     @Column(nullable = false)
@@ -49,12 +49,12 @@ public class Announcement implements Serializable {
         this.context = context;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     public Date getEndTime() {

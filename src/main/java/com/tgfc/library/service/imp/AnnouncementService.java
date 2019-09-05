@@ -46,7 +46,7 @@ public class AnnouncementService implements IAnnouncementService {
 
         Employee employee = employeeRepository.findById(id).get();
         Date current = new Date();
-        announcement.setCreateTime(current);
+        announcement.setStartTime(current);
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         baseResponse.setStatus(true);
@@ -62,7 +62,7 @@ public class AnnouncementService implements IAnnouncementService {
         Employee employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setStatus(announcement.getStatus());
-        existAnnouncement.setCreateTime(announcement.getCreateTime());
+        existAnnouncement.setStartTime(announcement.getStartTime());
         existAnnouncement.setEndTime(announcement.getEndTime());
         existAnnouncement.setTitle(announcement.getTitle());
         existAnnouncement.setContext(announcement.getContext());
