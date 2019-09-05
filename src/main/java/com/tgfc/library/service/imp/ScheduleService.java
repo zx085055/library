@@ -115,7 +115,7 @@ public class ScheduleService implements IScheduleService {
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
-            setStatus(model);
+            setScheduleStatus(model);
             response.setData(true);
             response.setMessage("新增排程no." + model.getId() + "成功");
             response.setStatus(true);
@@ -124,7 +124,7 @@ public class ScheduleService implements IScheduleService {
         }
         return response;
     }
-    private void setStatus(SchedulePageRequset model){
+    private void setScheduleStatus(SchedulePageRequset model){
         if (ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
             this.changeStatus(model.getId());
         }
