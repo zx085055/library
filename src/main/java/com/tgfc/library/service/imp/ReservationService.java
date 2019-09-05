@@ -185,8 +185,8 @@ public class ReservationService implements IReservationService {
         records.setEmployee(employeeRepository.findById(operatorId).get());
         records.setBook(book);
 
-        List<Object> result = Arrays.asList(recordsRepository.save(records),reservationRepository.save(reservation));
-        baseResponse.setData(result);
+        recordsRepository.save(records);
+        reservationRepository.save(reservation);
         baseResponse.setStatus(true);
         baseResponse.setMessage("取書成功");
         return baseResponse;
