@@ -8,13 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.naming.AuthenticationException;
-
 @RestControllerAdvice
 public class ExceptionAdvice {
     @ExceptionHandler
     @ResponseBody
-    ResponseEntity handleException(Exception e) throws Exception {
+    ResponseEntity exceptionHandle(Exception e) {
         BaseResponse response = new BaseResponse();
         response.setStatus(false);
         e.printStackTrace();

@@ -4,17 +4,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import javax.validation.constraints.Min;
-
 public class PageableRequest {
 
-    private  int pageSize=10;
+    private int pageSize = 10;
 
-    private  int pageNumber=0;
+    private int pageNumber = 0;
 
-    private String sortType="ASC";
+    private String sortType = "ASC";
 
-    private String sortBy="id";
+    private String sortBy = "id";
 
     public int getPageSize() {
         return pageSize;
@@ -48,15 +46,15 @@ public class PageableRequest {
         this.sortBy = sortBy;
     }
 
-    public Pageable getPageable(){
-        Sort sort = new Sort(getDirection(),getSortBy());
-        return PageRequest.of(getPageNumber(),getPageSize(),sort);
+    public Pageable getPageable() {
+        Sort sort = new Sort(getDirection(), getSortBy());
+        return PageRequest.of(getPageNumber(), getPageSize(), sort);
     }
 
-    private Sort.Direction getDirection(){
-        if(this.sortType.equals(Sort.Direction.ASC.name())){
+    private Sort.Direction getDirection() {
+        if (this.sortType.equals(Sort.Direction.ASC.name())) {
             return Sort.Direction.ASC;
-        }else{
+        } else {
             return Sort.Direction.DESC;
         }
 

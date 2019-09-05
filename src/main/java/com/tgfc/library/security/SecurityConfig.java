@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 
     @Configuration
-    @EnableGlobalMethodSecurity(jsr250Enabled=true)
+    @EnableGlobalMethodSecurity(jsr250Enabled = true)
     public static class ApiConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
@@ -73,16 +73,14 @@ public class SecurityConfig {
         }
 
         @Bean
-        public LogoutSuccessHandler logoutFilter() throws Exception{
-            LogoutSuccessHandler logoutSuccessHandler =
-                (HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
-                    BaseResponse logoutOk = new BaseResponse();
-                    logoutOk.setStatus(true);
-                    logoutOk.setMessage("登出成功");
-                    response.setHeader("Content-type", "application/json;charset=UTF-8");
-                    response.getWriter().print(mapper.writeValueAsString(logoutOk));
-                };
-            return logoutSuccessHandler;
+        public LogoutSuccessHandler logoutFilter() {
+            return (HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
+                BaseResponse logoutOk = new BaseResponse();
+                logoutOk.setStatus(true);
+                logoutOk.setMessage("登出成功");
+                response.setHeader("Content-type", "application/json;charset=UTF-8");
+                response.getWriter().print(mapper.writeValueAsString(logoutOk));
+            };
         }
     }
 

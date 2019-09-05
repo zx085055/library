@@ -21,9 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @Transactional
@@ -64,20 +62,20 @@ public class ReservationService implements IReservationService {
         BaseResponse baseResponse = new BaseResponse();
         Integer bookId = reservation.getBook().getBookId();
         String empId = ContextUtil.getAccount();
-        Reservation exist = reservationRepository.findByBookId(bookId,empId);
-        if(exist!=null){
+        Reservation exist = reservationRepository.findByBookId(bookId, empId);
+        if (exist != null) {
             baseResponse.setMessage("已有此預約");
             baseResponse.setStatus(false);
-        }else{
-            Integer count = reservationRepository.reservationStatusCount(bookId,ReservationEnum.RESERVATION_ALIVE.getCode());
+        } else {
+            Integer count = reservationRepository.reservationStatusCount(bookId, ReservationEnum.RESERVATION_ALIVE.getCode());
             Integer status;
             Date startDate = new Date();
-            Date endDate = new Date(startDate.getTime()+3*24*60*60*1000);
-            if (count>=1){
+            Date endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+            if (count >= 1) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 baseResponse.setMessage("此本書有人預約,已加入排隊");
                 reservation.setStartDate(startDate);
-            }else{
+            } else {
                 status = ReservationEnum.RESERVATION_ALIVE.getCode();
                 reservation.setStartDate(startDate);
                 reservation.setEndDate(endDate);
@@ -95,13 +93,13 @@ public class ReservationService implements IReservationService {
     public BaseResponse update(Reservation reservation) {
         BaseResponse baseResponse = new BaseResponse();
         boolean exist = reservationRepository.existsById(reservation.getId());
-        if (exist){
+        if (exist) {
             Reservation dataReserv = reservationRepository.getOne(reservation.getId());
-            BeanUtils.copyProperties(reservation,dataReserv);
+            BeanUtils.copyProperties(reservation, dataReserv);
             reservationRepository.save(dataReserv);
             baseResponse.setStatus(true);
             baseResponse.setMessage("成功新增一筆");
-        }else {
+        } else {
             baseResponse.setStatus(false);
             baseResponse.setMessage("無此預約");
         }
@@ -112,12 +110,11 @@ public class ReservationService implements IReservationService {
     public BaseResponse delete(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         boolean exist = reservationRepository.existsById(id);
-        if (exist){
+        if (exist) {
             reservationRepository.deleteById(id);
             baseResponse.setMessage("成功刪除一筆");
             baseResponse.setStatus(true);
-        }
-        else {
+        } else {
             baseResponse.setMessage("無此資料");
             baseResponse.setStatus(false);
         }
@@ -125,12 +122,11 @@ public class ReservationService implements IReservationService {
     }
 
 
-
     @Override
     @Transactional(readOnly = true)
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-        Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate,pageable);
+        Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
         baseResponse.setData(reservations.getContent());
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
@@ -142,11 +138,11 @@ public class ReservationService implements IReservationService {
     public BaseResponse cancleReservation(Integer reservationId) {
         BaseResponse baseResponse = new BaseResponse();
         Boolean exist = reservationRepository.existsById(reservationId);
-        if (exist){
-            reservationRepository.changeReservationStatus(ReservationEnum.RESERVATION_CANCLE.getCode(),reservationId);
+        if (exist) {
+            reservationRepository.changeReservationStatus(ReservationEnum.RESERVATION_CANCLE.getCode(), reservationId);
             baseResponse.setStatus(true);
             baseResponse.setMessage("成功更新一筆");
-        }else{
+        } else {
             baseResponse.setStatus(false);
             baseResponse.setMessage("無此預約");
         }

@@ -5,7 +5,7 @@ import com.tgfc.library.entity.Employee;
 
 import java.util.Date;
 
-public class RecordsPageRequest extends PageableRequest{
+public class RecordsPageRequest extends PageableRequest {
     private Integer id;
     private String borrowId;
     private Date borrowDate;
