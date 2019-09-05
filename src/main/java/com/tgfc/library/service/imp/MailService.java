@@ -44,6 +44,7 @@ public class MailService implements IMailService {
 
     /**
      * 批量寄信
+     * 目前sendMail被擋，無法使用
      */
     @Override
     public Boolean batchMailing(List<Map<String, String>> list) {
@@ -52,7 +53,7 @@ public class MailService implements IMailService {
             String context = map.get("context");
             String email = map.get("email");
 //            MailUtil.sendMail(title, context, email);
-            System.out.println(title+" "+context+" "+email);
+            System.out.println(title + " " + context + " " + email);
         });
         return true;
     }
@@ -75,7 +76,7 @@ public class MailService implements IMailService {
                     mailResponse.setEmployee(reservation.getEmployee().getName());
                     mailResponse.setBookName(reservation.getBook().getName());
                     mailResponse.setEmail(reservation.getEmployee().getEmail());
-                    mailResponse.setEndDate( new Date (reservation.getEndDate().getTime()));
+                    mailResponse.setEndDate(new Date(reservation.getEndDate().getTime()));
                     return mailResponse;
                 }
         ).collect(Collectors.toList());

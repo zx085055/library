@@ -3,11 +3,12 @@ package com.tgfc.library.enums;
 public enum ScheduleStatus {
     ENABLE("1", "啟用"),
     DISABLE("2", "停用"),
-    UNDONE("3","未成功建立"),
+    UNDONE("3", "未成功建立"),
     ;
 
     private String code;
     private String trans;
+
     private ScheduleStatus(String code, String trans) {
         this.code = code;
         this.trans = trans;

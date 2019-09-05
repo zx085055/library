@@ -64,8 +64,8 @@ public class ScheduleService implements IScheduleService {
         Path<Date> endTime = rootEntity.<Date>get("endTime");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = (Date) sdf.parse("1970-01-01");
-        Date endDate = (Date) sdf.parse("2099-01-01");
+        Date startDate = sdf.parse("1970-01-01");
+        Date endDate = sdf.parse("2099-01-01");
 
         model.setName(model.getName() == null ? "%" : "%" + model.getName() + "%");
         model.setStartTime(model.getStartTime() == null ? startDate : model.getStartTime());
@@ -110,28 +110,12 @@ public class ScheduleService implements IScheduleService {
     public BaseResponse create(SchedulePageRequset model) {
         BaseResponse response = new BaseResponse();
         try {
-            Schedule schedule = modelToPo(model);
-            schedule.setStatus(ScheduleStatus.UNDONE.getCode());
-            schedule.setGroup(model.getName() + model.getId());
-            if (model.getIsEdit() != null && model.getIsEdit()) {
-                schedule.setLastExecute(model.getLastExecute());
-            } else {
-                schedule.setLastExecute(JobLastExecuteEnum.UNDONE.getCode());
-            }
-            schedule.setEmployee(employeeRepository.findById(ContextUtil.getAccount()).get());
-            Schedule scheduleWithId = scheduleRepository.save(schedule);
-            if (model.getIsEdit() != null && model.getIsEdit()) {
-                scheduleRepository.setId(scheduleWithId.getId(), model.getId());
-            } else {
-                model.setId(scheduleWithId.getId());
-            }
+            Schedule schedule = saveSchedule(model);
+            model = getAndSetIdWithModelAndPo(model, schedule);
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
-            if (ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
-                this.changeStatus(model.getId());
-            }
-            scheduleRepository.setStatus(model.getId(), model.getScheduleStatus());
+            setStatus(model);
             response.setData(true);
             response.setMessage("新增排程no." + model.getId() + "成功");
             response.setStatus(true);
@@ -139,6 +123,34 @@ public class ScheduleService implements IScheduleService {
             e.printStackTrace();
         }
         return response;
+    }
+    private void setStatus(SchedulePageRequset model){
+        if (ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
+            this.changeStatus(model.getId());
+        }
+        scheduleRepository.setStatus(model.getId(), model.getScheduleStatus());
+    }
+
+    private SchedulePageRequset getAndSetIdWithModelAndPo(SchedulePageRequset model, Schedule schedule) {
+        if (model.getIsEdit() != null && model.getIsEdit()) {
+            scheduleRepository.setId(schedule.getId(), model.getId());
+        } else {
+            model.setId(schedule.getId());
+        }
+        return model;
+    }
+
+    private Schedule saveSchedule(SchedulePageRequset model) {
+        Schedule schedule = modelToPo(model);
+        schedule.setStatus(ScheduleStatus.UNDONE.getCode());
+        schedule.setGroup(model.getName() + model.getId());
+        if (model.getIsEdit() != null && model.getIsEdit()) {
+            schedule.setLastExecute(model.getLastExecute());
+        } else {
+            schedule.setLastExecute(JobLastExecuteEnum.UNDONE.getCode());
+        }
+        schedule.setEmployee(employeeRepository.findById(ContextUtil.getAccount()).get());
+        return scheduleRepository.save(schedule);
     }
 
     private Schedule modelToPo(SchedulePageRequset model) {
@@ -237,10 +249,6 @@ public class ScheduleService implements IScheduleService {
         return response;
     }
 
-
-    /**
-     * 刪除排程
-     */
     @Override
     public BaseResponse delete(int id) {
         BaseResponse response = new BaseResponse();

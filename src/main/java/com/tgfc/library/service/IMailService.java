@@ -1,10 +1,7 @@
 package com.tgfc.library.service;
 
-import com.tgfc.library.entity.Records;
-import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.response.MailResponse;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +24,7 @@ public interface IMailService {
     /**
      * 批量寄信
      */
-    Boolean batchMailing(List<Map<String,String>> map);
+    Boolean batchMailing(List<Map<String, String>> map);
 
 
 }

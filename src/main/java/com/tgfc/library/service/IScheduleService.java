@@ -1,21 +1,17 @@
 package com.tgfc.library.service;
 
-import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.BaseResponse;
-import com.tgfc.library.response.SchedulePageResponse;
 
-import java.io.Serializable;
 import java.text.ParseException;
-import java.util.List;
 
-public interface IScheduleService  {
+public interface IScheduleService {
 
     /**
      * 新增排程
      * 邏輯:根據排程類型選擇Job，預設每日執行一次通知，
-     *      Job的name與group和Trigger的group相同，Trigger為每日x點x分執行
-     *      讀取表得到需要通知的對象名單scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
+     * Job的name與group和Trigger的group相同，Trigger為每日x點x分執行
+     * 讀取表得到需要通知的對象名單scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
      */
     BaseResponse create(SchedulePageRequset model);
 

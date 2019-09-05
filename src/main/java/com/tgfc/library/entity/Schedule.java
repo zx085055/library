@@ -13,7 +13,7 @@ public class Schedule implements Serializable {
 
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "generatorName")
     @GenericGenerator(name = "generatorName", strategy = "native")
     private Integer id;
 

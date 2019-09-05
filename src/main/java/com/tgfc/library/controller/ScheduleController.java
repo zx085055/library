@@ -35,7 +35,7 @@ public class ScheduleController {
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/schedule/edit")
-    public BaseResponse edit(@RequestBody SchedulePageRequset model){
+    public BaseResponse edit(@RequestBody SchedulePageRequset model) {
         return scheduleService.edit(model);
     }
 
@@ -56,7 +56,7 @@ public class ScheduleController {
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @DeleteMapping("/schedule/delete")
-    public BaseResponse delete(@RequestParam int id){
+    public BaseResponse delete(@RequestParam int id) {
         return scheduleService.delete(id);
     }
 
@@ -67,7 +67,7 @@ public class ScheduleController {
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/schedule/changeStatus")
-    public BaseResponse changeStatus(@RequestParam int id){
+    public BaseResponse changeStatus(@RequestParam int id) {
         return scheduleService.changeStatus(id);
     }
 
@@ -85,7 +85,7 @@ public class ScheduleController {
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/schedule/pauseAll")
-    public BaseResponse pauseAll(){
+    public BaseResponse pauseAll() {
         return scheduleService.pauseAll();
     }
 
