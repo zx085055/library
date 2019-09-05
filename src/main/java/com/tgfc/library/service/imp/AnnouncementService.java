@@ -48,7 +48,7 @@ public class AnnouncementService implements IAnnouncementService {
         Date current = new Date();
         announcement.setCreateTime(current);
         announcement.setEmployee(employee);
-        baseResponse.setData(announcementRepository.save(announcement));
+        announcementRepository.save(announcement);
         baseResponse.setStatus(true);
         baseResponse.setMessage("新增成功");
         return baseResponse;
@@ -68,7 +68,7 @@ public class AnnouncementService implements IAnnouncementService {
         existAnnouncement.setContext(announcement.getContext());
         existAnnouncement.setEmployee(employee);
 
-        baseResponse.setData(announcementRepository.save(existAnnouncement));
+        announcementRepository.save(existAnnouncement);
         baseResponse.setStatus(true);
         baseResponse.setMessage("編輯成功");
         return baseResponse;
@@ -97,7 +97,7 @@ public class AnnouncementService implements IAnnouncementService {
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setEmployee(employee);
         existAnnouncement.setStatus(announcement.getStatus());
-        baseResponse.setData(announcementRepository.save(existAnnouncement));
+        announcementRepository.save(existAnnouncement);
         baseResponse.setStatus(true);
         baseResponse.setMessage("切換成功");
         return baseResponse;
