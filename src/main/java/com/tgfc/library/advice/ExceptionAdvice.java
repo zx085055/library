@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.naming.AuthenticationException;
+
 @RestControllerAdvice
 public class ExceptionAdvice {
     @ExceptionHandler
@@ -23,6 +25,9 @@ public class ExceptionAdvice {
         }else if (e instanceof MethodArgumentNotValidException){
             response.setMessage("參數錯誤,請檢查參數內容");
             return ResponseEntity.status(400).body(response);
+        }else if (e instanceof AuthenticationException){
+            response.setMessage("請登入後再使用");
+            return ResponseEntity.status(401).body(response);
         }
         response.setMessage(e.getLocalizedMessage());
         return ResponseEntity.status(500).body(response);

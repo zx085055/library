@@ -12,10 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.savedrequest.NullRequestCache;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -43,25 +49,10 @@ public class SecurityConfig {
                     .requestCache()
                     .requestCache(new NullRequestCache())
                     .and()
-                    .logout().logoutUrl("/logout").logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
-                    .logoutSuccessHandler((HttpServletRequest var1, HttpServletResponse response, Authentication var3) -> {
-                        BaseResponse logoutOk = new BaseResponse();
-                        logoutOk.setStatus(true);
-                        logoutOk.setMessage("logout ok");
-                        response.setHeader("Content-type", "application/json;charset=UTF-8");
-                        response.getWriter().print(mapper.writeValueAsString(logoutOk));
-                    });
+                    .logout().logoutUrl("/logout").deleteCookies("JSESSIONID").logoutSuccessUrl("/logout").logoutSuccessHandler(logoutFilter());
 
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 
-            http.exceptionHandling()
-                    .authenticationEntryPoint((request, response, exception) -> {
-                        BaseResponse mustLogin = new BaseResponse();
-                        mustLogin.setMessage(exception.getMessage());
-                        response.setStatus(401);
-                        response.setHeader("Content-type", "application/json;charset=UTF-8");
-                        response.getWriter().print(mapper.writeValueAsString(mustLogin));
-                    });
         }
 
         @Override
@@ -74,6 +65,19 @@ public class SecurityConfig {
             LoginFilter filter = new LoginFilter("/login");
             filter.setAuthenticationManager(authenticationManager());
             return filter;
+        }
+
+        @Bean
+        public LogoutSuccessHandler logoutFilter() throws Exception{
+            LogoutSuccessHandler logoutSuccessHandler =
+                (HttpServletRequest request, HttpServletResponse response, Authentication authentication) -> {
+                    BaseResponse logoutOk = new BaseResponse();
+                    logoutOk.setStatus(true);
+                    logoutOk.setMessage("登出成功");
+                    response.setHeader("Content-type", "application/json;charset=UTF-8");
+                    response.getWriter().print(mapper.writeValueAsString(logoutOk));
+                };
+            return logoutSuccessHandler;
         }
     }
 
