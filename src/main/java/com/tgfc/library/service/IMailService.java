@@ -7,9 +7,14 @@ import java.util.Map;
 
 public interface IMailService {
     /**
-     * 讀取預約過期名單
+     * 讀取預約即將過期名單
      */
     List<MailResponse> getReservationExpiredList();
+
+    /**
+     * 讀取預約過期名單
+     */
+    List<MailResponse> getReservationNearlyExpiredList();
 
     /**
      * 讀取借書即將過期名單
@@ -20,6 +25,8 @@ public interface IMailService {
      * 讀取借書過期名單
      */
     List<MailResponse> getLendingExpiredJobList();
+
+
 
     /**
      * 批量寄信

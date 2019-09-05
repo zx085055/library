@@ -60,8 +60,8 @@ public class ScheduleService implements IScheduleService {
         Root<Schedule> rootEntity = query.from(Schedule.class);
 
         Path<String> name = rootEntity.get("name");
-        Path<Date> startTime = rootEntity.<Date>get("startTime");
-        Path<Date> endTime = rootEntity.<Date>get("endTime");
+        Path<Date> startTime = rootEntity.get("startTime");
+        Path<Date> endTime = rootEntity.get("endTime");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = sdf.parse("1970-01-01");
@@ -124,7 +124,8 @@ public class ScheduleService implements IScheduleService {
         }
         return response;
     }
-    private void setScheduleStatus(SchedulePageRequset model){
+
+    private void setScheduleStatus(SchedulePageRequset model) {
         if (ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
             this.changeStatus(model.getId());
         }

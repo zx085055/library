@@ -1,6 +1,7 @@
 package com.tgfc.library.schedule.job;
 
 import com.tgfc.library.enums.JobLastExecuteEnum;
+import com.tgfc.library.repository.IRecordsRepository;
 import com.tgfc.library.repository.IScheduleRepository;
 import com.tgfc.library.response.MailResponse;
 import com.tgfc.library.service.imp.MailService;
@@ -10,6 +11,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +30,14 @@ public class LendingExpiredJob implements Job {
     @Autowired
     IScheduleRepository scheduleRepository;
 
+    @Autowired
+    IRecordsRepository recordsRepository;
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
         Boolean success = false;
+        int count = -1;
 
         try {
             List<MailResponse> list = mailService.getLendingExpiredJobList();
@@ -44,6 +50,8 @@ public class LendingExpiredJob implements Job {
                 return map;
             }).collect(Collectors.toList());
             success = mailService.batchMailing(collect);
+            count = recordsRepository.lendingExpiredStatus(new Date());
+            success = (success && count >= 0);
         } catch (Exception e) {
             e.printStackTrace();
         }

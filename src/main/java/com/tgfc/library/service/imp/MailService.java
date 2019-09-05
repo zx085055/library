@@ -25,6 +25,11 @@ public class MailService implements IMailService {
     @Autowired
     IRecordsRepository recordsRepository;
 
+    @Override
+    public List<MailResponse> getReservationNearlyExpiredList() {
+        java.util.Date date = addThreeDays(new java.util.Date());
+        return reservationToModel(reservationRepository.getReservationExpiredList(date));
+    }
 
     @Override
     public List<MailResponse> getReservationExpiredList() {

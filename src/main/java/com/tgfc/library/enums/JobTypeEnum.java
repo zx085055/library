@@ -3,11 +3,10 @@ package com.tgfc.library.enums;
 import com.tgfc.library.schedule.job.*;
 
 public enum JobTypeEnum {
-    RESERVATION_EXPIRED("1", "預約到期"),
-    LENDING_NEARLY_EXPIRED("2", "出借即將到期"),
-    LENDING_EXPIRED("3", "出借到期"),
-    RESERVATION_EXPIRED_STATUS("4", "預約到期狀態變更"),
-    LENDING_EXPIRED_STATUS("5", "出借到期狀態變更"),
+    RESERVATION_NEARLY_EXPIRED("1", "預約到期狀態變更"),
+    RESERVATION_EXPIRED("2", "預約到期"),
+    LENDING_NEARLY_EXPIRED("3", "出借即將到期"),
+    LENDING_EXPIRED("4", "出借到期"),
     ;
 
     private String code;
@@ -37,15 +36,13 @@ public enum JobTypeEnum {
     public static String codeToTrans(String type) {
         switch (type) {
             case "1":
-                return RESERVATION_EXPIRED.getTrans();
+                return RESERVATION_NEARLY_EXPIRED.getTrans();
             case "2":
-                return LENDING_NEARLY_EXPIRED.getTrans();
+                return RESERVATION_EXPIRED.getTrans();
             case "3":
-                return LENDING_EXPIRED.getTrans();
+                return LENDING_NEARLY_EXPIRED.getTrans();
             case "4":
-                return RESERVATION_EXPIRED_STATUS.getTrans();
-            case "5":
-                return LENDING_EXPIRED_STATUS.getTrans();
+                return LENDING_EXPIRED.getTrans();
             default:
         }
         return null;
@@ -54,15 +51,13 @@ public enum JobTypeEnum {
     public static Class codeToClass(String type) {
         switch (type) {
             case "1":
-                return ReservationExpiredJob.class;
+                return ReservationNearlyExpiredJob.class;
             case "2":
-                return LendingNearlyExpiredJob.class;
+                return ReservationExpiredJob.class;
             case "3":
-                return LendingExpiredJob.class;
+                return LendingNearlyExpiredJob.class;
             case "4":
-                return ReservationExpiredStatusJob.class;
-            case "5":
-                return LendingExpiredStatusJob.class;
+                return LendingExpiredJob.class;
             default:
         }
         return null;
