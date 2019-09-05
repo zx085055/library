@@ -71,9 +71,8 @@ public class RecordsService implements IRecordsService {
         Records records = recordsRepository.findById(model.getId()).get();
         model.setEmail(employeeRepository.findById(records.getBorrowId()).get().getEmail());
         MailUtil.sendMail(model.getTitle(), model.getContext(), model.getEmail());
-        baseResponse.setData(model);
-        baseResponse.setStatus(true);
         baseResponse.setMessage("通知成功");
+        baseResponse.setStatus(true);
         return baseResponse;
     }
 
@@ -88,8 +87,8 @@ public class RecordsService implements IRecordsService {
         records.setReturnDate(current);
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
         records.getBook().setStatus(BookStatusEnum.BOOK_STATUS_INSIDE.getCode());
-        List<Object> result = Arrays.asList(recordsRepository.save(records),reservationRepository.save(nextReservation));
-        baseResponse.setData(result);
+        recordsRepository.save(records);
+        reservationRepository.save(nextReservation);
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");
         return baseResponse;
