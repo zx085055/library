@@ -51,7 +51,17 @@ public class SecurityConfig {
                     .and()
                     .logout().logoutUrl("/logout").deleteCookies("JSESSIONID").logoutSuccessUrl("/logout").logoutSuccessHandler(logoutFilter());
 
+            http.exceptionHandling()
+                    .authenticationEntryPoint((request, response, exception) -> {
+                        BaseResponse mustLogin = new BaseResponse();
+                        mustLogin.setMessage("請登入後再使用");
+                        response.setStatus(401);
+                        response.setHeader("Content-type", "application/json;charset=UTF-8");
+                        response.getWriter().print(mapper.writeValueAsString(mustLogin));
+                    });
+
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
+
 
         }
 
