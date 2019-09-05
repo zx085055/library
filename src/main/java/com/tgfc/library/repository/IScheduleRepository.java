@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Repository
-public interface IScheduleRepository extends JpaRepository<Schedule,Integer> {
+public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     @Query("SELECT r from Schedule r where r.id=?1 ")
     Schedule getById(int id);
@@ -55,8 +55,45 @@ public interface IScheduleRepository extends JpaRepository<Schedule,Integer> {
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.group=?1 where r.id=?2")
-    int setGroup (String group,int id);
+    int setGroup(String group, int id);
 
+    /**
+     * Job執行狀態紀錄
+     */
+    @Modifying
+    @Transactional
+    @Query(value = "update Schedule r set r.lastExecute=?2 where r.id=?1")
+    int setLastExecute(int id, String lastExecute);
+
+    /**
+     * 建立時初始化
+     */
+    @Modifying
+    @Transactional
+    @Query(value = "update Schedule r set r.lastExecute=?2 , r.group=?3  where r.id=?1")
+    int setInitStatus(int id, String lastExecute, String group);
+
+    /**
+     * 設置狀態
+     */
+    @Modifying
+    @Transactional
+    @Query(value = "update Schedule r set r.status=?2 where r.id=?1")
+    int setStatus(int id, String Status);
+
+    /**
+     * 設置上次執行狀態
+     */
+    @Query("SELECT r.lastExecute from Schedule r where r.id=?1 ")
+    String getLastExecute(int id);
+
+    /**
+     * 設置Id
+     */
+    @Modifying
+    @Transactional
+    @Query(value = "update Schedule r set r.id=?2 where r.id=?1")
+    int setId(int oleId, int newId);
 
 
 }

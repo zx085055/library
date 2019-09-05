@@ -1,6 +1,7 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Schedule;
+import com.tgfc.library.enums.JobLastExecuteEnum;
 import com.tgfc.library.enums.JobTypeEnum;
 import com.tgfc.library.enums.ScheduleStatus;
 import com.tgfc.library.repository.IEmployeeRepository;
@@ -110,17 +111,27 @@ public class ScheduleService implements IScheduleService {
         BaseResponse response = new BaseResponse();
         try {
             Schedule schedule = model2Po(model);
+            schedule.setStatus(ScheduleStatus.UNDONE.getCode());
+            schedule.setGroup(model.getName() + model.getId());
+            if (model.getIsEdit() != null && model.getIsEdit()) {
+                schedule.setLastExecute(model.getLastExecute());
+            } else {
+                schedule.setLastExecute(JobLastExecuteEnum.UNDONE.getCode());
+            }
             schedule.setEmployee(employeeRepository.findById(ContextUtil.getAccount()).get());
-            schedule.setStatus(model.getScheduleStatus());
             Schedule scheduleWithId = scheduleRepository.save(schedule);
-            model.setId(scheduleWithId.getId());
+            if (model.getIsEdit() != null && model.getIsEdit()) {
+                scheduleRepository.setId(scheduleWithId.getId(), model.getId());
+            } else {
+                model.setId(scheduleWithId.getId());
+            }
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
             if (ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
                 this.changeStatus(model.getId());
             }
-            scheduleRepository.setGroup(model.getName() + model.getId(), model.getId());
+            scheduleRepository.setStatus(model.getId(), model.getScheduleStatus());
             response.setData(true);
             response.setMessage("新增排程no." + model.getId() + "成功");
             response.setStatus(true);
@@ -159,6 +170,7 @@ public class ScheduleService implements IScheduleService {
         JobKey jobKey = new JobKey(model.getName(), model.getName() + model.getId());
         JobDetail job = JobBuilder.newJob(JobTypeEnum.code2Class(model.getType()))
                 .withIdentity(jobKey)
+                .usingJobData("id", model.getId())
                 .build();
         return job;
     }
@@ -248,6 +260,8 @@ public class ScheduleService implements IScheduleService {
     @Override
     public BaseResponse edit(SchedulePageRequset model) {
         BaseResponse response = new BaseResponse();
+        model.setIsEdit(true);
+        model.setLastExecute(scheduleRepository.getLastExecute(model.getId()));
         scheduleRepository.deleteById(model.getId());
         response.setData(this.create(model).getStatus());
         response.setMessage("修改成功");

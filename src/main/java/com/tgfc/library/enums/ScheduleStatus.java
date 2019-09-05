@@ -13,6 +13,20 @@ public enum ScheduleStatus {
         this.trans = trans;
     }
 
+    public static String code2Trans(String type) {
+        switch (type) {
+            case "1":
+                return ENABLE.getTrans();
+            case "2":
+                return DISABLE.getTrans();
+            case "3":
+                return UNDONE.getTrans();
+            default:
+        }
+        return null;
+    }
+
+
     public String getCode() {
         return code;
     }
@@ -28,4 +42,6 @@ public enum ScheduleStatus {
     public void setTrans(String trans) {
         this.trans = trans;
     }
+
+
 }

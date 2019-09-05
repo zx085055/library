@@ -11,6 +11,8 @@ public class SchedulePageRequset extends PageableRequest {
     private Date startTime;
     private Date endTime;
     private String scheduleStatus;
+    private String lastExecute;
+    private Boolean isEdit;
 
     public Integer getId() {
         return id;
@@ -68,4 +70,19 @@ public class SchedulePageRequset extends PageableRequest {
         this.type = type;
     }
 
+    public Boolean getIsEdit() {
+        return isEdit;
+    }
+
+    public void setIsEdit(Boolean isEdit) {
+        this.isEdit = isEdit;
+    }
+
+    public String getLastExecute() {
+        return lastExecute;
+    }
+
+    public void setLastExecute(String lastExecute) {
+        this.lastExecute = lastExecute;
+    }
 }
