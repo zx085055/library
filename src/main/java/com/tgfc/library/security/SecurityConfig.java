@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SecurityConfig {
 
     @Configuration
-    @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true,jsr250Enabled=true)
+    @EnableGlobalMethodSecurity(jsr250Enabled=true)
     public static class ApiConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired

@@ -66,9 +66,10 @@ public class LdapAuthProvider implements AuthenticationProvider {
 
         if (loginUser.getDepartment().equals("管理部")) {
             permissions.add(PermissionEnum.ROLE_ADMIN.name());
-        } else {
             permissions.add(PermissionEnum.ROLE_USER.name());
         }
+
+
 
         return permissions.toArray(new String[permissions.size()]);
     }
