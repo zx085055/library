@@ -22,29 +22,26 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
 
     public LoginFilter(String defaultFilterProcessesUrl) {
         super(defaultFilterProcessesUrl);
-        this.setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+        AuthenticationSuccessHandler authenticationSuccessHandler =
+                (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) -> {
+                    BaseResponse response = new BaseResponse();
+                    response.setStatus(true);
+                    response.setData(authentication.getPrincipal());
+                    httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
+                    httpServletResponse.getWriter().println(mapper.writeValueAsString(response));
+                };
+        AuthenticationFailureHandler authenticationFailureHandler =
+                (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) ->{
+                    BaseResponse response = new BaseResponse();
+                    response.setStatus(false);
+                    response.setMessage(e.getMessage());
+                    httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
+                    httpServletResponse.setStatus(500);
+                    httpServletResponse.getWriter().println(mapper.writeValueAsString(response));
+                };
 
-                BaseResponse response = new BaseResponse();
-                response.setStatus(true);
-                response.setData(authentication.getPrincipal());
-                httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
-                httpServletResponse.getWriter().println(mapper.writeValueAsString(response));
-            }
-
-        });
-        this.setAuthenticationFailureHandler(new AuthenticationFailureHandler() {
-            @Override
-            public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                BaseResponse response = new BaseResponse();
-                response.setStatus(false);
-                response.setMessage(e.getMessage());
-                httpServletResponse.setHeader("Content-type", "application/json;charset=UTF-8");
-                httpServletResponse.setStatus(500);
-                httpServletResponse.getWriter().println(mapper.writeValueAsString(response));
-            }
-        });
+        this.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+        this.setAuthenticationFailureHandler(authenticationFailureHandler);
     }
 
     @Override
