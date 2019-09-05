@@ -6,7 +6,6 @@ import com.tgfc.library.repository.IRecordsRepository;
 import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.response.MailResponse;
 import com.tgfc.library.service.IMailService;
-import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,18 +28,18 @@ public class MailService implements IMailService {
 
     @Override
     public List<MailResponse> getReservationExpiredList() {
-        return reservation2Model(reservationRepository.getReservationExpiredList(new java.util.Date()));
+        return reservationToModel(reservationRepository.getReservationExpiredList(new java.util.Date()));
     }
 
     @Override
     public List<MailResponse> getLendingNearlyExpiredList() {
         java.util.Date date = addThreeDays(new java.util.Date());
-        return records2Model(recordsRepository.getLendingExpiredList(date));
+        return recordsToModel(recordsRepository.getLendingExpiredList(date));
     }
 
     @Override
     public List<MailResponse> getLendingExpiredJobList() {
-        return records2Model(recordsRepository.getLendingExpiredList(new java.util.Date()));
+        return recordsToModel(recordsRepository.getLendingExpiredList(new java.util.Date()));
     }
 
     /**
@@ -58,7 +57,7 @@ public class MailService implements IMailService {
         return true;
     }
 
-    private List<MailResponse> records2Model(List<Records> list) {
+    private List<MailResponse> recordsToModel(List<Records> list) {
         return list.stream().map(records -> {
                     MailResponse mailResponse = new MailResponse();
                     mailResponse.setEmployee(records.getBorrowUsername());
@@ -70,7 +69,7 @@ public class MailService implements IMailService {
         ).collect(Collectors.toList());
     }
 
-    private List<MailResponse> reservation2Model(List<Reservation> list) {
+    private List<MailResponse> reservationToModel(List<Reservation> list) {
         return list.stream().map(reservation -> {
                     MailResponse mailResponse = new MailResponse();
                     mailResponse.setEmployee(reservation.getEmployee().getName());

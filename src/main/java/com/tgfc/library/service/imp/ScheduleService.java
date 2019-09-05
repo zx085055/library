@@ -80,7 +80,7 @@ public class ScheduleService implements IScheduleService {
                 .setFirstResult((model.getPageNumber() - 1) * model.getPageSize())
                 .setMaxResults((model.getPageNumber() - 1) * model.getPageSize() + model.getPageSize())
                 .getResultList();
-        response.setData(scheduleList2Response(list));
+        response.setData(scheduleListToResponseList(list));
         response.setMessage("查詢成功");
         response.setStatus(true);
         return response;
@@ -89,7 +89,7 @@ public class ScheduleService implements IScheduleService {
     /**
      * schedule轉為SchedulePageResponse
      */
-    private List<SchedulePageResponse> scheduleList2Response(List<Schedule> list) {
+    private List<SchedulePageResponse> scheduleListToResponseList(List<Schedule> list) {
         return list.stream()
                 .map(schedule -> {
                     SchedulePageResponse schedulePageResponse = new SchedulePageResponse();
@@ -110,7 +110,7 @@ public class ScheduleService implements IScheduleService {
     public BaseResponse create(SchedulePageRequset model) {
         BaseResponse response = new BaseResponse();
         try {
-            Schedule schedule = model2Po(model);
+            Schedule schedule = modelToPo(model);
             schedule.setStatus(ScheduleStatus.UNDONE.getCode());
             schedule.setGroup(model.getName() + model.getId());
             if (model.getIsEdit() != null && model.getIsEdit()) {
@@ -141,7 +141,7 @@ public class ScheduleService implements IScheduleService {
         return response;
     }
 
-    private Schedule model2Po(SchedulePageRequset model) {
+    private Schedule modelToPo(SchedulePageRequset model) {
         Schedule schedule = new Schedule();
         schedule.setName(model.getName());
         schedule.setType(model.getType());
@@ -149,11 +149,11 @@ public class ScheduleService implements IScheduleService {
         schedule.setStartTime(model.getStartTime());
         schedule.setEndTime(model.getEndTime());
         schedule.setStatus(model.getScheduleStatus());
-        schedule.setJobName(JobTypeEnum.code2Trans(model.getType()));
+        schedule.setJobName(JobTypeEnum.codeToTrans(model.getType()));
         return schedule;
     }
 
-    private SchedulePageRequset po2Model(Schedule schedule) {
+    private SchedulePageRequset poToModel(Schedule schedule) {
         SchedulePageRequset model = new SchedulePageRequset();
         model.setName(schedule.getName());
         model.setType(schedule.getType());
@@ -168,7 +168,7 @@ public class ScheduleService implements IScheduleService {
 
     private JobDetail getJob(SchedulePageRequset model) {
         JobKey jobKey = new JobKey(model.getName(), model.getName() + model.getId());
-        JobDetail job = JobBuilder.newJob(JobTypeEnum.code2Class(model.getType()))
+        JobDetail job = JobBuilder.newJob(JobTypeEnum.codeToClass(model.getType()))
                 .withIdentity(jobKey)
                 .usingJobData("id", model.getId())
                 .build();

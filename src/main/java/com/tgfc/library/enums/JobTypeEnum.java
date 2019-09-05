@@ -34,7 +34,7 @@ public enum JobTypeEnum {
         this.trans = trans;
     }
 
-    public static String code2Trans(String type) {
+    public static String codeToTrans(String type) {
         switch (type) {
             case "1":
                 return RESERVATION_EXPIRED.getTrans();
@@ -51,7 +51,7 @@ public enum JobTypeEnum {
         return null;
     }
 
-    public static Class code2Class(String type) {
+    public static Class codeToClass(String type) {
         switch (type) {
             case "1":
                 return ReservationExpiredJob.class;
