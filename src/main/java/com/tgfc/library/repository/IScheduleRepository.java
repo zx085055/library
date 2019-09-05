@@ -58,7 +58,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     int setGroup(String group, int id);
 
     /**
-     * Job執行狀態紀錄
+     * 設置Job上次執行狀態紀錄
      */
     @Modifying
     @Transactional
@@ -82,7 +82,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     int setStatus(int id, String Status);
 
     /**
-     * 設置上次執行狀態
+     * 查詢上次執行狀態
      */
     @Query("SELECT r.lastExecute from Schedule r where r.id=?1 ")
     String getLastExecute(int id);
