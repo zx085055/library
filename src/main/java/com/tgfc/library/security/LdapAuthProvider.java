@@ -4,7 +4,6 @@ import com.tgfc.library.entity.Employee;
 import com.tgfc.library.enums.PermissionEnum;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.response.EmployeeResponse;
-import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,7 +32,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
     @Autowired
     IEmployeeRepository employeeRepository;
 
-    PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -58,14 +57,11 @@ public class LdapAuthProvider implements AuthenticationProvider {
         List<String> permissions = new ArrayList<>();
 
         //ROOT為測試帳號
-
-        if (loginUser.getDepartment().equals("管理部")||loginUser.getId().equals("ROOT")) {
+        if (loginUser.getDepartment().equals("管理部") || loginUser.getId().equals("ROOT")) {
             permissions.add(PermissionEnum.ROLE_ADMIN.name());
         }
-
         permissions.add(PermissionEnum.ROLE_USER.name());
-
-        return permissions.toArray(new String[permissions.size()]);
+        return permissions.toArray(new String[0]);
     }
 
     private Employee findUserByLDAp(String account, String password) {
