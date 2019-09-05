@@ -41,8 +41,8 @@ public class AnnouncementController {
     }
 
     @RolesAllowed({ PermissionEnum.Role.ADMIN})
-    @PostMapping("/statusChange")
-    public BaseResponse statusChange(@RequestBody Announcement announcement) {
-        return announcementService.statusChange(announcement);
+    @PostMapping("/changeStatus")
+    public BaseResponse changeStatus(@RequestBody Announcement announcement) {
+        return announcementService.changeStatus(announcement);
     }
 }

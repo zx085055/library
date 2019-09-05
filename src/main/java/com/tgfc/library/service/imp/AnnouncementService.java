@@ -62,11 +62,12 @@ public class AnnouncementService implements IAnnouncementService {
         Employee employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setStatus(announcement.getStatus());
+        existAnnouncement.setCreateTime(announcement.getCreateTime());
+        existAnnouncement.setEndTime(announcement.getEndTime());
         existAnnouncement.setTitle(announcement.getTitle());
         existAnnouncement.setContext(announcement.getContext());
         existAnnouncement.setEmployee(employee);
-        existAnnouncement.setCreateTime(announcement.getCreateTime());
-        existAnnouncement.setEndTime(announcement.getEndTime());
+
         baseResponse.setData(announcementRepository.save(existAnnouncement));
         baseResponse.setStatus(true);
         baseResponse.setMessage("編輯成功");
@@ -88,7 +89,7 @@ public class AnnouncementService implements IAnnouncementService {
     }
 
     @Override
-    public BaseResponse statusChange(Announcement announcement) {
+    public BaseResponse changeStatus(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
 

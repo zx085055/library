@@ -13,5 +13,5 @@ public interface IAnnouncementService {
 
     BaseResponse delete(Integer id);
 
-    BaseResponse statusChange(Announcement announcement);
+    BaseResponse changeStatus(Announcement announcement);
 }
