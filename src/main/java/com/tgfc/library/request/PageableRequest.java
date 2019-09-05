@@ -54,7 +54,7 @@ public class PageableRequest {
     }
 
     private Sort.Direction getDirection(){
-        if(this.sortType.equals(Sort.Direction.ASC)){
+        if(this.sortType.equals(Sort.Direction.ASC.toString())){
             return Sort.Direction.ASC;
         }else{
             return Sort.Direction.DESC;
