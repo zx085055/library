@@ -34,8 +34,8 @@ public class ReservationNearlyExpiredJob implements Job {
             List<Map<String, String>> collect = list.stream().map(mailResponse -> {
                 Map<String, String> map = new HashMap<>();
                 map.put("title", "預約即將到期通知");
-                map.put("context", mailResponse.getEmployee() + "您好，您借閱的書" + mailResponse.getBookName()
-                        + " 將在" + mailResponse.getEndDate().toString() + "過期，請在期限內取書，謝謝");
+                map.put("context", mailResponse.getEmployee() + "您好，您預約的書" + mailResponse.getBookName()
+                        + " 將在" + mailResponse.getEndDate().toString() + "過期，，謝謝請在期限內取書");
                 map.put("email", mailResponse.getEmail());
                 return map;
             }).collect(Collectors.toList());

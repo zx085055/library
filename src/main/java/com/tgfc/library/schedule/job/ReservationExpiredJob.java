@@ -47,7 +47,7 @@ public class ReservationExpiredJob implements Job {
                 Map<String, String> map = new HashMap<>();
                 map.put("title", "預約過期通知");
                 map.put("context", mailResponse.getEmployee() + "您好，您預約的書" + mailResponse.getBookName()
-                        + " 預約將在" + mailResponse.getEndDate().toString() + "過期，如有需要請再次預約，謝謝");
+                        + " 預約已在" + mailResponse.getEndDate().toString() + "過期，如有需要請再次預約，謝謝");
                 map.put("email", mailResponse.getEmail());
                 return map;
             }).collect(Collectors.toList());

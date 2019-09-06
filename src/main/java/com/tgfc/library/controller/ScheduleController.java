@@ -51,6 +51,7 @@ public class ScheduleController {
     }
 
     /**
+     * 刪除指定排程
      * 傳入值:排程ID
      * 回傳值:Boolean
      */
