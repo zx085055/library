@@ -4,7 +4,6 @@ import com.tgfc.library.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -13,9 +12,9 @@ import org.springframework.stereotype.Repository;
 public interface IBookRepository extends JpaRepository<Book,Integer> {
 
     @Override
-    public Book getOne(Integer id);
+    Book getOne(Integer id);
 
-    @Query(value = "SELECT u FROM Book u WHERE u.name LIKE :keyword or u.author LIKE :keyword or u.pubHouse LIKE :keyword ")
+    @Query(value = "SELECT book.* FROM book  WHERE name LIKE :keyword or author LIKE :keyword or pub_house LIKE :keyword ", nativeQuery = true)
     Page<Book> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = "SELECT u FROM Book u WHERE u.id = :id")
@@ -26,9 +25,6 @@ public interface IBookRepository extends JpaRepository<Book,Integer> {
 
     @Query(value = "SELECT b From Book b where b.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.pubHouse LIKE CONCAT('%',?1,'%')")
     Page<Book> findBookByKeyWord (String keyWord,Pageable pageable);
-
-//    @Override
-//    void delete(Book book);
 
     @Query(value = "delete from book  where id LIKE :id ", nativeQuery = true)
     void deleteById(@Param("id") Integer id);

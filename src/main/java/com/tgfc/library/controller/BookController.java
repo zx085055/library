@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.security.RolesAllowed;
+import javax.swing.*;
 import java.io.IOException;
 
 //import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -34,11 +35,13 @@ public class BookController {
     public BaseResponse get(@RequestParam("id") Integer id) throws IOException{
         return bookDataService.getById(id);
     }
+
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @PostMapping(value = "/books")
     public BaseResponse getKeyWord(@RequestBody BookDataPageRequest model) throws IOException {
         return bookDataService.getBookList(model);
     }
+
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @PostMapping(value = "/addBook")
     public BaseResponse addBook( MultipartFile files, BookAddRequest bookAddRequest){
@@ -50,6 +53,7 @@ public class BookController {
         baseResponse=bookDataService.upData(files, bookAddRequest);
         return baseResponse;
     }
+
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @GetMapping(value = "/deleteBook")
     public BaseResponse deleteBook(@RequestParam("id") Integer id) throws IOException{
@@ -59,10 +63,8 @@ public class BookController {
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @RequestMapping("/getPhoto")
     public ResponseEntity<byte[]> showPhoto( @RequestParam("fileName") String fileName)throws Exception {
-        
             byte[] image = photoService.getPhoto(fileName);
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
-
     }
 
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
@@ -70,9 +72,11 @@ public class BookController {
     public BaseResponse findAll(@RequestBody PageableRequest pageableRequest){
         return bookDataService.findAll(pageableRequest.getPageable());
     }
+
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @PostMapping(value = "/findByKeyword")
     public BaseResponse findByKeyword(@RequestBody BookDataPageRequest bookDataPageRequest){
         return bookDataService.findByKeyword(bookDataPageRequest.getKeyword(),bookDataPageRequest.getPageable());
     }
+
 }

@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,6 @@ public class BookService implements IBookService {
     public BaseResponse getBookList(BookDataPageRequest model) throws IOException{
         BaseResponse response = new BaseResponse();
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
-
         Page<Book> pageBook = bookDataRepository.findAllByKeyword(model.getKeyword(), pageable);
         if(pageBook.isEmpty()){
             response.setMessage("找不到資料");
@@ -49,8 +47,8 @@ public class BookService implements IBookService {
         }
         List<BooksResponse> list = new ArrayList<>();
         for (Book book : pageBook) {
-            if (book.getOriginalName() != null && book.getOriginalName().length() != 0) {
-                book.setOriginalName(photoService.getApiPhotoUrl(book.getOriginalName()));
+            if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
+                book.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
             }
             book.setStatus(book.getStatus());
             BooksResponse bookResponse = new BooksResponse();
@@ -66,8 +64,8 @@ public class BookService implements IBookService {
     public BaseResponse getById(int id) throws IOException{
         BaseResponse response = new BaseResponse();
         Book book = bookDataRepository.getById(id);
-        if (book.getOriginalName() != null && book.getOriginalName().length() != 0)
-            book.setOriginalName(photoService.getApiPhotoUrl(book.getOriginalName()));
+        if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0)
+            book.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
         response.setMessage("");
         response.setStatus(true);
         response.setData(book);
@@ -81,7 +79,6 @@ public class BookService implements IBookService {
         if (BookStatusEnum.getStatus(addBook.getStatus()) != null) {
             //用Id去資料庫找出舊資料
             Book book = bookDataRepository.getById(addBook.getId());
-
             if (book == null) {
                 book=new Book();
                 try {
@@ -94,17 +91,14 @@ public class BookService implements IBookService {
             }
             //是否有傳入檔案
             if (files != null) {
-                //設定PhotoName
-                addBook.setPhotoName(files.getOriginalFilename());
+                //addBook.setPhotoName(files.getOriginalFilename());
                 //存檔案
                 photoService.uploadPhoto(files, book.getId().toString());
                 //將Id設定成OriginalName
-                addBook.setOriginalName(book.getId() + ".jpg");
+                book.setPhotoOriginalName(book.getId() + ".jpg");
             } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
-                photoService.deletePhoto( book.getOriginalName());
-                addBook.setOriginalName(null);
-            }else{
-                addBook.setOriginalName(book.getOriginalName());
+                photoService.deletePhoto( book.getPhotoOriginalName());
+                book.setPhotoOriginalName(null);
             }
             try {
                 addBook.setId(book.getId());
@@ -126,7 +120,7 @@ public class BookService implements IBookService {
         bookDataRepository.deleteById(id);
         if(bookDataRepository.getById(id)==null){
             baseResponse.setStatus(true);
-            photoService.deletePhoto(book.getOriginalName());
+            photoService.deletePhoto(book.getPhotoOriginalName());
         }
         return baseResponse;
     }

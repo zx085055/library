@@ -28,8 +28,8 @@ public class Book implements Serializable {
     private Integer price;
     @Column(name = "photo_name")
     private String photoName;
-    @Column(name = "original_name")
-    private String originalName;
+    @Column(name = "photo_original_name")
+    private String photoOriginalName;
     @Column(name = "purchase_date",nullable = false)
     private Date purchaseDate;
     @Column(name = "publish_date",nullable = false)
@@ -128,12 +128,12 @@ public class Book implements Serializable {
         return photoName;
     }
 
-    public String getOriginalName() {
-        return originalName;
+    public String getPhotoOriginalName() {
+        return photoOriginalName;
     }
 
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
+    public void setPhotoOriginalName(String photoOriginalName) {
+        this.photoOriginalName = photoOriginalName;
     }
 
     public void setPhotoName(String photoUrl) {

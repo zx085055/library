@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -59,8 +62,6 @@ public class PhotoService implements IPhotoService {
                 String host = address.getHostAddress();
                 Socket  point = new Socket();
                 //point.getLocalPort();
-
-
                 String path = imageRuel + photoFileName;
                 URL url = new URL(protocol, host, point.getLocalPort(), path);
                 System.out.println(url.toString() + "?");
@@ -71,7 +72,6 @@ public class PhotoService implements IPhotoService {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-
         return urlString;
 
     }
@@ -83,27 +83,24 @@ public class PhotoService implements IPhotoService {
             return true;
         }//"刪除單個檔案"+name+"失敗！"
         return false;
-
     }
     @Override
     public byte[] getPhoto(String fileName) throws FileNotFoundException {
         String rpath = this.filePath + fileName;
         Path path = Paths.get(rpath);
-        byte[] data = new byte[0];
         try {
-            data = Files.readAllBytes(path);
+            byte[]   data = Files.readAllBytes(path);
             return data;
         } catch (IOException e) {
             throw new FileNotFoundException();
         }
     }
     @Override
-    public String getApiPhotoUrl(String photoFileName)throws IOException {
+    public String getApiPhotoUrl(String photoFileName){
        String url =urlString+photoFileName;
-
-
         return url;
-
     }
+
+
 
 }

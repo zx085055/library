@@ -30,15 +30,7 @@ public class BookAddRequest {
     private String photoName;
     @NotNull
     private Integer status;
-    private String originalName;
 
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
-    }
 
     public Integer getStatus() {
         return status;

@@ -1,8 +1,8 @@
 package com.tgfc.library.enums;
 
 public enum BookStatusEnum {
-    BOOK_STATUS_LEND(1, "出借中"),
-    BOOK_STATUS_INSIDE(2, "在館中"),
+    BOOK_STATUS_LEND(1, "在館中"),
+    BOOK_STATUS_INSIDE(2, "出借中"),
     BOOK_STATUS_LOST(3, "遺失"),
     BOOK_STATUS_BROKEN(4, "破損"),
     BOOK_STATUS_NOT_RETURNED(5, "未歸還");
