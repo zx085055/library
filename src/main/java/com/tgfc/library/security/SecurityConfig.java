@@ -1,10 +1,14 @@
 package com.tgfc.library.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tgfc.library.entity.Employee;
 import com.tgfc.library.response.BaseResponse;
+import com.tgfc.library.response.EmployeeResponse;
+import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -19,6 +25,7 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +33,7 @@ public class SecurityConfig {
 
     @Configuration
     @EnableGlobalMethodSecurity(jsr250Enabled = true)
-    public static class ApiConfig extends WebSecurityConfigurerAdapter {
+    public static class ApiConfig extends WebSecurityConfigurerAdapter implements AuditorAware<String> {
 
         @Autowired
         LdapAuthProvider ldapAuthProvider;
@@ -51,7 +58,6 @@ public class SecurityConfig {
             http.exceptionHandling().authenticationEntryPoint(forbiddenEntryPointHandler());
 
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
-
 
         }
 
@@ -78,7 +84,7 @@ public class SecurityConfig {
             };
         }
 
-        public AuthenticationEntryPoint forbiddenEntryPointHandler(){
+        private AuthenticationEntryPoint forbiddenEntryPointHandler(){
             return (HttpServletRequest request, HttpServletResponse response, AuthenticationException var) ->{
                 BaseResponse customResponse = new BaseResponse();
                 customResponse.setStatus(false);
@@ -86,6 +92,11 @@ public class SecurityConfig {
                 response.setHeader("Content-type", "application/json;charset=UTF-8");
                 response.getWriter().print(mapper.writeValueAsString(customResponse));
             };
+        }
+
+        @Override
+        public Optional<String> getCurrentAuditor() {
+            return Optional.of(ContextUtil.getAccount());
         }
     }
 
