@@ -1,6 +1,8 @@
 package com.tgfc.library.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,6 +10,7 @@ import java.sql.Time;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "schedule")
 public class Schedule implements Serializable {
 
@@ -47,6 +50,10 @@ public class Schedule implements Serializable {
     @ManyToOne
     @JoinColumn(name = "create_user_id")
     private Employee employee;
+
+    @CreatedDate
+    @Column(name = "created_date")
+    private Date createdDate;
 
 
     public Integer getId() {
