@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.savedrequest.NullRequestCache;
@@ -46,14 +48,7 @@ public class SecurityConfig {
                     .and()
                     .logout().logoutUrl("/logout").deleteCookies("JSESSIONID").logoutSuccessUrl("/logout").logoutSuccessHandler(logoutFilter());
 
-            http.exceptionHandling()
-                    .authenticationEntryPoint((request, response, exception) -> {
-                        BaseResponse mustLogin = new BaseResponse();
-                        mustLogin.setMessage("請登入後再使用");
-                        response.setStatus(401);
-                        response.setHeader("Content-type", "application/json;charset=UTF-8");
-                        response.getWriter().print(mapper.writeValueAsString(mustLogin));
-                    });
+            http.exceptionHandling().authenticationEntryPoint(forbiddenEntryPointHandler());
 
             http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -80,6 +75,16 @@ public class SecurityConfig {
                 logoutOk.setMessage("登出成功");
                 response.setHeader("Content-type", "application/json;charset=UTF-8");
                 response.getWriter().print(mapper.writeValueAsString(logoutOk));
+            };
+        }
+
+        public AuthenticationEntryPoint forbiddenEntryPointHandler(){
+            return (HttpServletRequest request, HttpServletResponse response, AuthenticationException var) ->{
+                BaseResponse customResponse = new BaseResponse();
+                customResponse.setStatus(false);
+                customResponse.setMessage("請登入後再使用");
+                response.setHeader("Content-type", "application/json;charset=UTF-8");
+                response.getWriter().print(mapper.writeValueAsString(customResponse));
             };
         }
     }
