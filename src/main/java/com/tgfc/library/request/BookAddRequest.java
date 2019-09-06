@@ -17,8 +17,7 @@ public class BookAddRequest {
     private String intro;
     @NotNull
     private Integer price;
-    @NotNull
-    private Date purchaseDate;
+
     @NotNull
     private Date publishDate;
     @NotNull
@@ -96,13 +95,6 @@ public class BookAddRequest {
         this.price = price;
     }
 
-    public Date getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(Date purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
 
     public Date getPublishDate() {
         return publishDate;

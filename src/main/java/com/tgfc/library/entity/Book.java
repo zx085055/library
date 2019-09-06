@@ -1,12 +1,15 @@
 package com.tgfc.library.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "book")
 public class Book implements Serializable {
 
@@ -30,7 +33,8 @@ public class Book implements Serializable {
     private String photoName;
     @Column(name = "photo_original_name")
     private String photoOriginalName;
-    @Column(name = "purchase_date",nullable = false)
+    @Column(name = "purchase_date",nullable = false,updatable = false)
+    @CreatedDate
     private Date purchaseDate;
     @Column(name = "publish_date",nullable = false)
     private Date publishDate;
