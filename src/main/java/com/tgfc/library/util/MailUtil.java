@@ -6,13 +6,22 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class MailUtil {
 
     private static JavaMailSender mailSender = new JavaMailSenderImpl(); //框架自帶的
 
-    @Value("${spring.mail.username}")  //發送人的郵箱  比如155156641XX@163.com
     private static String from;
+
+    @Value("${spring.mail.username}")  //發送人的郵箱  比如155156641XX@163.com
+    private String initFrom;
+
+    @PostConstruct
+    private void init(){
+        from = this.initFrom;
+    }
 
     public static void sendMail(String title, String context, String email) {
         SimpleMailMessage message = new SimpleMailMessage();
