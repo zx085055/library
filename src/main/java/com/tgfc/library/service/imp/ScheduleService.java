@@ -195,6 +195,11 @@ public class ScheduleService implements IScheduleService {
     public BaseResponse changeStatus(int id) {
         BaseResponse response = new BaseResponse();
         Schedule schedule = scheduleRepository.getById(id);
+        if (schedule == null) {
+            response.setMessage("查無此排程");
+            response.setStatus(false);
+            return response;
+        }
         JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
         if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
             myScheduler.pauseJob(jobKey);
@@ -254,6 +259,11 @@ public class ScheduleService implements IScheduleService {
     public BaseResponse delete(int id) {
         BaseResponse response = new BaseResponse();
         Schedule schedule = scheduleRepository.getById(id);
+        if (schedule == null) {
+            response.setMessage("查無此排程");
+            response.setStatus(false);
+            return response;
+        }
         JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
         try {
             response.setData(myScheduler.deleteJob(jobKey));
@@ -269,6 +279,11 @@ public class ScheduleService implements IScheduleService {
     @Override
     public BaseResponse edit(SchedulePageRequset model) {
         BaseResponse response = new BaseResponse();
+        if (scheduleRepository.getById(model.getId()) == null) {
+            response.setMessage("查無此排程");
+            response.setStatus(false);
+            return response;
+        }
         model.setIsEdit(true);
         model.setLastExecute(scheduleRepository.getLastExecute(model.getId()));
         scheduleRepository.deleteById(model.getId());
