@@ -88,7 +88,7 @@ public class MailService implements IMailService {
     }
 
     /**
-     * 計算出借即將到期的時間(3天)
+     * 計算即將到期的時間(3天)
      */
     private Date addThreeDays(java.util.Date date) {
         Calendar calendar = new GregorianCalendar();
