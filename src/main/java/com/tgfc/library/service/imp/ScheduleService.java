@@ -102,7 +102,7 @@ public class ScheduleService implements IScheduleService {
         return list.stream()
                 .map(schedule -> {
                     SchedulePageResponse schedulePageResponse = new SchedulePageResponse();
-                    BeanUtils.copyProperties(schedule,schedulePageResponse);
+                    BeanUtils.copyProperties(schedule, schedulePageResponse);
                     return schedulePageResponse;
                 }).collect(Collectors.toList());
     }
@@ -141,6 +141,7 @@ public class ScheduleService implements IScheduleService {
             scheduleRepository.setId(schedule.getId(), model.getId());
         } else {
             model.setId(schedule.getId());
+            scheduleRepository.setGroup(model.getId(), model.getName() + model.getId());
         }
         return model;
     }
@@ -148,7 +149,6 @@ public class ScheduleService implements IScheduleService {
     private Schedule saveSchedule(SchedulePageRequset model) {
         Schedule schedule = modelToPo(model);
         schedule.setStatus(ScheduleStatus.UNDONE.getCode());
-        schedule.setGroup(model.getName() + model.getId());
         if (model.getIsEdit() != null && model.getIsEdit()) {
             schedule.setLastExecute(model.getLastExecute());
         } else {

@@ -54,8 +54,8 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
      */
     @Modifying
     @Transactional
-    @Query(value = "update Schedule r set r.group=?1 where r.id=?2")
-    int setGroup(String group, int id);
+    @Query(value = "update Schedule r set r.group=?2 where r.id=?1")
+    int setGroup(int id, String group);
 
     /**
      * 設置Job上次執行狀態紀錄
