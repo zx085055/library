@@ -39,22 +39,18 @@ public class LendingExpiredJob implements Job {
         Boolean success = false;
         int count = -1;
 
-        try {
-            List<MailResponse> list = mailService.getLendingExpiredJobList();
-            List<Map<String, String>> collect = list.stream().map(mailResponse -> {
-                Map<String, String> map = new HashMap<>();
-                map.put("title", "借書過期通知");
-                map.put("context", mailResponse.getEmployee() + "您好，您借閱的書" + mailResponse.getBookName()
-                        + " 借閱在" + mailResponse.getEndDate().toString() + "過期，請盡快歸還，謝謝");
-                map.put("email", mailResponse.getEmail());
-                return map;
-            }).collect(Collectors.toList());
-            success = mailService.batchMailing(collect);
-            count = recordsRepository.lendingExpiredStatus(new Date());
-            success = (success && count >= 0);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<MailResponse> list = mailService.getLendingExpiredJobList();
+        List<Map<String, String>> collect = list.stream().map(mailResponse -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("title", "借書過期通知");
+            map.put("context", mailResponse.getEmployee() + "您好，您借閱的書" + mailResponse.getBookName()
+                    + " 借閱在" + mailResponse.getEndDate().toString() + "過期，請盡快歸還，謝謝");
+            map.put("email", mailResponse.getEmail());
+            return map;
+        }).collect(Collectors.toList());
+        success = mailService.batchMailing(collect);
+        count = recordsRepository.lendingExpiredStatus(new Date());
+        success = (success && count >= 0);
 
         if (success) {
             scheduleRepository.setLastExecute(dataMap.getInt("id"), JobLastExecuteEnum.DONE.getCode());

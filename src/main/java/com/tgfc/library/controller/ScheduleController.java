@@ -4,7 +4,6 @@ import com.tgfc.library.enums.PermissionEnum;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IScheduleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -13,8 +12,11 @@ import java.text.ParseException;
 @RestController
 public class ScheduleController {
 
-    @Autowired
-    IScheduleService scheduleService;
+    private final IScheduleService scheduleService;
+
+    public ScheduleController(IScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
 
 
     /**

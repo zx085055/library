@@ -18,12 +18,8 @@ public class MyScheduler {
     /**
      *
      */
-    public Boolean addJob(JobDetail job, Trigger trigger) {
-        try {
-            scheduler.scheduleJob(job, trigger);
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+    public Boolean addJob(JobDetail job, Trigger trigger) throws SchedulerException {
+        scheduler.scheduleJob(job, trigger);
         return null;
     }
 
@@ -51,16 +47,14 @@ public class MyScheduler {
     /**
      * 停止調度Job任務
      */
-    public boolean unscheduleJob(TriggerKey triggerkey)
-            throws SchedulerException {
+    public boolean unscheduleJob(TriggerKey triggerkey) throws SchedulerException {
         return scheduler.unscheduleJob(triggerkey);
     }
 
     /**
      * 重新恢复触发器相关的job任务
      */
-    public Date rescheduleJob(TriggerKey triggerkey, Trigger trigger)
-            throws SchedulerException {
+    public Date rescheduleJob(TriggerKey triggerkey, Trigger trigger) throws SchedulerException {
         return scheduler.rescheduleJob(triggerkey, trigger);
     }
 
@@ -96,22 +90,17 @@ public class MyScheduler {
     /**
      * 刪除全部job
      */
-    public Boolean deleteAllJobs() {
-        try {
-            for (String groupName : scheduler.getJobGroupNames()) {
-                for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
-                    String jobName = jobKey.getName();
-                    String jobGroup = jobKey.getGroup();
-                    //get job's trigger
-                    List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
-                    Date nextFireTime = triggers.get(0).getNextFireTime();
-                    System.out.println("[jobName] : " + jobName + " [groupName] : "
-                            + jobGroup + " - " + nextFireTime);
-                    this.deleteJob(new JobKey(jobName, jobGroup));
-                }
+    public Boolean deleteAllJobs() throws SchedulerException {
+        for (String groupName : scheduler.getJobGroupNames()) {
+            for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
+                String jobName = jobKey.getName();
+                String jobGroup = jobKey.getGroup();
+                List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
+                Date nextFireTime = triggers.get(0).getNextFireTime();
+                System.out.println("[jobName] : " + jobName + " [groupName] : "
+                        + jobGroup + " - " + nextFireTime);
+                this.deleteJob(new JobKey(jobName, jobGroup));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return true;
     }
@@ -119,23 +108,15 @@ public class MyScheduler {
     /**
      * 暫停指定Job
      */
-    public void pauseJob(JobKey jobKey) {
-        try {
-            scheduler.pauseJob(jobKey);
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+    public void pauseJob(JobKey jobKey) throws SchedulerException {
+        scheduler.pauseJob(jobKey);
     }
 
     /**
      * 恢復指定Job
      */
-    public void resumeJob(JobKey jobKey) {
-        try {
-            scheduler.resumeJob(jobKey);
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+    public void resumeJob(JobKey jobKey) throws SchedulerException {
+        scheduler.resumeJob(jobKey);
     }
 
     @PreDestroy

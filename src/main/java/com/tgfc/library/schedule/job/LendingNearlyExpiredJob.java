@@ -33,20 +33,17 @@ public class LendingNearlyExpiredJob implements Job {
         JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
         Boolean success = false;
 
-        try {
-            List<MailResponse> list = mailService.getLendingNearlyExpiredList();
-            List<Map<String, String>> collect = list.stream().map(mailResponse -> {
-                Map<String, String> map = new HashMap<>();
-                map.put("title", "借閱即將到期通知");
-                map.put("context", mailResponse.getEmployee() + "您好，您借閱的書" + mailResponse.getBookName()
-                        + " 將在" + mailResponse.getEndDate().toString() + "過期，請在期限內歸還，謝謝");
-                map.put("email", mailResponse.getEmail());
-                return map;
-            }).collect(Collectors.toList());
-            success = mailService.batchMailing(collect);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        List<MailResponse> list = mailService.getLendingNearlyExpiredList();
+        List<Map<String, String>> collect = list.stream().map(mailResponse -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("title", "借閱即將到期通知");
+            map.put("context", mailResponse.getEmployee() + "您好，您借閱的書" + mailResponse.getBookName()
+                    + " 將在" + mailResponse.getEndDate().toString() + "過期，請在期限內歸還，謝謝");
+            map.put("email", mailResponse.getEmail());
+            return map;
+        }).collect(Collectors.toList());
+        success = mailService.batchMailing(collect);
+
 
         if (success) {
             scheduleRepository.setLastExecute(dataMap.getInt("id"), JobLastExecuteEnum.DONE.getCode());
