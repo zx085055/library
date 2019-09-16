@@ -1,7 +1,6 @@
 package com.tgfc.library.repository;
 
 import com.tgfc.library.entity.Recommend;
-import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

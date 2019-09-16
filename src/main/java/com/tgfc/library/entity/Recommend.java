@@ -1,9 +1,6 @@
 package com.tgfc.library.entity;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;

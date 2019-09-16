@@ -3,7 +3,6 @@ package com.tgfc.library.entity;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 import java.io.Serializable;
