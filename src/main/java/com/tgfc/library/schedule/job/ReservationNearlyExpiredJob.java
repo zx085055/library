@@ -29,7 +29,6 @@ public class ReservationNearlyExpiredJob implements Job {
         JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
         Boolean success = false;
 
-
         List<MailResponse> list = mailService.getReservationNearlyExpiredList();
         List<Map<String, String>> collect = list.stream().map(mailResponse -> {
             Map<String, String> map = new HashMap<>();

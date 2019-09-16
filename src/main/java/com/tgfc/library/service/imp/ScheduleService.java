@@ -16,7 +16,6 @@ import com.tgfc.library.util.ContextUtil;
 import org.quartz.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -196,7 +195,7 @@ public class ScheduleService implements IScheduleService {
      * 改變排程狀態 ( 啟用 <---> 禁用 )
      */
     @Override
-    public BaseResponse changeStatus(int id) {
+    public BaseResponse changeStatus(int id)  {
         BaseResponse response = new BaseResponse();
         Schedule schedule = scheduleRepository.getById(id);
         if (schedule == null) {
@@ -205,14 +204,18 @@ public class ScheduleService implements IScheduleService {
             return response;
         }
         JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
-        if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
-            myScheduler.pauseJob(jobKey);
-            scheduleRepository.pauseJob(id);
-            response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.ENABLE.getTrans() + "變為" + ScheduleStatus.DISABLE.getTrans());
-        } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
-            myScheduler.resumeJob(jobKey);
-            scheduleRepository.resumeJob(id);
-            response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.DISABLE.getTrans() + "變為" + ScheduleStatus.ENABLE.getTrans());
+        try {
+            if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
+                myScheduler.pauseJob(jobKey);
+                scheduleRepository.pauseJob(id);
+                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.ENABLE.getTrans() + "變為" + ScheduleStatus.DISABLE.getTrans());
+            } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
+                myScheduler.resumeJob(jobKey);
+                scheduleRepository.resumeJob(id);
+                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.DISABLE.getTrans() + "變為" + ScheduleStatus.ENABLE.getTrans());
+            }
+        } catch (SchedulerException e) {
+            e.printStackTrace();
         }
         response.setData(true);
         response.setStatus(true);
@@ -222,7 +225,11 @@ public class ScheduleService implements IScheduleService {
     @Override
     public BaseResponse deleteAllJobs() {
         BaseResponse response = new BaseResponse();
-        response.setData(myScheduler.deleteAllJobs());
+        try {
+            response.setData(myScheduler.deleteAllJobs());
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
         scheduleRepository.deleteAll();
         response.setMessage("全部刪除完成");
         response.setStatus(true);
