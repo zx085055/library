@@ -1,14 +1,10 @@
 package com.tgfc.library.service.imp;
 
-import com.mysql.fabric.Server;
 import com.tgfc.library.service.IPhotoService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,7 +16,7 @@ import java.nio.file.Paths;
 @Service
 public class PhotoService implements IPhotoService {
 
-    private String imageRuel = File.separator + "image" + File.separator;
+    private String imageUrl = File.separator + "image" + File.separator;
 
     @Value("${file.root.path}")
     String filePath;
@@ -41,7 +37,9 @@ public class PhotoService implements IPhotoService {
 
         try {
             if (!dest.getParentFile().exists()) {
-                dest.getParentFile().mkdirs();
+                if(!dest.getParentFile().mkdirs()){
+                    throw new IOException();
+                }
             }
             file.transferTo(dest);
         } catch (IOException e) {
@@ -50,7 +48,7 @@ public class PhotoService implements IPhotoService {
     }
 
     @Override
-    public String getPhotoUrl(String photoFileName)throws IOException {
+    public String getPhotoUrl(String photoFileName) {
 
         String urlString="";
         try {
@@ -62,7 +60,7 @@ public class PhotoService implements IPhotoService {
                 String host = address.getHostAddress();
                 Socket  point = new Socket();
                 //point.getLocalPort();
-                String path = imageRuel + photoFileName;
+                String path = imageUrl + photoFileName;
                 URL url = new URL(protocol, host, point.getLocalPort(), path);
                 System.out.println(url.toString() + "?");
                 urlString = url.toString();
@@ -79,26 +77,26 @@ public class PhotoService implements IPhotoService {
     public boolean  deletePhoto( String newName) {
         File file = new File(this.filePath + newName);
         if (file.isFile() && file.exists()) {
-            file.delete();//"刪除單個檔案"+name+"成功！"
-            return true;
+            //file.delete();//"刪除單個檔案"+name+"成功！"
+            return file.delete();
         }//"刪除單個檔案"+name+"失敗！"
         return false;
     }
     @Override
     public byte[] getPhoto(String fileName) throws FileNotFoundException {
-        String rpath = this.filePath + fileName;
-        Path path = Paths.get(rpath);
+        String filePath = this.filePath + fileName;
+        Path path = Paths.get(filePath);
         try {
-            byte[]   data = Files.readAllBytes(path);
-            return data;
+            //byte[]   data = Files.readAllBytes(path);
+            return Files.readAllBytes(path);
         } catch (IOException e) {
             throw new FileNotFoundException();
         }
     }
     @Override
     public String getApiPhotoUrl(String photoFileName){
-       String url =urlString+photoFileName;
-        return url;
+       //String url =urlString+photoFileName;
+        return urlString+photoFileName;
     }
 
 
