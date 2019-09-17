@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @Aspect
 @Component
@@ -21,43 +22,29 @@ public class LogAspect {
     }
 
     @Before("pointcut()")
-    public void before(JoinPoint joinPoint) {
+    public void before(JoinPoint joinPoint) throws Exception{
         Logger logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         logger.info("START_TARGET : " + joinPoint.getTarget());
         StringBuilder rs = new StringBuilder();
         String className = null;
-        int index = 1;
         Object[] args = joinPoint.getArgs();
         for (Object info : args) {
-            // 獲取對象類型
-            className = info.getClass().getName();
+            className = info.getClass().getName();// 獲取對象類型
             className = className.substring(className.lastIndexOf(".") + 1);
-            rs.append("[參數").append(index).append("，類型：").append(className).append("，值：");
-            // 獲取對象的所有方法
-            Method[] methods = info.getClass().getDeclaredMethods();
-            // 遍歷方法，判斷get方法
-            for (Method method : methods) {
+            rs.append("[參數").append(Arrays.toString(args).indexOf(info.toString())).append("，類型：").append(className).append("，值：");
+            Method[] methods = info.getClass().getDeclaredMethods();// 獲取對象的所有方法
+            for (Method method : methods) {// 遍歷方法，判斷get方法
                 String methodName = method.getName();
-                //System.out.println(methodName);
-                // 判斷是不是get方法
-                if (Integer.toString(methodName.indexOf("get")).equals("-1")) {// 不是get方法
-                    continue;// 不處理
+                if (methodName.contains("get")) {// 判斷是不是get方法，是get方法
+                    Object rsValue = null;
+                        rsValue = method.invoke(info);// 調用get方法，獲取返回值
+                        if (rsValue == null) {// 沒有返回值
+                            continue;
+                        }
+                    rs.append("(").append(methodName).append(" : ").append(rsValue).append(")");// 將值加入內容中
                 }
-                Object rsValue = null;
-                try {
-                    // 調用get方法，獲取返回值
-                    rsValue = method.invoke(info);
-                    if (rsValue == null) {// 沒有返回值
-                        continue;
-                    }
-                } catch (Exception e) {
-                    continue;
-                }
-                // 將值加入內容中
-                rs.append("(").append(methodName).append(" : ").append(rsValue).append(")");
             }
             rs.append("]");
-            index++;
         }
         logger.info("START_ARGS : " + rs.toString());
     }
