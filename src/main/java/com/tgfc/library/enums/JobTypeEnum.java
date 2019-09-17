@@ -1,9 +1,8 @@
 package com.tgfc.library.enums;
 
-import com.tgfc.library.schedule.job.*;
 
 public enum JobTypeEnum {
-    RESERVATION_NEARLY_EXPIRED("1", "預約到期狀態變更"),
+    RESERVATION_NEARLY_EXPIRED("1", "預約即將到期"),
     RESERVATION_EXPIRED("2", "預約到期"),
     LENDING_NEARLY_EXPIRED("3", "出借即將到期"),
     LENDING_EXPIRED("4", "出借到期"),
@@ -43,21 +42,6 @@ public enum JobTypeEnum {
                 return LENDING_NEARLY_EXPIRED.getTrans();
             case "4":
                 return LENDING_EXPIRED.getTrans();
-            default:
-        }
-        return null;
-    }
-
-    public static Class codeToClass(String type) {
-        switch (type) {
-            case "1":
-                return ReservationNearlyExpiredJob.class;
-            case "2":
-                return ReservationExpiredJob.class;
-            case "3":
-                return LendingNearlyExpiredJob.class;
-            case "4":
-                return LendingExpiredJob.class;
             default:
         }
         return null;

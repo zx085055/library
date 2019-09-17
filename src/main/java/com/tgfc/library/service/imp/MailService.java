@@ -9,11 +9,7 @@ import com.tgfc.library.service.IMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,7 +65,7 @@ public class MailService implements IMailService {
                     mailResponse.setEmployee(records.getBorrowUsername());
                     mailResponse.setBookName(records.getBook().getName());
                     mailResponse.setEmail(records.getEmployee().getEmail());
-                    mailResponse.setEndDate((Date) records.getEndDate());
+                    mailResponse.setEndDate(records.getEndDate());
                     return mailResponse;
                 }
         ).collect(Collectors.toList());
@@ -94,6 +90,6 @@ public class MailService implements IMailService {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         calendar.add(calendar.DATE, 3);
-        return (Date) calendar.getTime();
+        return calendar.getTime();
     }
 }

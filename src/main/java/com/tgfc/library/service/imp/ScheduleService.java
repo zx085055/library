@@ -9,6 +9,7 @@ import com.tgfc.library.repository.IScheduleRepository;
 import com.tgfc.library.request.SchedulePageRequset;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.SchedulePageResponse;
+import com.tgfc.library.schedule.job.NoticeJob;
 import com.tgfc.library.schedule.scheduler.MyScheduler;
 import com.tgfc.library.schedule.trigger.OneDayOneTimeTrigger;
 import com.tgfc.library.service.IScheduleService;
@@ -184,9 +185,10 @@ public class ScheduleService implements IScheduleService {
 
     private JobDetail getJob(SchedulePageRequset model) {
         JobKey jobKey = new JobKey(model.getName(), model.getName() + model.getId());
-        JobDetail job = JobBuilder.newJob(JobTypeEnum.codeToClass(model.getType()))
+        JobDetail job = JobBuilder.newJob(NoticeJob.class)
                 .withIdentity(jobKey)
                 .usingJobData("id", model.getId())
+                .usingJobData("jobType",model.getType())
                 .build();
         return job;
     }

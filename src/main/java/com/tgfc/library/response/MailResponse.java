@@ -1,6 +1,7 @@
 package com.tgfc.library.response;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 public class MailResponse {
     private String employee;
