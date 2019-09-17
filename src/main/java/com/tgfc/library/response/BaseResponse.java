@@ -34,4 +34,13 @@ public class BaseResponse {
     public void setData(Object data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "BaseResponse{" +
+                "message='" + message + '\'' +
+                ", status=" + status +
+                ", data=" + data +
+                '}';
+    }
 }
