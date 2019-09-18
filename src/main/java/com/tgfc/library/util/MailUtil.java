@@ -23,17 +23,14 @@ public class MailUtil {
 
     private static String from;
 
-    @Value("${spring.mail.username}")  //發送人的郵箱  比如155156641XX@163.com
-    private String initFrom;
-
     @Autowired
     public MailUtil(ITemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 
-    @PostConstruct
-    private void init() {
-        from = this.initFrom;
+    @Value("${spring.mail.username}")
+    public void setFrom(String username) {
+        from = username;
     }
 
     private static ITemplateEngine templateEngine;
