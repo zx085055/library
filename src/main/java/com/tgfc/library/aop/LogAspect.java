@@ -6,14 +6,15 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.regex.Pattern;
 
 @Aspect
 @Component
@@ -25,20 +26,21 @@ public class LogAspect {
 
     @Before("pointcut()")
     public void before(JoinPoint joinPoint) throws Exception {
+        String requestMethod = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
         Logger logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
         logger.info("START_TARGET : " + joinPoint.getTarget());
         StringBuilder rs = new StringBuilder();
         String className = null;
         Object[] args = joinPoint.getArgs();
+        String[] argNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
+        int argIndex = 0;
         for (Object info : args) {
-            Pattern pattern = Pattern.compile("[0-9]*");
-            if (pattern.matcher(info.toString()).matches()) {
-                rs.append("[參數").append(Arrays.toString(args).indexOf(info.toString())).append("，類型：").append(className).append("，值：");
-                rs.append("(").append("id").append(" : ").append(info).append(")");// 將值加入內容中
+            className = info.getClass().getName();// 獲取對象類型
+            className = className.substring(className.lastIndexOf(".") + 1);
+            rs.append("[參數").append("{").append(argIndex + 1).append("}").append("，類型：").append(className).append("，值：");
+            if (requestMethod.equals("GET") || requestMethod.equals("DELETE")) {
+                rs.append("(").append(argNames[argIndex]).append(" : ").append(info).append(")");// 將值加入內容中
             } else {
-                className = info.getClass().getName();// 獲取對象類型
-                className = className.substring(className.lastIndexOf(".") + 1);
-                rs.append("[參數").append(Arrays.toString(args).indexOf(info.toString())).append("，類型：").append(className).append("，值：");
                 Method[] methods = info.getClass().getDeclaredMethods();// 獲取對象的所有方法
                 for (Method method : methods) {// 遍歷方法，判斷get方法
                     Parameter[] parameters = method.getParameters();
@@ -51,13 +53,14 @@ public class LogAspect {
                                 if (rsValue == null) {// 沒有返回值
                                     continue;
                                 }
-                                rs.append("(").append(parameters[0].getName()).append(" : ").append(rsValue).append(")");// 將值加入內容中
+                                rs.append("(").append(parameters[0].getName()).append(" = ").append(rsValue).append(")");// 將值加入內容中
                             }
                         }
                     }
                 }
                 rs.append("]");
             }
+            argIndex++;
         }
         logger.info("START_ARGS : " + rs.toString());
     }
