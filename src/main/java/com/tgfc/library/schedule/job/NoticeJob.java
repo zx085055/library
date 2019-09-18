@@ -61,7 +61,7 @@ public class NoticeJob implements Job {
 
     private Boolean reservationExpired() {
         Boolean success;
-        int count = -1;
+        int count;
         List<MailResponse> list = mailService.getReservationExpiredList();
         success = mailService.batchTemplateMailing(list, JobTypeEnum.RESERVATION_EXPIRED.getCode());
         count = reservationRepository.reservationExpiredStatus(new Date());
@@ -78,7 +78,7 @@ public class NoticeJob implements Job {
 
     private Boolean lendingExpired() {
         Boolean success;
-        int count = -1;
+        int count;
         List<MailResponse> list = mailService.getLendingExpiredJobList();
         success = mailService.batchTemplateMailing(list, JobTypeEnum.LENDING_EXPIRED.getCode());
         count = recordsRepository.lendingExpiredStatus(new Date());
