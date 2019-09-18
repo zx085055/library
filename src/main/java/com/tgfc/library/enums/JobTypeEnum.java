@@ -11,7 +11,7 @@ public enum JobTypeEnum {
     private String code;
     private String trans;
 
-    private JobTypeEnum(String code, String trans) {
+    JobTypeEnum(String code, String trans) {
         this.code = code;
         this.trans = trans;
     }

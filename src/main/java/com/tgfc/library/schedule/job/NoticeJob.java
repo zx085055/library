@@ -10,7 +10,6 @@ import com.tgfc.library.service.imp.MailService;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -31,7 +30,7 @@ public class NoticeJob implements Job {
     IReservationRepository reservationRepository;
 
     @Override
-    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+    public void execute(JobExecutionContext jobExecutionContext) {
         JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
         String jobType = (String) dataMap.get("jobType");
         Boolean success = chooseJob(jobType);
@@ -54,14 +53,14 @@ public class NoticeJob implements Job {
     }
 
     private Boolean reservationNearlyExpired() {
-        Boolean success = false;
+        Boolean success;
         List<MailResponse> list = mailService.getReservationNearlyExpiredList();
         success = mailService.batchTemplateMailing(list, JobTypeEnum.RESERVATION_NEARLY_EXPIRED.getCode());
         return success;
     }
 
     private Boolean reservationExpired() {
-        Boolean success = false;
+        Boolean success;
         int count = -1;
         List<MailResponse> list = mailService.getReservationExpiredList();
         success = mailService.batchTemplateMailing(list, JobTypeEnum.RESERVATION_EXPIRED.getCode());
@@ -71,14 +70,14 @@ public class NoticeJob implements Job {
     }
 
     private Boolean lendingNearlyExpired() {
-        Boolean success = false;
+        Boolean success;
         List<MailResponse> list = mailService.getLendingNearlyExpiredList();
         success = mailService.batchTemplateMailing(list, JobTypeEnum.LENDING_NEARLY_EXPIRED.getCode());
         return success;
     }
 
     private Boolean lendingExpired() {
-        Boolean success = false;
+        Boolean success;
         int count = -1;
         List<MailResponse> list = mailService.getLendingExpiredJobList();
         success = mailService.batchTemplateMailing(list, JobTypeEnum.LENDING_EXPIRED.getCode());

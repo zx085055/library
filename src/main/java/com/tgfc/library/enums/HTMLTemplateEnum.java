@@ -4,14 +4,14 @@ package com.tgfc.library.enums;
 public enum HTMLTemplateEnum {
     RESERVATION_NEARLY_EXPIRED_EMAIL_TEMPLATE("reservationNearlyExpiredEmailTemplate", "預約即將到期通知模板"),
     RESERVATION_EXPIRED_EMAIL_TEMPLATE("reservationExpiredEmailTemplate", "預約到期通知模板"),
-    LENDING_NEARLY_EXPIRED_EMAIL_TEMPLATE("LendingNearlyExpiredEmailTemplate", "借閱即將到期通知"),
-    LENDING_EXPIRED_EMAIL_TEMPLATE("LendingExpiredEmailTemplate", "借閱到期通知"),
+    LENDING_NEARLY_EXPIRED_EMAIL_TEMPLATE("LendingNearlyExpiredEmailTemplate", "借閱即將到期通知模板"),
+    LENDING_EXPIRED_EMAIL_TEMPLATE("LendingExpiredEmailTemplate", "借閱到期通知模板"),
     ;
 
     private String code;
     private String trans;
 
-    private HTMLTemplateEnum(String code, String trans) {
+    HTMLTemplateEnum(String code, String trans) {
         this.code = code;
         this.trans = trans;
     }

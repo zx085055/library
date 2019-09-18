@@ -89,6 +89,7 @@ public class MailService implements IMailService {
                     mailResponse.setBookName(records.getBook().getName());
                     mailResponse.setEmail(records.getEmployee().getEmail());
                     mailResponse.setEndDate((java.sql.Date) records.getEndDate());
+                    mailResponse.setTitle(title);
                     return mailResponse;
                 }
         ).collect(Collectors.toList());
@@ -101,6 +102,7 @@ public class MailService implements IMailService {
                     mailResponse.setBookName(reservation.getBook().getName());
                     mailResponse.setEmail(reservation.getEmployee().getEmail());
                     mailResponse.setEndDate((java.sql.Date) (reservation.getEndDate()));
+                    mailResponse.setTitle(title);
                     return mailResponse;
                 }
         ).collect(Collectors.toList());
