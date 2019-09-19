@@ -20,6 +20,7 @@ public class Records implements Serializable {
     @Column(name = "borrow_username", length = 30, nullable = false)
     private String borrowUsername;
     @Column(name = "borrow_date", nullable = false)
+    @CreatedDate
     private Date borrowDate;
     @Column(name = "return_date")
     @CreatedDate

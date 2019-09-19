@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AnnouncementService implements IAnnouncementService {
@@ -22,6 +23,7 @@ public class AnnouncementService implements IAnnouncementService {
     IEmployeeRepository employeeRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public BaseResponse select(String title, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         title = (title == null) ? "" : title;

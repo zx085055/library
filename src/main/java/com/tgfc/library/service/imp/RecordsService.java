@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -35,6 +36,7 @@ public class RecordsService implements IRecordsService {
     IReservationRepository reservationRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         keyword = (keyword.isEmpty()) ? null : keyword;
