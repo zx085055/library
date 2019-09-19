@@ -46,15 +46,12 @@ public class ReservationService implements IReservationService {
         Integer status = ReservationEnum.RESERVATION_ALIVE.getCode();
         if (keyword == null) {
             baseResponse.setData(reservationRepository.findAll(pageable));
-            baseResponse.setMessage("查詢成功");
-            baseResponse.setStatus(true);
-            return baseResponse;
         } else {
             baseResponse.setData(reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable));
-            baseResponse.setMessage("查詢成功");
-            baseResponse.setStatus(true);
-            return baseResponse;
         }
+        baseResponse.setMessage("查詢成功");
+        baseResponse.setStatus(true);
+        return baseResponse;
     }
 
     @Override
