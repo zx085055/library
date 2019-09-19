@@ -21,16 +21,28 @@ public class MailUtil {
 
     private static JavaMailSender mailSender = new JavaMailSenderImpl(); //框架自帶的
 
+    private static String host;
     private static String from;
+    private static String password;
 
     @Autowired
     public MailUtil(ITemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }
 
+    @Value("${spring.mail.host}")
+    public void setHost(String setHost) {
+        ((JavaMailSenderImpl) mailSender).setHost(setHost);
+    }
+
     @Value("${spring.mail.username}")
     public void setFrom(String username) {
         from = username;
+    }
+
+    @Value("${spring.mail.password}")
+    public void setPassword(String setPassword) {
+        ((JavaMailSenderImpl) mailSender).setPassword(setPassword);
     }
 
     private static ITemplateEngine templateEngine;
