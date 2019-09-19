@@ -37,17 +37,11 @@ public class RecordsService implements IRecordsService {
     @Override
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-        if (keyword == null || status == null) {
-            baseResponse.setData(recordsRepository.findAll(pageable));
-            baseResponse.setMessage("查詢成功");
-            baseResponse.setStatus(true);
-            return baseResponse;
-        } else {
-            baseResponse.setData(recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable));
-            baseResponse.setMessage("查詢成功");
-            baseResponse.setStatus(true);
-            return baseResponse;
-        }
+        keyword = (keyword.isEmpty()) ? null : keyword;
+        baseResponse.setData(recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable));
+        baseResponse.setMessage("查詢成功");
+        baseResponse.setStatus(true);
+        return baseResponse;
     }
 
     @Override
@@ -81,8 +75,6 @@ public class RecordsService implements IRecordsService {
         Reservation nextReservation = reservationRepository.getReservatonByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), records.getBook().getId());
         MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
         nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
-        Date current = new Date();
-        records.setReturnDate(current);
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
         records.getBook().setStatus(BookStatusEnum.BOOK_STATUS_INSIDE.getCode());
         recordsRepository.save(records);
