@@ -40,11 +40,11 @@ public class RecordsService implements IRecordsService {
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         keyword = (keyword.isEmpty()) ? null : keyword;
-        if(status != null){
+        if (status != null) {
             baseResponse.setData(recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable));
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
-        }else {
+        } else {
             baseResponse.setMessage("查詢失敗");
             baseResponse.setStatus(false);
         }

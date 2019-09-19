@@ -12,18 +12,14 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Component
 public class MailUtil {
-
     private static JavaMailSender mailSender = new JavaMailSenderImpl(); //框架自帶的
 
-    private static String host;
     private static String from;
-    private static String password;
 
     @Autowired
     public MailUtil(ITemplateEngine templateEngine) {

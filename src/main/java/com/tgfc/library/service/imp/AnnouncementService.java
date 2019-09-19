@@ -53,7 +53,7 @@ public class AnnouncementService implements IAnnouncementService {
 
         Employee employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
-        BeanUtils.copyProperties(announcement,existAnnouncement);
+        BeanUtils.copyProperties(announcement, existAnnouncement);
         existAnnouncement.setEmployee(employee);
         announcementRepository.save(existAnnouncement);
         baseResponse.setStatus(true);
