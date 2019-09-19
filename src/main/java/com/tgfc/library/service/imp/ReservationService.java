@@ -44,8 +44,11 @@ public class ReservationService implements IReservationService {
     public BaseResponse select(String keyword, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Integer status = ReservationEnum.RESERVATION_ALIVE.getCode();
-        keyword = (keyword == null) ? "" : keyword;
-        baseResponse.setData(reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable));
+        if (keyword == null) {
+            baseResponse.setData(reservationRepository.findAll(pageable));
+        } else {
+            baseResponse.setData(reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable));
+        }
         baseResponse.setMessage("查詢成功");
         baseResponse.setStatus(true);
         return baseResponse;
@@ -164,11 +167,13 @@ public class ReservationService implements IReservationService {
         Records records = new Records();
         Employee employee = employeeRepository.findById(reservation.getEmployee().getId()).get();
         Book book = bookRepository.findById(reservation.getBook().getId()).get();
-        Date endDate = new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000);
+        Date current = new Date();
+        Date endDate = new Date(current.getTime() + 14 * 24 * 60 * 60 * 1000);
         book.setStatus(BookStatusEnum.BOOK_STATUS_LEND.getCode());
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_BORROWING.getCode());
         records.setBorrowId(employee.getId());
         records.setBorrowUsername(employee.getName());
+        records.setBorrowDate(current);
         records.setEndDate(endDate);
         records.setEmployee(employeeRepository.findById(operatorId).get());
         records.setBook(book);
