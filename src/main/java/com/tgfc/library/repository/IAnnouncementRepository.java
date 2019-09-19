@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IAnnouncementRepository extends JpaRepository<Announcement,Integer> {
-    @Query("SELECT r from Recommend r where r.name like CONCAT('%',?1,'%')")
+    @Query("SELECT r from Announcement r where r.title like CONCAT('%',?1,'%')")
     Page<Announcement> getAnnouncementsByNameLike(String name, Pageable pageable);
 
 }

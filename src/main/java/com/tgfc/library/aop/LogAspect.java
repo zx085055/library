@@ -39,7 +39,7 @@ public class LogAspect {
             className = className.substring(className.lastIndexOf(".") + 1);
             rs.append("[參數").append("{").append(argIndex + 1).append("}").append("，類型：").append(className).append("，值：");
             if (requestMethod.equals("GET") || requestMethod.equals("DELETE")) {
-                rs.append("(").append(argNames[argIndex]).append(" : ").append(info).append(")");// 將值加入內容中
+                rs.append("(").append(argNames[argIndex]).append(" = ").append(info).append(")");// 將值加入內容中
             } else {
                 Method[] methods = info.getClass().getDeclaredMethods();// 獲取對象的所有方法
                 for (Method method : methods) {// 遍歷方法，判斷get方法

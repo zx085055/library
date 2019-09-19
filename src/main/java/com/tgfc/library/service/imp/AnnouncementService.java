@@ -25,18 +25,11 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public BaseResponse select(String title, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-
-        if (title == null) {
-            baseResponse.setData(announcementRepository.findAll(pageable));
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("查詢成功");
-            return baseResponse;
-        } else {
-            baseResponse.setData(announcementRepository.getAnnouncementsByNameLike(title, pageable));
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("查詢成功");
-            return baseResponse;
-        }
+        title = (title == null) ? "" : title;
+        baseResponse.setData(announcementRepository.getAnnouncementsByNameLike(title, pageable));
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
     }
 
     @Override
