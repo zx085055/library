@@ -162,6 +162,12 @@ public class ReservationService implements IReservationService {
         String operatorId = ContextUtil.getAccount();
 
         Reservation reservation = reservationRepository.findById(id).get();
+        if(!ReservationEnum.RESERVATION_ALIVE.getCode().equals(reservation.getStatus())){
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("請檢查預約狀態");
+            return baseResponse;
+        }
+
         reservation.setStatus(ReservationEnum.RESERVATION_SUCCESS.getCode());
 
         Records records = new Records();
