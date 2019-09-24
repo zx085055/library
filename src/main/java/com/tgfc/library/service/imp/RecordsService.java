@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class RecordsService implements IRecordsService {
@@ -96,7 +98,10 @@ public class RecordsService implements IRecordsService {
     public BaseResponse findAll(Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Records> records = recordsRepository.findAll(pageable);
-        baseResponse.setData(records.getContent());
+        Map<String ,Object> data = new HashMap<>();
+        data.put("totalCount",records.getTotalElements());
+        data.put("results",records.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;
