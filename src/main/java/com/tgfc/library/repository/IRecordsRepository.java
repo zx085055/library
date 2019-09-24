@@ -23,7 +23,7 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE r.borrowUsername LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%') OR r.status=?2")
     Page<Records> getRecordsByNameLikeAndStatus(String name, Integer status, Pageable pageable);
 
-    @Query("SELECT r from Records r where r.borrowDate>=?1 AND r.returnDate<=?2")
+    @Query("SELECT r from Records r where r.borrowDate>=?1 AND r.borrowDate<=?2")
     Page<Records> findByTimeInterval(Date borrowDate, Date returnDate, Pageable pageable);
 
     @Query(value = "select r from Records r where r.endDate>=?1 and r.status=1")
