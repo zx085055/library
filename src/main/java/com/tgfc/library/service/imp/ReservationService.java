@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -44,11 +46,16 @@ public class ReservationService implements IReservationService {
     public BaseResponse select(String keyword, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Integer status = ReservationEnum.RESERVATION_ALIVE.getCode();
+        Map<String,Object> data = new HashMap<>();
+        Page<Reservation> all = null;
         if (keyword == null) {
-            baseResponse.setData(reservationRepository.findAll(pageable).getContent());
+            all = reservationRepository.findAll(pageable);
         } else {
-            baseResponse.setData(reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable).getContent());
+            all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable);
         }
+        data.put("totalCount",all.getTotalElements());
+        data.put("results",all.getContent());
+        baseResponse.setData(data);
         baseResponse.setMessage("查詢成功");
         baseResponse.setStatus(true);
         return baseResponse;
@@ -124,7 +131,10 @@ public class ReservationService implements IReservationService {
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
-        baseResponse.setData(reservations.getContent());
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;
@@ -150,7 +160,10 @@ public class ReservationService implements IReservationService {
     public BaseResponse findAll(Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> all = reservationRepository.findAll(pageable);
-        baseResponse.setData(all.getContent());
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",all.getTotalElements());
+        data.put("results",all.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;

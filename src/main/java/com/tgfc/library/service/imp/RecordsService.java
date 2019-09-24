@@ -43,7 +43,11 @@ public class RecordsService implements IRecordsService {
         BaseResponse baseResponse = new BaseResponse();
         keyword = (keyword.isEmpty()) ? null : keyword;
         if (status != null) {
-            baseResponse.setData(recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable).getContent());
+            Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
+            Map<String,Object> data = new HashMap<>();
+            data.put("totalCount",records.getTotalElements());
+            data.put("results",records.getContent());
+            baseResponse.setData(data);
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
         } else {
@@ -111,7 +115,10 @@ public class RecordsService implements IRecordsService {
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Records> reservations = recordsRepository.findByTimeInterval(startDate, endDate, pageable);
-        baseResponse.setData(reservations.getContent());
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;
