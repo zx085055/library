@@ -27,7 +27,7 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse select(String title, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         title = (title == null) ? "" : title;
-        baseResponse.setData(announcementRepository.getAnnouncementsByNameLike(title, pageable));
+        baseResponse.setData(announcementRepository.getAnnouncementsByNameLike(title, pageable).getContent());
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;
