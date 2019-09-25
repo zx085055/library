@@ -16,31 +16,31 @@ public class AnnouncementController {
     @Autowired
     IAnnouncementService announcementService;
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/select")
     public BaseResponse select(@RequestBody AnnouncementPageRequest announcement) {
-        return announcementService.select(announcement.getTitle(), announcement.getPageable());
+        return announcementService.select(announcement.getTitle(), announcement.getStartTime(), announcement.getEndTime(), announcement.getPageable());
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/insert")
     public BaseResponse insert(@RequestBody Announcement announcement) {
         return announcementService.insert(announcement);
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/update")
     public BaseResponse update(@RequestBody Announcement announcement) {
         return announcementService.update(announcement);
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @DeleteMapping("/delete")
     public BaseResponse delete(@RequestParam int id) {
         return announcementService.delete(id);
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/changeStatus")
     public BaseResponse changeStatus(@RequestBody Announcement announcement) {
         return announcementService.changeStatus(announcement);
