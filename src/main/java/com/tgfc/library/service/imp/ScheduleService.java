@@ -26,7 +26,9 @@ import javax.persistence.criteria.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,7 +74,14 @@ public class ScheduleService implements IScheduleService {
                 .setFirstResult((model.getPageNumber() - 1) * model.getPageSize())
                 .setMaxResults((model.getPageNumber() - 1) * model.getPageSize() + model.getPageSize())
                 .getResultList();
-        response.setData(scheduleListToResponseList(list));
+
+        int totalCount = entityManager.createQuery(query).getResultList().size();
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("totalCount",totalCount);
+        resultMap.put("result",scheduleListToResponseList(list));
+
+        response.setData(resultMap);
         response.setMessage("查詢成功");
         response.setStatus(true);
         return response;
