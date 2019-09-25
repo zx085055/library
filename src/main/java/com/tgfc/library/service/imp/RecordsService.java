@@ -89,12 +89,12 @@ public class RecordsService implements IRecordsService {
         Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), records.getBook().getId());
         if(nextReservation!=null) {
             MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
+            nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
+            reservationRepository.save(nextReservation);
         }
-        nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
         records.getBook().setStatus(BookStatusEnum.BOOK_STATUS_INSIDE.getCode());
         recordsRepository.save(records);
-        reservationRepository.save(nextReservation);
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");
         return baseResponse;
