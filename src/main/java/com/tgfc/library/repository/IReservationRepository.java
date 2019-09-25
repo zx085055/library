@@ -24,8 +24,8 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Query("SELECT r from Reservation r where r.startDate>=?1 AND r.startDate<=?2")
     Page<Reservation> findByTimeInterval(Date startDate, Date endDate, Pageable pageable);
 
-    @Query(value = "select r from Reservation r inner join r.book b where b.id = ?1 and r.employee.id = ?2")
-    Reservation findByBookId(Integer bookId, String empId);
+    @Query(value = "select r from Reservation r inner join r.book b where b.id = ?1 and r.employee.id = ?2 and r.status in ?3")
+    Reservation getReservationByStatus(Integer bookId, String empId, List<Integer> status);
 
     @Modifying
     @Query(value = "update Reservation r set r.status=?1 where r.id=?2")

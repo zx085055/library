@@ -21,9 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -66,15 +64,18 @@ public class ReservationService implements IReservationService {
         BaseResponse baseResponse = new BaseResponse();
         Integer bookId = reservation.getBook().getBookId();
         String empId = ContextUtil.getAccount();
-        Reservation exist = reservationRepository.findByBookId(bookId, empId);
+        List<Integer> statusList = new ArrayList<>();
+        statusList.add(ReservationEnum.RESERVATION_ALIVE.getCode());
+        statusList.add(ReservationEnum.RESERVATION_WAIT.getCode());
+        Reservation exist = reservationRepository.getReservationByStatus(bookId, empId,statusList);
         if (exist != null) {
             baseResponse.setMessage("已有此預約");
             baseResponse.setStatus(false);
         } else {
             Integer count = reservationRepository.reservationStatusCount(bookId, ReservationEnum.RESERVATION_ALIVE.getCode());
-            Integer status;
             Date startDate = new Date();
             Date endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+            Integer status;
             if (count >= 1) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 baseResponse.setMessage("此本書有人預約,已加入排隊");
