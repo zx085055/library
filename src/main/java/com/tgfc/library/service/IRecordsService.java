@@ -21,4 +21,6 @@ public interface IRecordsService {
 
     BaseResponse findByEmpId(Pageable pageable);
 
+    BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable);
+
 }

@@ -39,4 +39,7 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Transactional
     @Query(value = "update Records r set r.status=3 where r.endDate<=?1 and r.status=1")
     int lendingExpiredStatus(Date currentDate);
+
+    @Query("SELECT r from Reservation r inner join r.employee e where e.id =?1 And r.startDate>=?2 AND r.startDate<=?3")
+    Page<Records> findByTimeIntervalWithEmpId(String empId,Date startDate, Date endDate, Pageable pageable);
 }

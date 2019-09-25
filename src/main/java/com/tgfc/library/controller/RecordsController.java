@@ -60,4 +60,10 @@ public class RecordsController {
         return recordsService.findByEmpId(pageableRequest.getPageable());
     }
 
+    @RolesAllowed({PermissionEnum.Role.USER})
+    @PostMapping("/findByDateWithEmpId")
+    public BaseResponse findByTimeWithEmpId(@RequestBody RecordsSearchPageRequest recordsPageRequest) {
+        return recordsService.findByTimeIntervalWithEmpId(recordsPageRequest.getStartDate(), recordsPageRequest.getEndDate(), recordsPageRequest.getPageable());
+    }
+
 }
