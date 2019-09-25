@@ -79,7 +79,7 @@ public class ScheduleService implements IScheduleService {
 
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("totalCount",totalCount);
-        resultMap.put("result",scheduleListToResponseList(list));
+        resultMap.put("results",scheduleListToResponseList(list));
 
         response.setData(resultMap);
         response.setMessage("查詢成功");
