@@ -41,9 +41,8 @@ public class RecordsService implements IRecordsService {
     @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-        keyword = (keyword.isEmpty()) ? null : keyword;
-        if (status != null) {
-            Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
+        if (status.equals(RecordsStatusEnum.RECORDSSTATUS_ALL.getCode())) {
+            Page<Records> records = recordsRepository.getRecordsByNameLike(keyword, pageable);
             Map<String,Object> data = new HashMap<>();
             data.put("totalCount",records.getTotalElements());
             data.put("results",records.getContent());
@@ -51,8 +50,13 @@ public class RecordsService implements IRecordsService {
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
         } else {
-            baseResponse.setMessage("查詢失敗");
-            baseResponse.setStatus(false);
+            Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
+            Map<String,Object> data = new HashMap<>();
+            data.put("totalCount",records.getTotalElements());
+            data.put("results",records.getContent());
+            baseResponse.setData(data);
+            baseResponse.setMessage("查詢成功");
+            baseResponse.setStatus(true);
         }
 
         return baseResponse;
