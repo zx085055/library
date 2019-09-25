@@ -219,4 +219,17 @@ public class ReservationService implements IReservationService {
         return baseResponse;
     }
 
+    @Override
+    public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        String empId = ContextUtil.getAccount();
+        Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
 }

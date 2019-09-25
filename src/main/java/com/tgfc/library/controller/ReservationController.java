@@ -57,4 +57,10 @@ public class ReservationController {
     public BaseResponse getBook(@RequestParam Integer id) {
         return reservationService.getBook(id);
     }
+
+    @RolesAllowed({PermissionEnum.Role.USER})
+    @PostMapping("/findByDateWithEmpId")
+    public BaseResponse findByDateWithEmpId(@RequestBody ReservationPageRequest reservationPageRequest) {
+        return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(), reservationPageRequest.getEndDate(), reservationPageRequest.getPageable());
+    }
 }
