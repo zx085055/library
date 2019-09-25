@@ -30,6 +30,11 @@ public class ReservationController {
     }
 
     @RolesAllowed({PermissionEnum.Role.USER})
+    @PostMapping("/findByEmp")
+    public BaseResponse findByEmpName(@RequestBody PageableRequest pageableRequest){
+        return reservationService.findByEmpId(pageableRequest.getPageable());
+    }
+    @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/cancelReservation")
     public BaseResponse cancel(@RequestBody Reservation reservation) {
         return reservationService.cancleReservation(reservation.getId());

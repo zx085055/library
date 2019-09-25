@@ -44,4 +44,7 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Transactional
     @Query(value = "update Reservation r set r.status=2 where r.endDate<=?1 and r.status=1")
     int reservationExpiredStatus(Date currentDate);
+
+    @Query(value = "select r from Reservation r inner join r.employee e where e.id = ?1")
+    Page<Reservation> findByEmpId(String empId,Pageable pageable);
 }
