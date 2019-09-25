@@ -7,7 +7,7 @@ import java.util.Date;
 public class AnnouncementPageRequest extends PageableRequest {
     private Integer id;
     private String title;
-    private Date createTime;
+    private Date startTime;
     private Date endTime;
     private Boolean status;
     private String updateUsername;
@@ -29,12 +29,12 @@ public class AnnouncementPageRequest extends PageableRequest {
         this.title = title;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
     public Date getEndTime() {

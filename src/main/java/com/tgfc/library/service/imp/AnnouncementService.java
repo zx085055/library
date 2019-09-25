@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,13 +29,13 @@ public class AnnouncementService implements IAnnouncementService {
 
     @Override
     @Transactional(readOnly = true)
-    public BaseResponse select(String title, Pageable pageable) {
+    public BaseResponse select(String title, Date startTime, Date endTime, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         title = (title == null) ? "" : title;
-        Page<Announcement> announcements = announcementRepository.getAnnouncementsByNameLike(title, pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",announcements.getTotalElements());
-        data.put("results",announcements.getContent());
+        Page<Announcement> announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeInterval(title, startTime, endTime, pageable);
+        Map<String, Object> data = new HashMap<>();
+        data.put("totalCount", announcements.getTotalElements());
+        data.put("results", announcements.getContent());
         baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
