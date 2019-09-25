@@ -204,4 +204,19 @@ public class ReservationService implements IReservationService {
         baseResponse.setMessage("取書成功");
         return baseResponse;
     }
+
+    @Override
+    public BaseResponse findByEmpId(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        String empId = ContextUtil.getAccount();
+        Page<Reservation> reservations = reservationRepository.findByEmpId(empId,pageable);
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
 }

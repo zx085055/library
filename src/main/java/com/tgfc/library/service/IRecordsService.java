@@ -18,4 +18,9 @@ public interface IRecordsService {
     BaseResponse returnNotify(SendMailRequest model);
 
     BaseResponse returnBook(Integer id);
+
+    BaseResponse findByEmpId(Pageable pageable);
+
+    BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable);
+
 }
