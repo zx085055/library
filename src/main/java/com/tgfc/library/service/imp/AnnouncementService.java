@@ -46,6 +46,12 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse insert(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
+        Date currentDate = new Date();
+        if(announcement.getEndTime().before(currentDate)){
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("日期有誤");
+            return baseResponse;
+        }
 
         Employee employee = employeeRepository.findById(id).get();
         announcement.setEmployee(employee);
