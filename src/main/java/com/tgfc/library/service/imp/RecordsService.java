@@ -12,6 +12,7 @@ import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
+import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -122,6 +123,20 @@ public class RecordsService implements IRecordsService {
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Records> reservations = recordsRepository.findByTimeInterval(startDate, endDate, pageable);
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findByEmpId(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        String empId = ContextUtil.getAccount();
+        Page<Records> reservations = recordsRepository.getRecordsByEmpId(empId,pageable);
         Map<String,Object> data = new HashMap<>();
         data.put("totalCount",reservations.getTotalElements());
         data.put("results",reservations.getContent());
