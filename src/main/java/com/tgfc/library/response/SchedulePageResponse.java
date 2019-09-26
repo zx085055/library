@@ -1,5 +1,6 @@
 package com.tgfc.library.response;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class SchedulePageResponse {
@@ -9,6 +10,8 @@ public class SchedulePageResponse {
     private Date endTime;
     private String lastExecute;
     private String status;
+    private String type;
+    private Time noticeTime;
 
     public Integer getId() {
         return id;
@@ -56,5 +59,21 @@ public class SchedulePageResponse {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Time getNoticeTime() {
+        return noticeTime;
+    }
+
+    public void setNoticeTime(Time noticeTime) {
+        this.noticeTime = noticeTime;
     }
 }
