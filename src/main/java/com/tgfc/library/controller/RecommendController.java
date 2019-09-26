@@ -2,7 +2,6 @@ package com.tgfc.library.controller;
 
 import com.tgfc.library.entity.Recommend;
 import com.tgfc.library.enums.PermissionEnum;
-import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.request.RecommendPageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecommendService;

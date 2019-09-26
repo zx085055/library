@@ -20,6 +20,7 @@ public class Announcement implements Serializable {
     @Column(name = "context", length = 100)
     private String context;
     @Column(name = "start_time", nullable = false)
+    @CreatedDate
     private Date startTime;
     @Column(name = "end_time", nullable = false)
     private Date endTime;

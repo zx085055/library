@@ -21,7 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.*;
 
 @Service
 @Transactional
@@ -44,17 +44,19 @@ public class ReservationService implements IReservationService {
     public BaseResponse select(String keyword, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Integer status = ReservationEnum.RESERVATION_ALIVE.getCode();
+        Map<String,Object> data = new HashMap<>();
+        Page<Reservation> all = null;
         if (keyword == null) {
-            baseResponse.setData(reservationRepository.findAll(pageable));
-            baseResponse.setMessage("查詢成功");
-            baseResponse.setStatus(true);
-            return baseResponse;
+            all = reservationRepository.findAll(pageable);
         } else {
-            baseResponse.setData(reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable));
-            baseResponse.setMessage("查詢成功");
-            baseResponse.setStatus(true);
-            return baseResponse;
+            all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable);
         }
+        data.put("totalCount",all.getTotalElements());
+        data.put("results",all.getContent());
+        baseResponse.setData(data);
+        baseResponse.setMessage("查詢成功");
+        baseResponse.setStatus(true);
+        return baseResponse;
     }
 
     @Override
@@ -62,15 +64,18 @@ public class ReservationService implements IReservationService {
         BaseResponse baseResponse = new BaseResponse();
         Integer bookId = reservation.getBook().getBookId();
         String empId = ContextUtil.getAccount();
-        Reservation exist = reservationRepository.findByBookId(bookId, empId);
+        List<Integer> statusList = new ArrayList<>();
+        statusList.add(ReservationEnum.RESERVATION_ALIVE.getCode());
+        statusList.add(ReservationEnum.RESERVATION_WAIT.getCode());
+        Reservation exist = reservationRepository.getReservationByStatus(bookId, empId,statusList);
         if (exist != null) {
             baseResponse.setMessage("已有此預約");
             baseResponse.setStatus(false);
         } else {
             Integer count = reservationRepository.reservationStatusCount(bookId, ReservationEnum.RESERVATION_ALIVE.getCode());
-            Integer status;
             Date startDate = new Date();
             Date endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
+            Integer status;
             if (count >= 1) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 baseResponse.setMessage("此本書有人預約,已加入排隊");
@@ -127,7 +132,10 @@ public class ReservationService implements IReservationService {
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
-        baseResponse.setData(reservations.getContent());
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;
@@ -153,7 +161,10 @@ public class ReservationService implements IReservationService {
     public BaseResponse findAll(Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> all = reservationRepository.findAll(pageable);
-        baseResponse.setData(all.getContent());
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",all.getTotalElements());
+        data.put("results",all.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;
@@ -165,6 +176,12 @@ public class ReservationService implements IReservationService {
         String operatorId = ContextUtil.getAccount();
 
         Reservation reservation = reservationRepository.findById(id).get();
+        if(!ReservationEnum.RESERVATION_ALIVE.getCode().equals(reservation.getStatus())){
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("請檢查預約狀態");
+            return baseResponse;
+        }
+
         reservation.setStatus(ReservationEnum.RESERVATION_SUCCESS.getCode());
 
         Records records = new Records();
@@ -185,6 +202,34 @@ public class ReservationService implements IReservationService {
         reservationRepository.save(reservation);
         baseResponse.setStatus(true);
         baseResponse.setMessage("取書成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findByEmpId(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        String empId = ContextUtil.getAccount();
+        Page<Reservation> reservations = reservationRepository.findByEmpId(empId,pageable);
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        String empId = ContextUtil.getAccount();
+        Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
         return baseResponse;
     }
 }

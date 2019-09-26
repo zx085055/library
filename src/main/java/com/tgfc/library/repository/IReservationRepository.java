@@ -19,13 +19,16 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     Page<Reservation> getReservationByKeywordLikeAndStatus(String keyword, Integer status, Pageable pageable);
 
     @Query(value = "SELECT r.* FROM `reservation` r WHERE book_id=3 AND `status`=3 ORDER BY r.start_date LIMIT 1", nativeQuery = true)
-    Reservation getReservatonByStatusAndBookId(Integer status, Integer bookId);
+    Reservation getReservationByStatusAndBookId(Integer status, Integer bookId);
 
-    @Query("SELECT r from Reservation r where r.startDate>=?1 AND r.endDate<=?2")
+    @Query("SELECT r from Reservation r where r.startDate>=?1 AND r.startDate<=?2")
     Page<Reservation> findByTimeInterval(Date startDate, Date endDate, Pageable pageable);
 
-    @Query(value = "select r from Reservation r inner join r.book b where b.id = ?1 and r.employee.id = ?2")
-    Reservation findByBookId(Integer bookId, String empId);
+    @Query("SELECT r from Reservation r inner join r.employee e where e.id =?1 And r.startDate>=?2 AND r.startDate<=?3")
+    Page<Reservation> findByTimeIntervalWithEmpId(String empId,Date startDate, Date endDate, Pageable pageable);
+
+    @Query(value = "select r from Reservation r inner join r.book b where b.id = ?1 and r.employee.id = ?2 and r.status in ?3")
+    Reservation getReservationByStatus(Integer bookId, String empId, List<Integer> status);
 
     @Modifying
     @Query(value = "update Reservation r set r.status=?1 where r.id=?2")
@@ -44,4 +47,7 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Transactional
     @Query(value = "update Reservation r set r.status=2 where r.endDate<=?1 and r.status=1")
     int reservationExpiredStatus(Date currentDate);
+
+    @Query(value = "select r from Reservation r inner join r.employee e where e.id = ?1")
+    Page<Reservation> findByEmpId(String empId,Pageable pageable);
 }

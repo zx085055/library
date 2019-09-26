@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface IAnnouncementRepository extends JpaRepository<Announcement,Integer> {
-    @Query("SELECT r from Recommend r where r.name like CONCAT('%',?1,'%')")
-    Page<Announcement> getAnnouncementsByNameLike(String name, Pageable pageable);
+import java.util.Date;
 
+@Repository
+public interface IAnnouncementRepository extends JpaRepository<Announcement, Integer> {
+    @Query("SELECT r from Announcement r where r.title like CONCAT('%',?1,'%') AND r.startTime>=?2 AND r.endTime<=?3")
+    Page<Announcement> getAnnouncementsByNameLikeAndTimeInterval(String name, Date startTime, Date endTime, Pageable pageable);
 }

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>預約即將到期通知</title>
+</head>
+<body>
+<span th:text="${mailResponse.employee}"></span>您好<br/>
+您預約的書"<span th:text="${mailResponse.bookName}"></span>"
+將在<span th:text="${mailResponse.endDate}"></span>過期，
+請在期限內取書，謝謝!<br/>
+</body>
+</html>

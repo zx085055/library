@@ -9,7 +9,7 @@ public enum ScheduleStatus {
     private String code;
     private String trans;
 
-    private ScheduleStatus(String code, String trans) {
+    ScheduleStatus(String code, String trans) {
         this.code = code;
         this.trans = trans;
     }

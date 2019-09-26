@@ -1,5 +1,7 @@
 package com.tgfc.library.entity;
 
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,8 +20,10 @@ public class Records implements Serializable {
     @Column(name = "borrow_username", length = 30, nullable = false)
     private String borrowUsername;
     @Column(name = "borrow_date", nullable = false)
+    @CreatedDate
     private Date borrowDate;
     @Column(name = "return_date")
+    @CreatedDate
     private Date returnDate;
     @Column(name = "end_date", nullable = false)
     private Date endDate;

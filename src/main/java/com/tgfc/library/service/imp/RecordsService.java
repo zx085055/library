@@ -12,13 +12,17 @@ import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
+import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class RecordsService implements IRecordsService {
@@ -35,19 +39,29 @@ public class RecordsService implements IRecordsService {
     IReservationRepository reservationRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-        if (keyword == null || status == null) {
-            baseResponse.setData(recordsRepository.findAll(pageable));
+        if (status.equals(RecordsStatusEnum.RECORDSSTATUS_ALL.getCode())) {
+            Page<Records> records = recordsRepository.getRecordsByNameLike(keyword, pageable);
+            Map<String,Object> data = new HashMap<>();
+            data.put("totalCount",records.getTotalElements());
+            data.put("results",records.getContent());
+            baseResponse.setData(data);
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
-            return baseResponse;
         } else {
-            baseResponse.setData(recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable));
+            keyword = (keyword.isEmpty()) ? null : keyword;
+            Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
+            Map<String,Object> data = new HashMap<>();
+            data.put("totalCount",records.getTotalElements());
+            data.put("results",records.getContent());
+            baseResponse.setData(data);
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
-            return baseResponse;
         }
+
+        return baseResponse;
     }
 
     @Override
@@ -78,15 +92,15 @@ public class RecordsService implements IRecordsService {
     public BaseResponse returnBook(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         Records records = recordsRepository.findById(id).get();
-        Reservation nextReservation = reservationRepository.getReservatonByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), records.getBook().getId());
-        MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
-        nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
-        Date current = new Date();
-        records.setReturnDate(current);
+        Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), records.getBook().getId());
+        if(nextReservation!=null) {
+            MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
+            nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
+            reservationRepository.save(nextReservation);
+        }
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
         records.getBook().setStatus(BookStatusEnum.BOOK_STATUS_INSIDE.getCode());
         recordsRepository.save(records);
-        reservationRepository.save(nextReservation);
         baseResponse.setStatus(true);
         baseResponse.setMessage("歸還成功");
         return baseResponse;
@@ -96,7 +110,10 @@ public class RecordsService implements IRecordsService {
     public BaseResponse findAll(Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Records> records = recordsRepository.findAll(pageable);
-        baseResponse.setData(records.getContent());
+        Map<String ,Object> data = new HashMap<>();
+        data.put("totalCount",records.getTotalElements());
+        data.put("results",records.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;
@@ -106,7 +123,38 @@ public class RecordsService implements IRecordsService {
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         Page<Records> reservations = recordsRepository.findByTimeInterval(startDate, endDate, pageable);
-        baseResponse.setData(reservations.getContent());
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findByEmpId(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        String empId = ContextUtil.getAccount();
+        Page<Records> reservations = recordsRepository.getRecordsByEmpId(empId,pageable);
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
+
+    @Override
+    public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        String empId = ContextUtil.getAccount();
+        Page<Records> reservations = recordsRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
+        Map<String,Object> data = new HashMap<>();
+        data.put("totalCount",reservations.getTotalElements());
+        data.put("results",reservations.getContent());
+        baseResponse.setData(data);
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
         return baseResponse;

@@ -26,7 +26,9 @@ import javax.persistence.criteria.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +54,7 @@ public class ScheduleService implements IScheduleService {
      * 動態查詢各參數(排程名稱，起始時間，結束時間)
      */
     @Override
-    public BaseResponse list(SchedulePageRequset model) throws ParseException {
+    public BaseResponse list(SchedulePageRequset model) {
         BaseResponse response = new BaseResponse();
         EntityManager entityManager = emf.createEntityManager();
         EntityTransaction etx = entityManager.getTransaction();
@@ -72,7 +74,14 @@ public class ScheduleService implements IScheduleService {
                 .setFirstResult((model.getPageNumber() - 1) * model.getPageSize())
                 .setMaxResults((model.getPageNumber() - 1) * model.getPageSize() + model.getPageSize())
                 .getResultList();
-        response.setData(scheduleListToResponseList(list));
+
+        int totalCount = entityManager.createQuery(query).getResultList().size();
+
+        Map<String,Object> resultMap = new HashMap<>();
+        resultMap.put("totalCount",totalCount);
+        resultMap.put("results",scheduleListToResponseList(list));
+
+        response.setData(resultMap);
         response.setMessage("查詢成功");
         response.setStatus(true);
         return response;
@@ -188,7 +197,7 @@ public class ScheduleService implements IScheduleService {
         JobDetail job = JobBuilder.newJob(NoticeJob.class)
                 .withIdentity(jobKey)
                 .usingJobData("id", model.getId())
-                .usingJobData("jobType",model.getType())
+                .usingJobData("jobType", model.getType())
                 .build();
         return job;
     }
@@ -197,7 +206,7 @@ public class ScheduleService implements IScheduleService {
      * 改變排程狀態 ( 啟用 <---> 禁用 )
      */
     @Override
-    public BaseResponse changeStatus(int id)  {
+    public BaseResponse changeStatus(int id) {
         BaseResponse response = new BaseResponse();
         Schedule schedule = scheduleRepository.getById(id);
         if (schedule == null) {

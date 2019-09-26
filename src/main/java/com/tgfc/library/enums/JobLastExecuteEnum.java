@@ -9,7 +9,7 @@ public enum JobLastExecuteEnum {
     private String code;
     private String trans;
 
-    private JobLastExecuteEnum(String code, String trans) {
+    JobLastExecuteEnum(String code, String trans) {
         this.code = code;
         this.trans = trans;
     }

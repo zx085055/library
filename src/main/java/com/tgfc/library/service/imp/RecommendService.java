@@ -16,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Transactional
 @Service
 public class RecommendService implements IRecommendService {
@@ -35,10 +38,16 @@ public class RecommendService implements IRecommendService {
         BaseResponse baseResponse = new BaseResponse();
         if (name==null){
             Page<Recommend> recommends = recommendRepository.findAll(pageable);
-            baseResponse.setData(recommends.getContent());
+            Map<String,Object> data = new HashMap<>();
+            data.put("totalCount",recommends.getTotalElements());
+            data.put("results",recommends.getContent());
+            baseResponse.setData(data);
         }else {
             Page<Recommend> recommends = recommendRepository.getRecommendsByNameLike(name, pageable);
-            baseResponse.setData(recommends.getContent());
+            Map<String,Object> data = new HashMap<>();
+            data.put("totalCount",recommends.getTotalElements());
+            data.put("results",recommends.getContent());
+            baseResponse.setData(data);
         }
         baseResponse.setMessage("成功查詢");
         baseResponse.setStatus(true);

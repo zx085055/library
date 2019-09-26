@@ -7,11 +7,16 @@ import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IAnnouncementService;
 import com.tgfc.library.util.ContextUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AnnouncementService implements IAnnouncementService {
@@ -23,30 +28,32 @@ public class AnnouncementService implements IAnnouncementService {
     IEmployeeRepository employeeRepository;
 
     @Override
-    public BaseResponse select(String title, Pageable pageable) {
+    @Transactional(readOnly = true)
+    public BaseResponse select(String title, Date startTime, Date endTime, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-
-        if (title == null) {
-            baseResponse.setData(announcementRepository.findAll(pageable));
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("查詢成功");
-            return baseResponse;
-        } else {
-            baseResponse.setData(announcementRepository.getAnnouncementsByNameLike(title, pageable));
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("查詢成功");
-            return baseResponse;
-        }
+        title = (title == null) ? "" : title;
+        Page<Announcement> announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeInterval(title, startTime, endTime, pageable);
+        Map<String, Object> data = new HashMap<>();
+        data.put("totalCount", announcements.getTotalElements());
+        data.put("results", announcements.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
     }
 
     @Override
     public BaseResponse insert(Announcement announcement) {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
+        Date currentDate = new Date();
+        if(announcement.getEndTime().before(currentDate)){
+            baseResponse.setStatus(false);
+            baseResponse.setMessage("日期有誤");
+            return baseResponse;
+        }
 
         Employee employee = employeeRepository.findById(id).get();
-        Date current = new Date();
-        announcement.setStartTime(current);
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         baseResponse.setStatus(true);
@@ -61,13 +68,8 @@ public class AnnouncementService implements IAnnouncementService {
 
         Employee employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
-        existAnnouncement.setStatus(announcement.getStatus());
-        existAnnouncement.setStartTime(announcement.getStartTime());
-        existAnnouncement.setEndTime(announcement.getEndTime());
-        existAnnouncement.setTitle(announcement.getTitle());
-        existAnnouncement.setContext(announcement.getContext());
+        BeanUtils.copyProperties(announcement, existAnnouncement);
         existAnnouncement.setEmployee(employee);
-
         announcementRepository.save(existAnnouncement);
         baseResponse.setStatus(true);
         baseResponse.setMessage("編輯成功");
