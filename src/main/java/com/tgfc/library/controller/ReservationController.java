@@ -61,6 +61,6 @@ public class ReservationController {
     @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/findByDateWithEmpId")
     public BaseResponse findByDateWithEmpId(@RequestBody ReservationPageRequest reservationPageRequest) {
-        return reservationService.findByTimeInterval(reservationPageRequest.getStartDate(), reservationPageRequest.getEndDate(), reservationPageRequest.getPageable());
+        return reservationService.findByTimeIntervalWithEmpId(reservationPageRequest.getStartDate(), reservationPageRequest.getEndDate(), reservationPageRequest.getPageable());
     }
 }

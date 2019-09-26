@@ -12,9 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.security.RolesAllowed;
-import javax.swing.*;
 import java.io.IOException;
 
 //import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -24,11 +22,18 @@ import java.io.IOException;
 public class BookController {
 
 
-    @Autowired
-    IBookService bookDataService;
+
+
+    private final IBookService bookDataService;
+
+    private final IPhotoService photoService;
 
     @Autowired
-    IPhotoService photoService;
+    public BookController(IBookService bookDataService,IPhotoService photoService) {
+        this.bookDataService = bookDataService;
+        this.photoService = photoService;
+    }
+
 
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @GetMapping(value = "/find")
@@ -42,11 +47,11 @@ public class BookController {
         return bookDataService.getBookList(model);
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping(value = "/addBook")
     public BaseResponse addBook( MultipartFile files, BookAddRequest bookAddRequest){
         BaseResponse baseResponse=new BaseResponse();
-        if(files!=null&&!files.getOriginalFilename().matches(".*.jpg")){
+        if(files.getOriginalFilename()!=null&&!files.getOriginalFilename().matches("(.+)(\\.jpg|\\.gif|\\.jpeg|\\.png){1}$")){
             baseResponse.setMessage("上傳格式錯誤");
             return baseResponse;
         }
@@ -54,9 +59,9 @@ public class BookController {
         return baseResponse;
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
-    @GetMapping(value = "/deleteBook")
-    public BaseResponse deleteBook(@RequestParam("id") Integer id) throws IOException{
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
+    @DeleteMapping(value = "/deleteBook")
+    public BaseResponse deleteBook(@RequestParam("id") Integer id) {
         return bookDataService.deleteBook(id);
     }
 

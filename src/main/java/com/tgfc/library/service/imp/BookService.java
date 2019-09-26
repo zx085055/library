@@ -10,16 +10,15 @@ import com.tgfc.library.request.BookDataPageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.BooksResponse;
 import com.tgfc.library.service.IBookService;
+import com.tgfc.library.service.IPhotoService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,20 +26,29 @@ import java.util.List;
 @Service
 public class BookService implements IBookService {
 
-    @Autowired
+
+    private final
     IBookRepository bookDataRepository;
 
-    @Autowired
-    PhotoService photoService;
-    @Autowired
+    private final
+    IPhotoService photoService;
+    private final
     IRecommendRepository iRecommendRepository;
 
 
+    public BookService(IBookRepository bookDataRepository, IPhotoService photoService, IRecommendRepository iRecommendRepository) {
+        this.bookDataRepository = bookDataRepository;
+        this.photoService = photoService;
+        this.iRecommendRepository = iRecommendRepository;
+    }
+
+
     @Override
-    public BaseResponse getBookList(BookDataPageRequest model) throws IOException{
+    public BaseResponse getBookList(BookDataPageRequest model) {
         BaseResponse response = new BaseResponse();
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
-        Page<Book> pageBook = bookDataRepository.findAllByKeyword(model.getKeyword(), pageable);
+        Page<Book> pageBook = bookDataRepository.findAllByKeyword("%"+model.getKeyword()+"%", pageable);
+        int total =bookDataRepository.countBykeyWord(model.getKeyword());
         if(pageBook.isEmpty()){
             response.setMessage("找不到資料");
             return response;
@@ -54,14 +62,15 @@ public class BookService implements IBookService {
             BooksResponse bookResponse = new BooksResponse();
             BeanUtils.copyProperties(book, bookResponse);
             list.add(bookResponse);
-            response.setData(list);
-            response.setStatus(true);
         }
+        response.setMessage(String.valueOf(total));
+        response.setData(list);
+        response.setStatus(true);
         return response;
     }
 
     @Override
-    public BaseResponse getById(int id) throws IOException{
+    public BaseResponse getById(int id) {
         BaseResponse response = new BaseResponse();
         Book book = bookDataRepository.getById(id);
         if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0)
@@ -83,7 +92,9 @@ public class BookService implements IBookService {
                 book=new Book();
                 try {
                     BeanUtils.copyProperties(addBook, book);
-                } catch (BeansException e) {}
+                } catch (BeansException e) {
+                    response.setMessage("addBook錯誤");
+                }
                 book=bookDataRepository.save(book);
                 Recommend recommend=iRecommendRepository.findRecommendByIsbn(book.getIsbn());
                 if(recommend!=null)
@@ -93,9 +104,10 @@ public class BookService implements IBookService {
             if (files != null) {
                 //addBook.setPhotoName(files.getOriginalFilename());
                 //存檔案
-                photoService.uploadPhoto(files, book.getId().toString());
+                String bookName=book.getId()+files.getOriginalFilename().substring(files.getOriginalFilename().lastIndexOf("."));
+                photoService.uploadPhoto(files, bookName);
                 //將Id設定成OriginalName
-                book.setPhotoOriginalName(book.getId() + ".jpg");
+                book.setPhotoOriginalName(bookName);
             } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
                 photoService.deletePhoto( book.getPhotoOriginalName());
                 book.setPhotoOriginalName(null);
@@ -104,6 +116,7 @@ public class BookService implements IBookService {
                 addBook.setId(book.getId());
                 BeanUtils.copyProperties(addBook, book);
             } catch (BeansException e) {
+                response.setMessage("Id");
             }
             if (bookDataRepository.save(book) != null)
                 response.setStatus(true);
@@ -117,6 +130,11 @@ public class BookService implements IBookService {
     public BaseResponse deleteBook(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         Book book=bookDataRepository.getById(id);
+        if(book==null){
+            baseResponse.setMessage("無此ID");
+            return baseResponse;
+        }
+
         bookDataRepository.deleteById(id);
         if(bookDataRepository.getById(id)==null){
             baseResponse.setStatus(true);

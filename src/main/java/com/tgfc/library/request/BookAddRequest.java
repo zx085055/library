@@ -17,7 +17,6 @@ public class BookAddRequest {
     private String intro;
     @NotNull
     private Integer price;
-
     @NotNull
     private Date publishDate;
     @NotNull
