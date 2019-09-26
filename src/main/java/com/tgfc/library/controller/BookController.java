@@ -47,11 +47,11 @@ public class BookController {
         return bookDataService.getBookList(model);
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping(value = "/addBook")
     public BaseResponse addBook( MultipartFile files, BookAddRequest bookAddRequest){
         BaseResponse baseResponse=new BaseResponse();
-        if(files.getOriginalFilename()!=null&&!files.getOriginalFilename().matches(".*.jpg")){
+        if(files.getOriginalFilename()!=null&&!files.getOriginalFilename().matches("(.+)(\\.jpg|\\.gif|\\.jpeg|\\.png){1}$")){
             baseResponse.setMessage("上傳格式錯誤");
             return baseResponse;
         }
@@ -59,7 +59,7 @@ public class BookController {
         return baseResponse;
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @DeleteMapping(value = "/deleteBook")
     public BaseResponse deleteBook(@RequestParam("id") Integer id) {
         return bookDataService.deleteBook(id);

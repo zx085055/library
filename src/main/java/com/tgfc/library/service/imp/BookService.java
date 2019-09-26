@@ -8,6 +8,7 @@ import com.tgfc.library.repository.IRecommendRepository;
 import com.tgfc.library.request.BookAddRequest;
 import com.tgfc.library.request.BookDataPageRequest;
 import com.tgfc.library.response.BaseResponse;
+import com.tgfc.library.response.BookCountResponse;
 import com.tgfc.library.response.BooksResponse;
 import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IPhotoService;
@@ -47,7 +48,8 @@ public class BookService implements IBookService {
     public BaseResponse getBookList(BookDataPageRequest model) {
         BaseResponse response = new BaseResponse();
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
-        Page<Book> pageBook = bookDataRepository.findAllByKeyword(model.getKeyword(), pageable);
+        Page<Book> pageBook = bookDataRepository.findAllByKeyword("%"+model.getKeyword()+"%", pageable);
+        int total =bookDataRepository.countBykeyWord(model.getKeyword());
         if(pageBook.isEmpty()){
             response.setMessage("找不到資料");
             return response;
@@ -61,9 +63,10 @@ public class BookService implements IBookService {
             BooksResponse bookResponse = new BooksResponse();
             BeanUtils.copyProperties(book, bookResponse);
             list.add(bookResponse);
-            response.setData(list);
-            response.setStatus(true);
         }
+        response.setMessage(String.valueOf(total));
+        response.setData(list);
+        response.setStatus(true);
         return response;
     }
 
@@ -102,9 +105,10 @@ public class BookService implements IBookService {
             if (files != null) {
                 //addBook.setPhotoName(files.getOriginalFilename());
                 //存檔案
-                photoService.uploadPhoto(files, book.getId().toString());
+                String bookName=book.getId()+files.getOriginalFilename().substring(files.getOriginalFilename().lastIndexOf("."));
+                photoService.uploadPhoto(files, bookName);
                 //將Id設定成OriginalName
-                book.setPhotoOriginalName(book.getId() + ".jpg");
+                book.setPhotoOriginalName(bookName);
             } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
                 photoService.deletePhoto( book.getPhotoOriginalName());
                 book.setPhotoOriginalName(null);

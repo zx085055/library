@@ -13,7 +13,7 @@ public class BooksResponse {
     private String pubHouse;
     private Date publishDate;
     private String type;
-    private String originalName;
+    private String photoOriginalName;
     private Integer status;
 
     public Integer getId() {
@@ -72,12 +72,12 @@ public class BooksResponse {
         this.type = type;
     }
 
-    public String getOriginalName() {
-        return originalName;
+    public String getPhotoOriginalName() {
+        return photoOriginalName;
     }
 
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
+    public void setPhotoOriginalName(String photoOriginalName) {
+        this.photoOriginalName = photoOriginalName;
     }
 
     public Integer getStatus() {

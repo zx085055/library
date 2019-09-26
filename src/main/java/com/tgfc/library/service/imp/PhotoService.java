@@ -31,7 +31,7 @@ public class PhotoService implements IPhotoService {
 
     @Override
     public void uploadPhoto(MultipartFile file, String newName) {
-        String fileName = newName + ".jpg";
+        String fileName = newName;
         File dest = new File(this.filePath + fileName);
 
 
