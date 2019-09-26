@@ -70,8 +70,8 @@ public class ScheduleController {
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/schedule/changeStatus")
-    public BaseResponse changeStatus(@RequestParam int id) {
-        return scheduleService.changeStatus(id);
+    public BaseResponse changeStatus(@RequestBody SchedulePageRequset model) {
+        return scheduleService.changeStatus(model.getId());
     }
 
     /**
