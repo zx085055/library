@@ -32,7 +32,7 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Query(value = "select r from Records r where r.endDate>=?1 and r.status=1")
     List<Records> getLendingExpiredList(Date currentDate);
 
-    @Query(value = "select r from Records r inner join r.employee e where e.id = ?1")
+    @Query(value = "select r from Records r where r.borrowId = ?1")
     Page<Records> getRecordsByEmpId(String EmpId,Pageable pageable);
 
     @Modifying
@@ -40,6 +40,6 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Query(value = "update Records r set r.status=3 where r.endDate<=?1 and r.status=1")
     int lendingExpiredStatus(Date currentDate);
 
-    @Query("SELECT r from Reservation r inner join r.employee e where e.id =?1 And r.startDate>=?2 AND r.startDate<=?3")
+    @Query("SELECT r from Records r where r.borrowId=?1 And r.borrowDate>=?2 AND r.borrowDate<=?3")
     Page<Records> findByTimeIntervalWithEmpId(String empId,Date startDate, Date endDate, Pageable pageable);
 }
