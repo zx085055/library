@@ -104,4 +104,17 @@ public class AnnouncementService implements IAnnouncementService {
         baseResponse.setMessage("切換成功");
         return baseResponse;
     }
+
+    @Override
+    public BaseResponse getAnnouncementsByTimeInterval(Pageable pageable) {
+        BaseResponse baseResponse = new BaseResponse();
+        Page<Announcement> announcements = announcementRepository.getAnnouncementsByTimeInterval(new Date(), pageable);
+        Map<String, Object> data = new HashMap<>();
+        data.put("totalCount", announcements.getTotalElements());
+        data.put("results", announcements.getContent());
+        baseResponse.setData(data);
+        baseResponse.setStatus(true);
+        baseResponse.setMessage("查詢成功");
+        return baseResponse;
+    }
 }

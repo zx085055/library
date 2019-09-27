@@ -16,4 +16,6 @@ public interface IAnnouncementService {
     BaseResponse delete(Integer id);
 
     BaseResponse changeStatus(Announcement announcement);
+
+    BaseResponse getAnnouncementsByTimeInterval(Pageable pageable);
 }

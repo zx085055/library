@@ -13,4 +13,7 @@ import java.util.Date;
 public interface IAnnouncementRepository extends JpaRepository<Announcement, Integer> {
     @Query("SELECT r from Announcement r where r.title like CONCAT('%',?1,'%') AND r.startTime>=?2 AND r.endTime<=?3")
     Page<Announcement> getAnnouncementsByNameLikeAndTimeInterval(String name, Date startTime, Date endTime, Pageable pageable);
+
+    @Query("SELECT r from Announcement r where r.startTime<=?1 AND r.endTime>=?1")
+    Page<Announcement> getAnnouncementsByTimeInterval(Date currentTime, Pageable pageable);
 }

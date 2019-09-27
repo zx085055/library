@@ -3,6 +3,7 @@ package com.tgfc.library.controller;
 import com.tgfc.library.entity.Announcement;
 import com.tgfc.library.enums.PermissionEnum;
 import com.tgfc.library.request.AnnouncementPageRequest;
+import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IAnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,11 @@ public class AnnouncementController {
     @PostMapping("/changeStatus")
     public BaseResponse changeStatus(@RequestBody Announcement announcement) {
         return announcementService.changeStatus(announcement);
+    }
+
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
+    @PostMapping("/findByNotExpired")
+    public BaseResponse findByNotExpired(@RequestBody PageableRequest pageableRequest) {
+        return announcementService.getAnnouncementsByTimeInterval(pageableRequest.getPageable());
     }
 }
