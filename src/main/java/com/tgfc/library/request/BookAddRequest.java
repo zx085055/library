@@ -9,24 +9,24 @@ public class BookAddRequest {
     private String name;
     @NotNull
     private String author;
-    @NotNull
+//    @NotNull
     private String isbn;
-    @NotNull
+//    @NotNull
     private String pubHouse;
-    @NotNull
+//    @NotNull
     private String intro;
-    @NotNull
+//    @NotNull
     private Integer price;
     @NotNull
     private Date publishDate;
-    @NotNull
+//    @NotNull
     private String type;
-    @NotNull
+//    @NotNull
     private String page;
-    @NotNull
+//    @NotNull
     private String language;
     private String photoName;
-    @NotNull
+//    @NotNull
     private Integer status;
 
 
