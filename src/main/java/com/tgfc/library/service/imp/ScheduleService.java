@@ -72,7 +72,7 @@ public class ScheduleService implements IScheduleService {
         query = query.select(rootEntity).where(predicate);
         List<Schedule> list = entityManager.createQuery(query)
                 .setFirstResult((model.getPageNumber() - 1) * model.getPageSize())
-                .setMaxResults((model.getPageNumber() - 1) * model.getPageSize() + model.getPageSize())
+                .setMaxResults( model.getPageSize())
                 .getResultList();
 
         int totalCount = entityManager.createQuery(query).getResultList().size();
