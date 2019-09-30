@@ -17,6 +17,7 @@ import java.util.Date;
 public class OneDayOneTimeTrigger {
     public CronTrigger getTrigger(SchedulePageRequset model) {
 
+        String seconds = Integer.toString(model.getNoticeTime().getSeconds());
         String minutes = Integer.toString(model.getNoticeTime().getMinutes());
         String hours = Integer.toString(model.getNoticeTime().getHours());
 
@@ -27,7 +28,7 @@ public class OneDayOneTimeTrigger {
                 .newTrigger()
                 .withIdentity("OneDayOneTime", model.getName() + model.getId())
                 .startAt(startTime)
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 "+minutes+" "+hours+" * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule(seconds+" "+minutes+" "+hours+" * * ?"))
                 .endAt(endTime)
                 .build();
 
