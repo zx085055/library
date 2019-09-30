@@ -56,7 +56,7 @@ public class MailUtil {
     public static void sendHtmlMail(String title, String content, String email) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setFrom(from);
             helper.setTo(email);
             helper.setSubject(title);
