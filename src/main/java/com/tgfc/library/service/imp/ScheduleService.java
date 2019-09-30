@@ -77,6 +77,9 @@ public class ScheduleService implements IScheduleService {
 
         int totalCount = entityManager.createQuery(query).getResultList().size();
 
+        etx.commit();
+        entityManager.close();
+
         Map<String,Object> resultMap = new HashMap<>();
         resultMap.put("totalCount",totalCount);
         resultMap.put("results",scheduleListToResponseList(list));
