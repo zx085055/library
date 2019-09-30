@@ -153,8 +153,8 @@ public class ScheduleService implements IScheduleService {
             scheduleRepository.setId(schedule.getId(), model.getId());
         } else {
             model.setId(schedule.getId());
-            scheduleRepository.setGroup(model.getId(), model.getName() + model.getId());
         }
+        scheduleRepository.setGroup(model.getId(), model.getName() + model.getId());
         return model;
     }
 
@@ -311,7 +311,7 @@ public class ScheduleService implements IScheduleService {
         }
         model.setIsEdit(true);
         model.setLastExecute(scheduleRepository.getLastExecute(model.getId()));
-        scheduleRepository.deleteById(model.getId());
+        this.delete(model.getId());
         response.setData(this.create(model).getStatus());
         response.setMessage("修改成功");
         response.setStatus(true);
