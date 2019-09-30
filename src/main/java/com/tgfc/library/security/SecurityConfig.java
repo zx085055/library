@@ -90,6 +90,7 @@ public class SecurityConfig {
                 customResponse.setStatus(false);
                 customResponse.setMessage("請登入後再使用");
                 response.setHeader("Content-type", "application/json;charset=UTF-8");
+                response.setStatus(401);
                 response.getWriter().print(mapper.writeValueAsString(customResponse));
             };
         }
