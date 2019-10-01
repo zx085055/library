@@ -17,7 +17,7 @@ public class AnnouncementController {
     @Autowired
     IAnnouncementService announcementService;
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @PostMapping("/select")
     public BaseResponse select(@RequestBody AnnouncementPageRequest announcement) {
         return announcementService.select(announcement.getTitle(), announcement.getStartTime(), announcement.getEndTime(), announcement.getPageable());
