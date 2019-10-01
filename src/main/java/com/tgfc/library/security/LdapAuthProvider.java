@@ -44,7 +44,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
         } else {//如果帳號存在
             loginUser = employeeRepository.findById(account).get();//讀取所有該帳號的相關資料
             if (!encoder.matches(password, loginUser.getPassword())) {//比對密碼是否相符
-                throw new BadCredentialsException("plz check account or password");//如果不相符會丟出一個錯誤訊息
+                throw new BadCredentialsException("請確認帳號或密碼");//如果不相符會丟出一個錯誤訊息
             }
         }
         String[] permissions = getPermissionsList(loginUser);
@@ -67,7 +67,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
     private Employee findUserByLDAp(String account, String password) {
         LdapUser ldapUser = ldapService.authenticate(account, password);
         if (ldapUser == null) {
-            throw new BadCredentialsException("plz check account or password");
+            throw new BadCredentialsException("請確認帳號或密碼");
         }
         return addUserToDataBase(ldapUser, password);
     }

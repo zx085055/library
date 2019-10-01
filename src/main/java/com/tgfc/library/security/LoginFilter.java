@@ -50,7 +50,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             JsonNode root = mapper.readTree(httpServletRequest.getInputStream());
             return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(root.get("account").asText(), root.get("password").asText()));
         } else {
-            throw new BadCredentialsException("method not support");
+            throw new BadCredentialsException("方法不支援");
         }
 
     }
