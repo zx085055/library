@@ -51,7 +51,6 @@ public class RecordsService implements IRecordsService {
             baseResponse.setMessage("查詢成功");
             baseResponse.setStatus(true);
         } else {
-            keyword = (keyword.isEmpty()) ? null : keyword;
             Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
             Map<String,Object> data = new HashMap<>();
             data.put("totalCount",records.getTotalElements());
