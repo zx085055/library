@@ -1,6 +1,6 @@
 package com.tgfc.library.enums;
 
-public enum ScheduleStatus {
+public enum ScheduleStatusEnum {
     ENABLE("1", "啟用"),
     DISABLE("2", "停用"),
     UNDONE("3", "未成功建立"),
@@ -9,7 +9,7 @@ public enum ScheduleStatus {
     private String code;
     private String trans;
 
-    ScheduleStatus(String code, String trans) {
+    ScheduleStatusEnum(String code, String trans) {
         this.code = code;
         this.trans = trans;
     }

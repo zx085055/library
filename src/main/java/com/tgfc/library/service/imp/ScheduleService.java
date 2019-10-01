@@ -3,7 +3,8 @@ package com.tgfc.library.service.imp;
 import com.tgfc.library.entity.Schedule;
 import com.tgfc.library.enums.JobLastExecuteEnum;
 import com.tgfc.library.enums.JobTypeEnum;
-import com.tgfc.library.enums.ScheduleStatus;
+import com.tgfc.library.enums.ScheduleEnum;
+import com.tgfc.library.enums.ScheduleStatusEnum;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IScheduleRepository;
 import com.tgfc.library.request.SchedulePageRequset;
@@ -72,7 +73,7 @@ public class ScheduleService implements IScheduleService {
         query = query.select(rootEntity).where(predicate);
         List<Schedule> list = entityManager.createQuery(query)
                 .setFirstResult((model.getPageNumber() - 1) * model.getPageSize())
-                .setMaxResults( model.getPageSize())
+                .setMaxResults(model.getPageSize())
                 .getResultList();
 
         int totalCount = entityManager.createQuery(query).getResultList().size();
@@ -80,9 +81,9 @@ public class ScheduleService implements IScheduleService {
         etx.commit();
         entityManager.close();
 
-        Map<String,Object> resultMap = new HashMap<>();
-        resultMap.put("totalCount",totalCount);
-        resultMap.put("results",scheduleListToResponseList(list));
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("totalCount", totalCount);
+        resultMap.put("results", scheduleListToResponseList(list));
 
         response.setData(resultMap);
         response.setMessage("查詢成功");
@@ -142,7 +143,7 @@ public class ScheduleService implements IScheduleService {
     }
 
     private void setScheduleStatus(SchedulePageRequset model) {
-        if (ScheduleStatus.DISABLE.getCode().equals(model.getScheduleStatus())) {
+        if (ScheduleStatusEnum.DISABLE.getCode().equals(model.getScheduleStatus())) {
             this.changeStatus(model.getId());
         }
         scheduleRepository.setStatus(model.getId(), model.getScheduleStatus());
@@ -154,13 +155,13 @@ public class ScheduleService implements IScheduleService {
         } else {
             model.setId(schedule.getId());
         }
-        scheduleRepository.setGroup(model.getId(), model.getName() + model.getId());
+        scheduleRepository.setGroup(model.getId(), ScheduleEnum.GROUP.getCode() + model.getId());
         return model;
     }
 
     private Schedule saveSchedule(SchedulePageRequset model) {
         Schedule schedule = modelToPo(model);
-        schedule.setStatus(ScheduleStatus.UNDONE.getCode());
+        schedule.setStatus(ScheduleStatusEnum.UNDONE.getCode());
         if (model.getIsEdit() != null && model.getIsEdit()) {
             schedule.setLastExecute(model.getLastExecute());
         } else {
@@ -196,7 +197,7 @@ public class ScheduleService implements IScheduleService {
 
 
     private JobDetail getJob(SchedulePageRequset model) {
-        JobKey jobKey = new JobKey(model.getName(), model.getName() + model.getId());
+        JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + model.getId(), ScheduleEnum.GROUP.getCode() + model.getId());
         JobDetail job = JobBuilder.newJob(NoticeJob.class)
                 .withIdentity(jobKey)
                 .usingJobData("id", model.getId())
@@ -217,16 +218,16 @@ public class ScheduleService implements IScheduleService {
             response.setStatus(false);
             return response;
         }
-        JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
+        JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + schedule.getId(), ScheduleEnum.GROUP.getCode() + schedule.getId());
         try {
-            if (ScheduleStatus.ENABLE.getCode().equals(schedule.getStatus())) {
+            if (ScheduleStatusEnum.ENABLE.getCode().equals(schedule.getStatus())) {
                 myScheduler.pauseJob(jobKey);
                 scheduleRepository.pauseJob(id);
-                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.ENABLE.getTrans() + "變為" + ScheduleStatus.DISABLE.getTrans());
-            } else if (ScheduleStatus.DISABLE.getCode().equals(schedule.getStatus())) {
+                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatusEnum.ENABLE.getTrans() + "變為" + ScheduleStatusEnum.DISABLE.getTrans());
+            } else if (ScheduleStatusEnum.DISABLE.getCode().equals(schedule.getStatus())) {
                 myScheduler.resumeJob(jobKey);
                 scheduleRepository.resumeJob(id);
-                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatus.DISABLE.getTrans() + "變為" + ScheduleStatus.ENABLE.getTrans());
+                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatusEnum.DISABLE.getTrans() + "變為" + ScheduleStatusEnum.ENABLE.getTrans());
             }
         } catch (SchedulerException e) {
             e.printStackTrace();
@@ -289,7 +290,7 @@ public class ScheduleService implements IScheduleService {
             response.setStatus(false);
             return response;
         }
-        JobKey jobKey = new JobKey(schedule.getName(), schedule.getName() + schedule.getId());
+        JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + schedule.getId(), ScheduleEnum.GROUP.getCode() + schedule.getId());
         try {
             response.setData(myScheduler.deleteJob(jobKey));
         } catch (SchedulerException e) {

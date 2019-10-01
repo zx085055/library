@@ -1,5 +1,6 @@
 package com.tgfc.library.schedule.trigger;
 
+import com.tgfc.library.enums.ScheduleEnum;
 import com.tgfc.library.request.SchedulePageRequset;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
@@ -26,9 +27,9 @@ public class OneDayOneTimeTrigger {
 
         CronTrigger trigger = TriggerBuilder
                 .newTrigger()
-                .withIdentity("OneDayOneTime", model.getName() + model.getId())
+                .withIdentity("OneDayOneTime", ScheduleEnum.GROUP.getCode() + model.getId())
                 .startAt(startTime)
-                .withSchedule(CronScheduleBuilder.cronSchedule(seconds+" "+minutes+" "+hours+" * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule(seconds + " " + minutes + " " + hours + " * * ?"))
                 .endAt(endTime)
                 .build();
 
