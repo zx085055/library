@@ -14,9 +14,9 @@ public class Recommend implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(length = 30,nullable = false)
+    @Column(length = 100,nullable = false)
     private String name;
-    @Column(length = 30,nullable = false)
+    @Column(length = 10,nullable = false)
     @Pattern(regexp = "^[0-9X]{10,13}")
     private String isbn;
     @Column(length = 30,nullable = false)
