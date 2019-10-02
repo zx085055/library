@@ -37,7 +37,7 @@ public class QuartzConfiguration {
 
     @Bean
     public Properties quartzProperties() throws IOException {
-        InputStream propertyStream = ClassLoader.getSystemClassLoader().getResourceAsStream("quartz.properties");
+        InputStream propertyStream =this.getClass().getClassLoader().getResourceAsStream("quartz.properties");
         Properties properties = new Properties();
         properties.load(propertyStream);
         return properties;
