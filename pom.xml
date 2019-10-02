@@ -27,7 +27,7 @@
     </repositories>
 
     <build>
-        <finalName>library</finalName>
+        <finalName>api</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
