@@ -33,7 +33,7 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse select(String title, Date startTime, Date endTime, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         title = (title == null) ? "" : title;
-        startTime = (startTime == null) ? new Date(0) : startTime;
+        startTime = (startTime == null) ? new Date(Long.valueOf("-30610253160000")) : startTime;
         endTime = (endTime == null) ? new Date(Long.valueOf("253402271999000"))  : endTime;
         Page<Announcement> announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeInterval(title, startTime, endTime, pageable);
         Map<String, Object> data = new HashMap<>();
