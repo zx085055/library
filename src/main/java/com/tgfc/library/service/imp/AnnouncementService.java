@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,8 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse select(String title, Date startTime, Date endTime, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
         title = (title == null) ? "" : title;
+        startTime = (startTime == null) ? new Date(0) : startTime;
+        endTime = (endTime == null) ? new Date(Long.valueOf("253402271999000"))  : endTime;
         Page<Announcement> announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeInterval(title, startTime, endTime, pageable);
         Map<String, Object> data = new HashMap<>();
         data.put("totalCount", announcements.getTotalElements());
@@ -47,7 +50,7 @@ public class AnnouncementService implements IAnnouncementService {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
 
-        if(announcement.getEndTime().before(announcement.getStartTime())){
+        if (announcement.getEndTime().before(announcement.getStartTime())) {
             baseResponse.setStatus(false);
             baseResponse.setMessage("日期有誤");
             return baseResponse;
