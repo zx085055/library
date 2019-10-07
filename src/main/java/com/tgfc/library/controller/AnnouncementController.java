@@ -47,7 +47,7 @@ public class AnnouncementController {
         return announcementService.changeStatus(announcement);
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @PostMapping("/findByNotExpired")
     public BaseResponse findByNotExpired(@RequestBody PageableRequest pageableRequest) {
         return announcementService.getAnnouncementsByTimeInterval(pageableRequest.getPageable());
