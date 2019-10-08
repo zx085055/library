@@ -1,6 +1,6 @@
 package com.tgfc.library.response;
 
-import com.tgfc.library.request.PageableRequest;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
@@ -15,6 +15,70 @@ public class BooksResponse {
     private String type;
     private String photoOriginalName;
     private Integer status;
+    private String intro;
+    private Integer price;
+    private String photoName;
+    private Date purchaseDate;
+    private String page;
+    private String language;
+
+    ResponseEntity<byte[]> photo=null;
+
+    public ResponseEntity<byte[]> getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(ResponseEntity<byte[]> photo) {
+        this.photo = photo;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
+    public Date getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(Date purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
 
     public Integer getId() {
         return id;

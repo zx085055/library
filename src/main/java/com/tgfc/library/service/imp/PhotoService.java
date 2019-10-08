@@ -16,10 +16,11 @@ import java.nio.file.Paths;
 @Service
 public class PhotoService implements IPhotoService {
 
-    private String imageUrl = File.separator + "image" + File.separator;
+    private String imageRootUrl = "/image/";
 
     @Value("${file.root.path}")
     String filePath;
+
     @Value("${file.root.port}")
     String filePort;
 
@@ -60,8 +61,9 @@ public class PhotoService implements IPhotoService {
                 String host = address.getHostAddress();
                 Socket  point = new Socket();
                 //point.getLocalPort();
-                String path = imageUrl + photoFileName;
-                URL url = new URL(protocol, host, point.getLocalPort(), path);
+                String path = filePath+ photoFileName;
+//                URL url = new URL(protocol, host, point.getLocalPort(), path);
+                URL url = new URL(protocol, host,Integer.valueOf(filePort) , path);
                 System.out.println(url.toString() + "?");
                 urlString = url.toString();
             } catch (MalformedURLException ex) {
@@ -87,7 +89,7 @@ public class PhotoService implements IPhotoService {
         String filePath = this.filePath + fileName;
         Path path = Paths.get(filePath);
         try {
-            //byte[]   data = Files.readAllBytes(path);
+//            byte[]   data = Files.readAllBytes(path);
             return Files.readAllBytes(path);
         } catch (IOException e) {
             throw new FileNotFoundException();

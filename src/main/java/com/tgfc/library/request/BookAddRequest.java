@@ -5,9 +5,9 @@ import java.util.Date;
 
 public class BookAddRequest {
     private Integer id;
-    @NotNull
+//    @NotNull
     private String name;
-    @NotNull
+//    @NotNull
     private String author;
 //    @NotNull
     private String isbn;
@@ -17,8 +17,9 @@ public class BookAddRequest {
     private String intro;
 //    @NotNull
     private Integer price;
-    @NotNull
+//    @NotNull
     private Date publishDate;
+    private Date purchaseDate;
 //    @NotNull
     private String type;
 //    @NotNull
@@ -29,6 +30,13 @@ public class BookAddRequest {
 //    @NotNull
     private Integer status;
 
+    public Date getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(Date purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
 
     public Integer getStatus() {
         return status;

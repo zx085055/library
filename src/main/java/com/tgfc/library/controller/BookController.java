@@ -21,9 +21,6 @@ import java.io.IOException;
 @RequestMapping("/book")
 public class BookController {
 
-
-
-
     private final IBookService bookDataService;
 
     private final IPhotoService photoService;
@@ -33,8 +30,6 @@ public class BookController {
         this.bookDataService = bookDataService;
         this.photoService = photoService;
     }
-
-
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @GetMapping(value = "/find")
     public BaseResponse get(@RequestParam("id") Integer id) throws IOException{
@@ -49,9 +44,11 @@ public class BookController {
 
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping(value = "/addBook")
-    public BaseResponse addBook( MultipartFile files, BookAddRequest bookAddRequest){
+    public BaseResponse addBook(MultipartFile files, BookAddRequest bookAddRequest){
+//    public BaseResponse addBook(  BookAddRequest bookAddRequest){
+//        MultipartFile files =null;
         BaseResponse baseResponse=new BaseResponse();
-        if(files.getOriginalFilename()!=null&&!files.getOriginalFilename().matches("(.+)(\\.jpg|\\.gif|\\.jpeg|\\.png){1}$")){
+        if(files != null && files.getOriginalFilename()!=null&&!files.getOriginalFilename().matches("(.+)(\\.jpg|\\.gif|\\.jpeg|\\.png){1}$")){
             baseResponse.setMessage("上傳格式錯誤");
             return baseResponse;
         }
@@ -60,12 +57,22 @@ public class BookController {
     }
 
     @RolesAllowed({PermissionEnum.Role.ADMIN})
+    @PostMapping(value = "/UpdateBook")
+    public BaseResponse UpdateBook( MultipartFile files){
+        BaseResponse baseResponse=new BaseResponse();
+
+        photoService.uploadPhoto(files, files.getOriginalFilename());
+        return baseResponse;
+    }
+
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @DeleteMapping(value = "/deleteBook")
-    public BaseResponse deleteBook(@RequestParam("id") Integer id) {
+    public BaseResponse deleteBook(@RequestParam("id") int id) {
+
         return bookDataService.deleteBook(id);
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+//    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
     @RequestMapping("/getPhoto")
     public ResponseEntity<byte[]> showPhoto( @RequestParam("fileName") String fileName)throws Exception {
             byte[] image = photoService.getPhoto(fileName);

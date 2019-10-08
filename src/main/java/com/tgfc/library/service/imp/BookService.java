@@ -17,10 +17,17 @@ import org.springframework.beans.BeansException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -45,33 +52,50 @@ public class BookService implements IBookService {
 
 
     @Override
-    public BaseResponse getBookList(BookDataPageRequest model) {
+    public BaseResponse getBookList(BookDataPageRequest model) throws FileNotFoundException {
         BaseResponse response = new BaseResponse();
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
-        Page<Book> pageBook = bookDataRepository.findAllByKeyword("%"+model.getKeyword()+"%", pageable);
-        int total=bookDataRepository.countBykeyWord(model.getKeyword());
-        if(pageBook.isEmpty()){
+        Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", pageable);
+        int total = bookDataRepository.countBykeyWord("%" + model.getKeyword() + "%");
+        if (pageBook.isEmpty()) {
             response.setMessage("找不到資料");
             return response;
         }
         List<BooksResponse> list = new ArrayList<>();
         for (Book book : pageBook) {
-            if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
-                book.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
-            }
+
             book.setStatus(book.getStatus());
             BooksResponse bookResponse = new BooksResponse();
             BeanUtils.copyProperties(book, bookResponse);
             list.add(bookResponse);
+            if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
 
+                if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
+                    bookResponse.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
+                }
+                try {
+                    bookResponse.setPhoto(ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photoService.getPhoto(book.getPhotoOriginalName())));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+//            if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
+////                try {
+////                    bookResponse.setPhotoOriginalName(photoService.getPhotoUrl(book.getPhotoOriginalName()));
+////                } catch (IOException e) {
+////                    e.printStackTrace();
+////                }
+//
+//                bookResponse.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
+//            }
         }
 
-        BookCountResponse bookCountResponse=new BookCountResponse();
+        BookCountResponse bookCountResponse = new BookCountResponse();
         bookCountResponse.setList(list);
         bookCountResponse.setCount(total);
         response.setData(bookCountResponse);
         response.setStatus(true);
-
 
 
         return response;
@@ -93,62 +117,67 @@ public class BookService implements IBookService {
     public BaseResponse upData(MultipartFile files, BookAddRequest addBook) {
         BaseResponse response = new BaseResponse();
         //判斷status是否正確
-        if (BookStatusEnum.getStatus(addBook.getStatus()) != null) {
-            //用Id去資料庫找出舊資料
-            Book book = bookDataRepository.getById(addBook.getId());
-            if (book == null) {
-                book=new Book();
-                try {
-                    BeanUtils.copyProperties(addBook, book);
-                } catch (BeansException e) {
-                    response.setMessage("addBook錯誤");
-                }
-                book=bookDataRepository.save(book);
-                Recommend recommend=iRecommendRepository.findRecommendByIsbn(book.getIsbn());
-                if(recommend!=null)
-                recommend.setStatus(2);
-            }
-            //是否有傳入檔案
-            if (files != null) {
-                //addBook.setPhotoName(files.getOriginalFilename());
-                //存檔案
-                photoService.uploadPhoto(files, book.getId().toString());
-                //將Id設定成OriginalName
-                book.setPhotoOriginalName(book.getId() + ".jpg");
-            } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
-                photoService.deletePhoto( book.getPhotoOriginalName());
-                book.setPhotoOriginalName(null);
-            }
-            try {
-                addBook.setId(book.getId());
-                BeanUtils.copyProperties(addBook, book);
-            } catch (BeansException e) {
-                response.setMessage("Id");
-            }
-            if (bookDataRepository.save(book) != null)
-                response.setStatus(true);
-        } else {
+
+        if (BookStatusEnum.getStatus(addBook.getStatus()) == null) {
             response.setMessage("Status錯誤");
+            return response;
         }
+        //用Id去資料庫找出舊資料
+        Book book = bookDataRepository.getById(addBook.getId());
+        if (book == null) {
+            book = new Book();
+//                try {
+//                    BeanUtils.copyProperties(addBook, book);
+//                } catch (BeansException e) {
+//                    response.setMessage("addBook錯誤");
+//                }
+//                book=bookDataRepository.save(book);
+            Recommend recommend = iRecommendRepository.findRecommendByIsbn(addBook.getIsbn());
+            if (recommend != null)
+                recommend.setStatus(2);
+        }
+        //是否有傳入檔案
+        if (files != null) {
+            //addBook.setPhotoName(files.getOriginalFilename());
+            //存檔案
+            Date date = new Date();
+            String photoOriginalName = String.valueOf(date.getTime()) + ".jpg";
+            photoService.uploadPhoto(files, photoOriginalName);
+            //將Id設定成OriginalName
+            book.setPhotoOriginalName(photoOriginalName);
+        } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
+            photoService.deletePhoto(book.getPhotoOriginalName());
+            book.setPhotoOriginalName(null);
+        }
+        try {
+//                addBook.setId(book.getId());
+            BeanUtils.copyProperties(addBook, book);
+        } catch (BeansException e) {
+            response.setMessage("儲存失敗");
+        }
+        if (bookDataRepository.save(book) != null)
+            response.setStatus(true);
+
         return response;
     }
 
     @Override
-    public BaseResponse deleteBook(Integer id) {
+    public BaseResponse deleteBook(int id) {
         BaseResponse baseResponse = new BaseResponse();
-        Book book=bookDataRepository.getById(id);
-        if(book==null){
+        Book book = bookDataRepository.getById(id);
+        if (book == null) {
             baseResponse.setMessage("無此ID");
             return baseResponse;
         }
 
         bookDataRepository.deleteById(id);
-        if(bookDataRepository.getById(id)==null){
+        if (bookDataRepository.getById(id) == null) {
             baseResponse.setStatus(true);
             photoService.deletePhoto(book.getPhotoOriginalName());
         }
         return baseResponse;
     }
+
     @Override
     public BaseResponse findAll(Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
@@ -162,7 +191,7 @@ public class BookService implements IBookService {
     @Override
     public BaseResponse findByKeyword(String keyword, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
-        Page<Book> books = bookDataRepository.findBookByKeyWord(keyword,pageable);
+        Page<Book> books = bookDataRepository.findBookByKeyWord(keyword, pageable);
         baseResponse.setData(books.getContent());
         baseResponse.setStatus(true);
         baseResponse.setMessage("查詢成功");
