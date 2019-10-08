@@ -32,7 +32,7 @@ public class Recommend implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "emp_id",referencedColumnName = "id")
-    private Employee employee;
+    private EmployeeSafty employee;
 
     public Integer getId() {
         return id;
@@ -82,11 +82,11 @@ public class Recommend implements Serializable {
         this.publishDate = publishDate;
     }
 
-    public Employee getEmployee() {
+    public EmployeeSafty getEmployee() {
         return employee;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(EmployeeSafty employee) {
         this.employee = employee;
     }
 

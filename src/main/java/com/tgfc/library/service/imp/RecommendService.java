@@ -1,10 +1,10 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.entity.Employee;
+import com.tgfc.library.entity.EmployeeSafty;
 import com.tgfc.library.entity.Recommend;
 import com.tgfc.library.enums.RecommendEnum;
 import com.tgfc.library.repository.IBookRepository;
-import com.tgfc.library.repository.IEmployeeRepository;
+import com.tgfc.library.repository.IEmployeeRepositorySafty;
 import com.tgfc.library.repository.IRecommendRepository;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecommendService;
@@ -27,7 +27,7 @@ public class RecommendService implements IRecommendService {
     IRecommendRepository recommendRepository;
 
     @Autowired
-    IEmployeeRepository employeeRepository;
+    IEmployeeRepositorySafty employeeRepository;
 
     @Autowired
     IBookRepository bookRepository;
@@ -66,7 +66,7 @@ public class RecommendService implements IRecommendService {
             baseResponse.setMessage("已存在此本書籍");
         }else {
             String id = ContextUtil.getAccount();
-            Employee employee = employeeRepository.findById(id).get();
+            EmployeeSafty employee = employeeRepository.findById(id).get();
             recommend.setEmployee(employee);
             recommend.setStatus(RecommendEnum.RECOMMEND_ALIVE.getCode());
             recommendRepository.save(recommend);
