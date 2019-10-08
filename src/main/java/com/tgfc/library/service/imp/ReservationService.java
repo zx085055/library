@@ -1,16 +1,10 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.entity.Book;
-import com.tgfc.library.entity.Employee;
-import com.tgfc.library.entity.Records;
-import com.tgfc.library.entity.Reservation;
+import com.tgfc.library.entity.*;
 import com.tgfc.library.enums.BookStatusEnum;
 import com.tgfc.library.enums.RecordsStatusEnum;
 import com.tgfc.library.enums.ReservationEnum;
-import com.tgfc.library.repository.IBookRepository;
-import com.tgfc.library.repository.IEmployeeRepository;
-import com.tgfc.library.repository.IRecordsRepository;
-import com.tgfc.library.repository.IReservationRepository;
+import com.tgfc.library.repository.*;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import com.tgfc.library.util.ContextUtil;
@@ -31,7 +25,7 @@ public class ReservationService implements IReservationService {
     IReservationRepository reservationRepository;
 
     @Autowired
-    IEmployeeRepository employeeRepository;
+    IEmployeeRepositorySafty employeeRepository;
 
     @Autowired
     IRecordsRepository recordsRepository;
@@ -185,7 +179,7 @@ public class ReservationService implements IReservationService {
         reservation.setStatus(ReservationEnum.RESERVATION_SUCCESS.getCode());
 
         Records records = new Records();
-        Employee employee = employeeRepository.findById(reservation.getEmployee().getId()).get();
+        EmployeeSafty employee = employeeRepository.findById(reservation.getEmployee().getId()).get();
         Book book = bookRepository.findById(reservation.getBook().getId()).get();
         Date current = new Date();
         Date endDate = new Date(current.getTime() + 14 * 24 * 60 * 60 * 1000);

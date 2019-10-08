@@ -26,7 +26,7 @@ public class Reservation implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
-    private Employee employee;
+    private EmployeeSafty employee;
 
     @ManyToOne
     @JoinColumn(name = "book_id", referencedColumnName = "id")
@@ -64,11 +64,11 @@ public class Reservation implements Serializable {
         this.status = status;
     }
 
-    public Employee getEmployee() {
+    public EmployeeSafty getEmployee() {
         return employee;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(EmployeeSafty employee) {
         this.employee = employee;
     }
 
