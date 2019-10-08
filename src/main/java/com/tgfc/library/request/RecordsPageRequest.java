@@ -1,7 +1,7 @@
 package com.tgfc.library.request;
 
 import com.tgfc.library.entity.Book;
-import com.tgfc.library.entity.Employee;
+import com.tgfc.library.entity.EmployeeSafty;
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ public class RecordsPageRequest extends PageableRequest {
     private Date borrowDate;
     private Date returnDate;
     private Integer Status;
-    private Employee employee;
+    private EmployeeSafty employee;
     private Book book;
     private String keyword;
 
@@ -55,11 +55,11 @@ public class RecordsPageRequest extends PageableRequest {
         Status = status;
     }
 
-    public Employee getEmployee() {
+    public EmployeeSafty getEmployee() {
         return employee;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(EmployeeSafty employee) {
         this.employee = employee;
     }
 

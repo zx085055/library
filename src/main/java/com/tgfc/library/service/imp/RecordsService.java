@@ -5,10 +5,7 @@ import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.BookStatusEnum;
 import com.tgfc.library.enums.RecordsStatusEnum;
 import com.tgfc.library.enums.ReservationEnum;
-import com.tgfc.library.repository.IBookRepository;
-import com.tgfc.library.repository.IEmployeeRepository;
-import com.tgfc.library.repository.IRecordsRepository;
-import com.tgfc.library.repository.IReservationRepository;
+import com.tgfc.library.repository.*;
 import com.tgfc.library.request.SendMailRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
@@ -30,7 +27,7 @@ public class RecordsService implements IRecordsService {
     IRecordsRepository recordsRepository;
 
     @Autowired
-    IEmployeeRepository employeeRepository;
+    IEmployeeRepositorySafty employeeRepository;
 
     @Autowired
     IBookRepository bookRepository;
