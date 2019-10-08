@@ -96,8 +96,8 @@ public class ScheduleService implements IScheduleService {
         Date startDate = null;
         Date endDate = null;
         try {
-            startDate = sdf.parse("1970-01-01");
-            endDate = sdf.parse("2099-01-01");
+            startDate = sdf.parse("0000-01-01");
+            endDate = sdf.parse("3099-01-01");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -318,4 +318,5 @@ public class ScheduleService implements IScheduleService {
         response.setStatus(true);
         return response;
     }
+
 }
