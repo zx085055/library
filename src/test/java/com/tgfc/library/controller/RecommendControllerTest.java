@@ -63,28 +63,27 @@ public class RecommendControllerTest {
 
     @Test
     public void testInsert() throws Exception{
-        RecommendPageRequest recommendmodel = new RecommendPageRequest();
-        recommendmodel.setName("NightMare");
-        recommendmodel.setAuther("Steven King");
-        recommendmodel.setPubHouse("KingStore");
-        recommendmodel.setIsbn("12345678911");
-        recommendmodel.setPublishDate(new Date());
+        RecommendPageRequest recommendModel = new RecommendPageRequest();
+        recommendModel.setName("NightMare");
+        recommendModel.setAuther("Steven King");
+        recommendModel.setPubHouse("KingStore");
+        recommendModel.setIsbn("12345678911");
+        recommendModel.setPublishDate(new Date());
 
         Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
-        String jsonData = gson.toJson(recommendmodel);
+        String jsonData = gson.toJson(recommendModel);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("成功新增一筆",new JSONObject(response.getContentAsString()).get("message"));
 
-        requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("已存在此推薦",new JSONObject(response.getContentAsString()).get("message"));
 
-        recommendmodel.setIsbn("9576330998");
-        jsonData = gson.toJson(recommendmodel);
+        recommendModel.setIsbn("9576330998");
+        jsonData = gson.toJson(recommendModel);
 
         requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         response = mockMvc.perform(requestBuilder).andReturn().getResponse();
@@ -93,6 +92,18 @@ public class RecommendControllerTest {
 
     }
 
+    @Test
+    public void testDelete() throws Exception{
 
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
+        Assertions.assertEquals("成功刪除一筆",new JSONObject(response.getContentAsString()).get("message"));
+
+        response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
+        Assertions.assertEquals("無此推薦",new JSONObject(response.getContentAsString()).get("message"));
+
+    }
 
 }
