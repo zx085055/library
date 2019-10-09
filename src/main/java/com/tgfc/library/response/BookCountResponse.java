@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BookCountResponse {
     private List<BooksResponse> list=new ArrayList<>();
-    private int count;
+    private long count;
 
     public List<BooksResponse> getList() {
         return list;
@@ -15,11 +15,11 @@ public class BookCountResponse {
         this.list = list;
     }
 
-    public int getCount() {
+    public long getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(long count) {
         this.count = count;
     }
 }

@@ -23,9 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +53,6 @@ public class BookService implements IBookService {
         BaseResponse response = new BaseResponse();
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
         Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", pageable);
-        int total = bookDataRepository.countBykeyWord("%" + model.getKeyword() + "%");
         if (pageBook.isEmpty()) {
             response.setMessage("找不到資料");
             return response;
@@ -68,32 +64,32 @@ public class BookService implements IBookService {
             BooksResponse bookResponse = new BooksResponse();
             BeanUtils.copyProperties(book, bookResponse);
             list.add(bookResponse);
-            if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
+            if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
 
-                if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
-                    bookResponse.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
+                if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
+                    bookResponse.setPhotoName(photoService.getPhotoUrl(book.getPhotoName()));
                 }
-                try {
-                    bookResponse.setPhoto(ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photoService.getPhoto(book.getPhotoOriginalName())));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    bookResponse.setPhoto(ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photoService.getPhoto(book.getPhotoName())));
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
 
             }
-//            if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0) {
+//            if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
 ////                try {
-////                    bookResponse.setPhotoOriginalName(photoService.getPhotoUrl(book.getPhotoOriginalName()));
+////                    bookResponse.setPhotoName(photoService.getPhotoUrl(book.getPhotoName()));
 ////                } catch (IOException e) {
 ////                    e.printStackTrace();
 ////                }
 //
-//                bookResponse.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
+//                bookResponse.setPhotoName(photoService.getApiPhotoUrl(book.getPhotoName()));
 //            }
         }
 
         BookCountResponse bookCountResponse = new BookCountResponse();
         bookCountResponse.setList(list);
-        bookCountResponse.setCount(total);
+        bookCountResponse.setCount(pageBook.getTotalElements());
         response.setData(bookCountResponse);
         response.setStatus(true);
 
@@ -105,8 +101,8 @@ public class BookService implements IBookService {
     public BaseResponse getById(int id) {
         BaseResponse response = new BaseResponse();
         Book book = bookDataRepository.getById(id);
-        if (book.getPhotoOriginalName() != null && book.getPhotoOriginalName().length() != 0)
-            book.setPhotoOriginalName(photoService.getApiPhotoUrl(book.getPhotoOriginalName()));
+        if (book.getPhotoName() != null && book.getPhotoName().length() != 0)
+            book.setPhotoName(photoService.getApiPhotoUrl(book.getPhotoName()));
         response.setMessage("");
         response.setStatus(true);
         response.setData(book);
@@ -138,16 +134,16 @@ public class BookService implements IBookService {
         }
         //是否有傳入檔案
         if (files != null) {
-            //addBook.setPhotoName(files.getOriginalFilename());
+            addBook.setPhotoOriginalName(files.getOriginalFilename());
             //存檔案
             Date date = new Date();
-            String photoOriginalName = String.valueOf(date.getTime()) + ".jpg";
-            photoService.uploadPhoto(files, photoOriginalName);
-            //將Id設定成OriginalName
-            book.setPhotoOriginalName(photoOriginalName);
-        } else if (addBook.getPhotoName() == null || addBook.getPhotoName().length() == 0) {
-            photoService.deletePhoto(book.getPhotoOriginalName());
-            book.setPhotoOriginalName(null);
+            String photoName = date.getTime() + ".jpg";
+            photoService.uploadPhoto(files, photoName);
+
+            book.setPhotoName(photoName);
+        } else if (addBook.getPhotoOriginalName() == null || addBook.getPhotoOriginalName().length() == 0) {
+            photoService.deletePhoto(book.getPhotoName());
+            book.setPhotoName(null);
         }
         try {
 //                addBook.setId(book.getId());
@@ -155,8 +151,12 @@ public class BookService implements IBookService {
         } catch (BeansException e) {
             response.setMessage("儲存失敗");
         }
-        if (bookDataRepository.save(book) != null)
-            response.setStatus(true);
+            bookDataRepository.save(book);
+//        if (bookDataRepository.save(book) != null){
+//            Book book1 =bookDataRepository.getById(book.getId());
+//            response.setStatus(true);
+//        }
+
 
         return response;
     }
@@ -173,7 +173,7 @@ public class BookService implements IBookService {
         bookDataRepository.deleteById(id);
         if (bookDataRepository.getById(id) == null) {
             baseResponse.setStatus(true);
-            photoService.deletePhoto(book.getPhotoOriginalName());
+            photoService.deletePhoto(book.getPhotoName());
         }
         return baseResponse;
     }

@@ -1,6 +1,5 @@
 package com.tgfc.library.request;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class BookAddRequest {
@@ -26,7 +25,7 @@ public class BookAddRequest {
     private String page;
 //    @NotNull
     private String language;
-    private String photoName;
+    private String photoOriginalName;
 //    @NotNull
     private Integer status;
 
@@ -137,12 +136,12 @@ public class BookAddRequest {
         this.language = language;
     }
 
-    public String getPhotoName() {
-        return photoName;
+    public String getPhotoOriginalName() {
+        return photoOriginalName;
     }
 
-    public void setPhotoName(String photoName) {
-        this.photoName = photoName;
+    public void setPhotoOriginalName(String photoOriginalName) {
+        this.photoOriginalName = photoOriginalName;
     }
 
 

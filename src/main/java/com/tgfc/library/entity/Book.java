@@ -29,12 +29,12 @@ public class Book implements Serializable {
     private String intro;
     @Column(name = "price",length = 10,nullable = false)
     private Integer price;
-    @Column(name = "photo_name")
-    private String photoName;
     @Column(name = "photo_original_name")
     private String photoOriginalName;
+    @Column(name = "photo_name")
+    private String photoName;
     @Column(name = "purchase_date",nullable = false,updatable = false)
-    @CreatedDate
+//    @CreatedDate
     private Date purchaseDate;
     @Column(name = "publish_date",nullable = false)
     private Date publishDate;
@@ -128,20 +128,20 @@ public class Book implements Serializable {
         this.price = price;
     }
 
-    public String getPhotoName() {
-        return photoName;
-    }
-
     public String getPhotoOriginalName() {
         return photoOriginalName;
     }
 
-    public void setPhotoOriginalName(String photoOriginalName) {
-        this.photoOriginalName = photoOriginalName;
+    public String getPhotoName() {
+        return photoName;
     }
 
-    public void setPhotoName(String photoUrl) {
-        this.photoName = photoUrl;
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
+    public void setPhotoOriginalName(String photoUrl) {
+        this.photoOriginalName = photoUrl;
     }
 
     public Date getPurchaseDate() {

@@ -21,14 +21,11 @@ public class PhotoService implements IPhotoService {
     @Value("${file.root.path}")
     String filePath;
 
-    @Value("${file.root.port}")
+    @Value("${nginx.port}")
     String filePort;
 
-    @Value("${file.path}")
-    private String filePath1;
-
     @Value("${file.photo.path}")
-     String urlString;
+    String urlString;
 
     @Override
     public void uploadPhoto(MultipartFile file, String newName) {
@@ -38,7 +35,7 @@ public class PhotoService implements IPhotoService {
 
         try {
             if (!dest.getParentFile().exists()) {
-                if(!dest.getParentFile().mkdirs()){
+                if (!dest.getParentFile().mkdirs()) {
                     throw new IOException();
                 }
             }
@@ -51,32 +48,28 @@ public class PhotoService implements IPhotoService {
     @Override
     public String getPhotoUrl(String photoFileName) {
 
-        String urlString="";
+        String urlString = "";
         try {
             InetAddress address = InetAddress.getLocalHost();
-
-            try {
-
-                String protocol = "http";
-                String host = address.getHostAddress();
-                Socket  point = new Socket();
-                //point.getLocalPort();
-                String path = filePath+ photoFileName;
+            String protocol = "http";
+            String host = address.getHostAddress();
+            Socket point = new Socket();
+            //point.getLocalPort();
+            String path = imageRootUrl + photoFileName;
 //                URL url = new URL(protocol, host, point.getLocalPort(), path);
-                URL url = new URL(protocol, host,Integer.valueOf(filePort) , path);
-                System.out.println(url.toString() + "?");
-                urlString = url.toString();
-            } catch (MalformedURLException ex) {
-                ex.printStackTrace();
-            }
-        } catch (UnknownHostException e) {
+
+            URL url = new URL(protocol, host, Integer.valueOf(filePort), path);
+            System.out.println(url.toString() + "?");
+            urlString = url.toString();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return urlString;
 
     }
+
     @Override
-    public boolean  deletePhoto( String newName) {
+    public boolean deletePhoto(String newName) {
         File file = new File(this.filePath + newName);
         if (file.isFile() && file.exists()) {
             //file.delete();//"刪除單個檔案"+name+"成功！"
@@ -84,6 +77,7 @@ public class PhotoService implements IPhotoService {
         }//"刪除單個檔案"+name+"失敗！"
         return false;
     }
+
     @Override
     public byte[] getPhoto(String fileName) throws FileNotFoundException {
         String filePath = this.filePath + fileName;
@@ -95,12 +89,12 @@ public class PhotoService implements IPhotoService {
             throw new FileNotFoundException();
         }
     }
-    @Override
-    public String getApiPhotoUrl(String photoFileName){
-       //String url =urlString+photoFileName;
-        return urlString+photoFileName;
-    }
 
+    @Override
+    public String getApiPhotoUrl(String photoFileName) {
+        //String url =urlString+photoFileName;
+        return urlString + photoFileName;
+    }
 
 
 }

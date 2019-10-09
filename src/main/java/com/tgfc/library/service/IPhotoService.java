@@ -2,15 +2,13 @@ package com.tgfc.library.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public interface IPhotoService {
 
     void uploadPhoto(MultipartFile file, String newName);
 
-    String getPhotoUrl(String Photo) throws IOException;
+    String getPhotoUrl(String Photo) ;
 
     boolean deletePhoto(String newName);
 

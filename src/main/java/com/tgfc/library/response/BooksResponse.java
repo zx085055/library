@@ -22,15 +22,15 @@ public class BooksResponse {
     private String page;
     private String language;
 
-    ResponseEntity<byte[]> photo=null;
-
-    public ResponseEntity<byte[]> getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(ResponseEntity<byte[]> photo) {
-        this.photo = photo;
-    }
+//    ResponseEntity<byte[]> photo=null;
+//
+//    public ResponseEntity<byte[]> getPhoto() {
+//        return photo;
+//    }
+//
+//    public void setPhoto(ResponseEntity<byte[]> photo) {
+//        this.photo = photo;
+//    }
 
     public Integer getPrice() {
         return price;
