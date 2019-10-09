@@ -2,8 +2,10 @@ package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Announcement;
 import com.tgfc.library.entity.Employee;
+import com.tgfc.library.entity.EmployeeSafty;
 import com.tgfc.library.repository.IAnnouncementRepository;
 import com.tgfc.library.repository.IEmployeeRepository;
+import com.tgfc.library.repository.IEmployeeRepositorySafty;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IAnnouncementService;
 import com.tgfc.library.util.ContextUtil;
@@ -14,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class AnnouncementService implements IAnnouncementService {
     IAnnouncementRepository announcementRepository;
 
     @Autowired
-    IEmployeeRepository employeeRepository;
+    IEmployeeRepositorySafty employeeRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -34,7 +35,7 @@ public class AnnouncementService implements IAnnouncementService {
         BaseResponse baseResponse = new BaseResponse();
         title = (title == null) ? "" : title;
         startTime = (startTime == null) ? new Date(Long.valueOf("-62135798400000")) : startTime;
-        endTime = (endTime == null) ? new Date(Long.valueOf("253402271999000"))  : endTime;
+        endTime = (endTime == null) ? new Date(Long.valueOf("253402271999000")) : endTime;
         Page<Announcement> announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeInterval(title, startTime, endTime, pageable);
         Map<String, Object> data = new HashMap<>();
         data.put("totalCount", announcements.getTotalElements());
@@ -56,7 +57,7 @@ public class AnnouncementService implements IAnnouncementService {
             return baseResponse;
         }
 
-        Employee employee = employeeRepository.findById(id).get();
+        EmployeeSafty employee = employeeRepository.findById(id).get();
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         baseResponse.setStatus(true);
@@ -69,7 +70,7 @@ public class AnnouncementService implements IAnnouncementService {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
 
-        Employee employee = employeeRepository.findById(id).get();
+        EmployeeSafty employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         BeanUtils.copyProperties(announcement, existAnnouncement);
         existAnnouncement.setEmployee(employee);
@@ -98,7 +99,7 @@ public class AnnouncementService implements IAnnouncementService {
         BaseResponse baseResponse = new BaseResponse();
         String id = ContextUtil.getAccount();
 
-        Employee employee = employeeRepository.findById(id).get();
+        EmployeeSafty employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setEmployee(employee);
         existAnnouncement.setStatus(announcement.getStatus());

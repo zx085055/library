@@ -34,7 +34,7 @@ public class Announcement implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
-    private Employee employee;
+    private EmployeeSafty employee;
 
     public Integer getId() {
         return id;
@@ -84,11 +84,11 @@ public class Announcement implements Serializable {
         this.status = status;
     }
 
-    public Employee getEmployee() {
+    public EmployeeSafty getEmployee() {
         return employee;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(EmployeeSafty employee) {
         this.employee = employee;
     }
 }
