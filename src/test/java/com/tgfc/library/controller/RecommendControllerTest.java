@@ -1,8 +1,6 @@
 package com.tgfc.library.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tgfc.library.LibraryApplication;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -38,12 +36,13 @@ public class RecommendControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
 
+
+
     @BeforeEach
     public void init() throws Exception{
         Map<String, String> param = new HashMap<>();
         param.put("account", "ROOT");
         param.put("password", "12345678");
-
         MockHttpServletRequestBuilder requestBuilder =
                 MockMvcRequestBuilders.post("/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(param));
         session = (MockHttpSession) mockMvc.perform(requestBuilder).andReturn().getRequest().getSession();
@@ -60,16 +59,21 @@ public class RecommendControllerTest {
     public void testInsert() throws Exception{
         String paramString ="{" +
                 "\"auther\":\"Steven King\"," +
-                "\"isbn\":\"12345678911X\"," +
+                "\"isbn\":\"12345678911\"," +
                 "\"pubHouse\":\"KingStore\"," +
                 "\"name\":\"NightMare1\",\n" +
                 "\"publishDate\":\"2019-06-10\"" +
                 "}";
+
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(paramString);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("成功新增一筆",new JSONObject(response.getContentAsString()).get("message"));
 
+        requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(paramString);
+        response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
+        Assertions.assertEquals("已存在此推薦",new JSONObject(response.getContentAsString()).get("message"));
     }
 
 
