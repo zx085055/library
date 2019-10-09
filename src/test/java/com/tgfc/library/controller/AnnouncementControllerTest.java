@@ -52,19 +52,16 @@ class AnnouncementControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/select").contentType(MediaType.APPLICATION_JSON).session(session).content("{}");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
-    }
+        Assertions.assertEquals("公告查詢成功",new JSONObject(response.getContentAsString()).get("message"));
 
-    @Test
-    void testSelectTime() throws Exception{
         Map<String, String> param = new HashMap<>();
         param.put("startTime", "2019-09-04");
         param.put("endTime", "2019-09-06");
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
-        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        requestBuilder = MockMvcRequestBuilders.post("/announcement/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
+        response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals("公告查詢成功",new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -79,7 +76,14 @@ class AnnouncementControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("新增成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals("新增公告成功",new JSONObject(response.getContentAsString()).get("message"));
+
+        param.put("endTime", "2019-08-06");
+
+        requestBuilder = MockMvcRequestBuilders.post("/announcement/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
+        response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
+        Assertions.assertEquals("新增公告日期有誤",new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -95,15 +99,20 @@ class AnnouncementControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/announcement/update").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("編輯成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals("公告編輯成功",new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
     void testDelete() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/announcement/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","92");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/announcement/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","98");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("刪除成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals("公告刪除成功",new JSONObject(response.getContentAsString()).get("message"));
+
+        requestBuilder = MockMvcRequestBuilders.delete("/announcement/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","999");
+        response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
+        Assertions.assertEquals("公告刪除失敗",new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -115,7 +124,7 @@ class AnnouncementControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/changeStatus").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("切換成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals("公告狀態切換成功",new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -123,7 +132,7 @@ class AnnouncementControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/findByNotExpired").contentType(MediaType.APPLICATION_JSON).session(session).content("{}");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals("公告未過期查詢成功",new JSONObject(response.getContentAsString()).get("message"));
     }
 
 }

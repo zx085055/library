@@ -1,10 +1,8 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Announcement;
-import com.tgfc.library.entity.Employee;
 import com.tgfc.library.entity.EmployeeSafty;
 import com.tgfc.library.repository.IAnnouncementRepository;
-import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IEmployeeRepositorySafty;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IAnnouncementService;
@@ -42,7 +40,7 @@ public class AnnouncementService implements IAnnouncementService {
         data.put("results", announcements.getContent());
         baseResponse.setData(data);
         baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
+        baseResponse.setMessage("公告查詢成功");
         return baseResponse;
     }
 
@@ -53,7 +51,7 @@ public class AnnouncementService implements IAnnouncementService {
 
         if (announcement.getEndTime().before(announcement.getStartTime())) {
             baseResponse.setStatus(false);
-            baseResponse.setMessage("日期有誤");
+            baseResponse.setMessage("新增公告日期有誤");
             return baseResponse;
         }
 
@@ -61,7 +59,7 @@ public class AnnouncementService implements IAnnouncementService {
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         baseResponse.setStatus(true);
-        baseResponse.setMessage("新增成功");
+        baseResponse.setMessage("新增公告成功");
         return baseResponse;
     }
 
@@ -76,7 +74,7 @@ public class AnnouncementService implements IAnnouncementService {
         existAnnouncement.setEmployee(employee);
         announcementRepository.save(existAnnouncement);
         baseResponse.setStatus(true);
-        baseResponse.setMessage("編輯成功");
+        baseResponse.setMessage("公告編輯成功");
         return baseResponse;
     }
 
@@ -85,12 +83,12 @@ public class AnnouncementService implements IAnnouncementService {
         BaseResponse baseResponse = new BaseResponse();
         if (!announcementRepository.existsById(id)) {
             baseResponse.setStatus(false);
-            baseResponse.setMessage("刪除失敗");
+            baseResponse.setMessage("公告刪除失敗");
             return baseResponse;
         }
         announcementRepository.deleteById(id);
         baseResponse.setStatus(true);
-        baseResponse.setMessage("刪除成功");
+        baseResponse.setMessage("公告刪除成功");
         return baseResponse;
     }
 
@@ -105,7 +103,7 @@ public class AnnouncementService implements IAnnouncementService {
         existAnnouncement.setStatus(announcement.getStatus());
         announcementRepository.save(existAnnouncement);
         baseResponse.setStatus(true);
-        baseResponse.setMessage("切換成功");
+        baseResponse.setMessage("公告狀態切換成功");
         return baseResponse;
     }
 
@@ -118,7 +116,7 @@ public class AnnouncementService implements IAnnouncementService {
         data.put("results", announcements.getContent());
         baseResponse.setData(data);
         baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
+        baseResponse.setMessage("公告未過期查詢成功");
         return baseResponse;
     }
 }
