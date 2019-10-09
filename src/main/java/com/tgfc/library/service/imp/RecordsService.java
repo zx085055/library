@@ -45,7 +45,7 @@ public class RecordsService implements IRecordsService {
             data.put("totalCount",records.getTotalElements());
             data.put("results",records.getContent());
             baseResponse.setData(data);
-            baseResponse.setMessage("查詢成功");
+            baseResponse.setMessage("出借全查成功");
             baseResponse.setStatus(true);
         } else {
             Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
@@ -53,7 +53,7 @@ public class RecordsService implements IRecordsService {
             data.put("totalCount",records.getTotalElements());
             data.put("results",records.getContent());
             baseResponse.setData(data);
-            baseResponse.setMessage("查詢成功");
+            baseResponse.setMessage("出借查詢成功");
             baseResponse.setStatus(true);
         }
 
@@ -64,11 +64,12 @@ public class RecordsService implements IRecordsService {
     public BaseResponse delete(Integer id) {
         BaseResponse baseResponse = new BaseResponse();
         if (!recordsRepository.existsById(id)) {
-            baseResponse.setMessage("無此資料");
+            baseResponse.setMessage("出借無此資料");
             baseResponse.setStatus(false);
+            return baseResponse;
         }
         recordsRepository.deleteById(id);
-        baseResponse.setMessage("刪除成功");
+        baseResponse.setMessage("出借刪除成功");
         baseResponse.setStatus(true);
         return baseResponse;
     }
@@ -79,7 +80,7 @@ public class RecordsService implements IRecordsService {
         Records records = recordsRepository.findById(model.getId()).get();
         model.setEmail(employeeRepository.findById(records.getBorrowId()).get().getEmail());
         MailUtil.sendMail(model.getTitle(), model.getContext(), model.getEmail());
-        baseResponse.setMessage("通知成功");
+        baseResponse.setMessage("還書通知成功");
         baseResponse.setStatus(true);
         return baseResponse;
     }
