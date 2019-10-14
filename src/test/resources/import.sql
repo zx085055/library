@@ -6,5 +6,5 @@ insert into book (author,isbn,language,name,page,price,pub_house,publish_date,pu
 INSERT INTO `recommend` VALUES (1,'Howard', '12345682', '正則表達概論與應用', 'HowHouse', '2019-09-29 13:00:00', '懶得想', 1,null);
 INSERT INTO `announcement` VALUES (1,'我是內容', '2019-10-14 09:31:34', 'ROOT', '2019-09-06 08:00:00', '2019-09-05 08:00:00', false , '我是標題','ROOT');
 INSERT INTO `records` VALUES (1,'2019-10-14 08:00:00', 'ROOT', 'ROOT', '2019-10-28 08:00:00', null , 1 , 1,'ROOT');
-INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (1, '2019-09-08 13:00:00', '2019-09-15 13:00:00', 1,1,'ROOT');
-INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (2, '2019-09-08 13:00:00', '2019-09-15 13:00:00', 1,2,'TGFC062');
+INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (1, '2019-10-14 13:00:00', '2019-10-17 13:00:00', 1,1,'ROOT');
+INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (2, '2019-10-14 13:00:00', '2019-10-17 13:00:00', 2,2,'TGFC062');

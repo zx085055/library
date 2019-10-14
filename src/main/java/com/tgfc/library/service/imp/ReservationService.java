@@ -48,7 +48,7 @@ public class ReservationService implements IReservationService {
         data.put("totalCount",all.getTotalElements());
         data.put("results",all.getContent());
         baseResponse.setData(data);
-        baseResponse.setMessage("查詢成功");
+        baseResponse.setMessage("預約查詢成功");
         baseResponse.setStatus(true);
         return baseResponse;
     }
