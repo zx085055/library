@@ -36,7 +36,7 @@ public class LogAspect {
     @AfterReturning(returning = "ret", pointcut = "pointcut()")
     public void doAfterReturning(JoinPoint joinPoint, BaseResponse ret) {
         Logger logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-//        logger.info("response : " + gson.toJson(ret));
+        logger.info("response : " + gson.toJson(ret));
     }
 
 }

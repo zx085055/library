@@ -83,7 +83,7 @@ public class AnnouncementService implements IAnnouncementService {
         BaseResponse baseResponse = new BaseResponse();
         if (!announcementRepository.existsById(id)) {
             baseResponse.setStatus(false);
-            baseResponse.setMessage("公告刪除失敗");
+            baseResponse.setMessage("公告無此資料");
             return baseResponse;
         }
         announcementRepository.deleteById(id);

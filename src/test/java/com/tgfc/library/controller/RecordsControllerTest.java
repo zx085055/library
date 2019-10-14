@@ -48,7 +48,7 @@ class RecordsControllerTest {
     }
 
     @Test
-    void testSelect() throws Exception{
+    void testAllSelect() throws Exception{
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", "");
         param.put("status", 0);
@@ -57,24 +57,32 @@ class RecordsControllerTest {
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("出借全查成功",new JSONObject(response.getContentAsString()).get("message"));
+    }
 
+    @Test
+    void testSelect() throws Exception{
+        Map<String, Object> param = new HashMap<>();
+        param.put("keyword", "");
         param.put("status", 1);
 
-        requestBuilder = MockMvcRequestBuilders.post("/records/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
-        response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("出借查詢成功",new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testDelete() throws Exception{
+    void testDeleteNotFound() throws Exception{
         RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","999");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("出借無此資料",new JSONObject(response.getContentAsString()).get("message"));
+    }
 
-        requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","39");
-        response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+    @Test
+    void testDelete() throws Exception{
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("出借刪除成功",new JSONObject(response.getContentAsString()).get("message"));
     }
@@ -82,7 +90,7 @@ class RecordsControllerTest {
     @Test
     void testReturnNotify() throws Exception{
         Map<String, Object> param = new HashMap<>();
-        param.put("id", "4");
+        param.put("id", 1);
         param.put("title", "該還書了");
         param.put("context", "快點還書!!!!!");
 
@@ -94,7 +102,7 @@ class RecordsControllerTest {
 
     @Test
     void testReturnBook() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/records/returnBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","36");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/records/returnBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("歸還成功",new JSONObject(response.getContentAsString()).get("message"));
