@@ -90,7 +90,7 @@ class RecordsControllerTest {
     @Test
     void testReturnNotify() throws Exception{
         Map<String, Object> param = new HashMap<>();
-        param.put("id", 1);
+        param.put("id", 2);
         param.put("title", "該還書了");
         param.put("context", "快點還書!!!!!");
 

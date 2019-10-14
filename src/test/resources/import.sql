@@ -5,6 +5,8 @@ insert into book (author,isbn,language,name,page,price,pub_house,publish_date,pu
 insert into book (author,isbn,language,name,page,price,pub_house,publish_date,purchase_date,status,type) values ('戚小凡','9577168574','繁體中文','情長夢繾綣','238',180,'精美','1993-12-01 00:00:00','2019-09-04 00:00:00',1,'文學小說');
 INSERT INTO `recommend` VALUES (1,'Howard', '12345682', '正則表達概論與應用', 'HowHouse', '2019-09-29 13:00:00', '懶得想', 1,null);
 INSERT INTO `announcement` VALUES (1,'我是內容', '2019-10-14 09:31:34', 'ROOT', '2019-09-06 08:00:00', '2019-09-05 08:00:00', false , '我是標題','ROOT');
+INSERT INTO `announcement` VALUES (2,'我是內容2', '2019-10-14 09:31:34', 'ROOT', '2019-09-06 08:00:00', '2019-09-05 08:00:00', false , '我是標題2','ROOT');
 INSERT INTO `records` VALUES (1,'2019-10-14 08:00:00', 'ROOT', 'ROOT', '2019-10-28 08:00:00', null , 1 , 1,'ROOT');
+INSERT INTO `records` VALUES (2,'2019-10-14 08:00:00', 'ROOT', 'ROOT', '2019-10-28 08:00:00', null , 3 , 2,'ROOT');
 INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (1, '2019-10-14 13:00:00', '2019-10-17 13:00:00', 1,1,'ROOT');
 INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (2, '2019-10-14 13:00:00', '2019-10-17 13:00:00', 2,2,'TGFC062');

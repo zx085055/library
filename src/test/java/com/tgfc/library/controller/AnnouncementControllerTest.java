@@ -100,7 +100,7 @@ class AnnouncementControllerTest {
     @Test
     void testUpdate() throws Exception{
         Map<String, Object> param = new HashMap<>();
-        param.put("id", 1);
+        param.put("id", 2);
         param.put("title", "我是公告");
         param.put("context", "我是內容");
         param.put("startTime", "2019-09-05");
@@ -132,7 +132,7 @@ class AnnouncementControllerTest {
     @Test
     void testChangeStatus() throws Exception{
         Map<String, Object> param = new HashMap<>();
-        param.put("id", 1);
+        param.put("id", 2);
         param.put("status", true);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/changeStatus").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
