@@ -107,4 +107,13 @@ class RecordsControllerTest {
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("歸還成功",new JSONObject(response.getContentAsString()).get("message"));
     }
+
+    @Test
+    void testFindAll() throws Exception{
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findAll").contentType(MediaType.APPLICATION_JSON).session(session).content("{}");
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
+        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+    }
+
 }
