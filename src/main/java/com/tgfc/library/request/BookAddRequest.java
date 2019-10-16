@@ -1,32 +1,34 @@
 package com.tgfc.library.request;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class BookAddRequest {
     private Integer id;
-//    @NotNull
+    @NotNull
     private String name;
-//    @NotNull
+    @NotNull
     private String author;
-//    @NotNull
+    @NotNull
     private String isbn;
-//    @NotNull
+    @NotNull
     private String pubHouse;
 //    @NotNull
     private String intro;
-//    @NotNull
+    @NotNull
     private Integer price;
-//    @NotNull
+    @NotNull
     private Date publishDate;
+    @NotNull
     private Date purchaseDate;
-//    @NotNull
+    @NotNull
     private String type;
-//    @NotNull
+    @NotNull
     private String page;
-//    @NotNull
+    @NotNull
     private String language;
     private String photoOriginalName;
-//    @NotNull
+    @NotNull
     private Integer status;
 
     public Date getPurchaseDate() {

@@ -55,6 +55,7 @@ public class BookService implements IBookService {
         Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", pageable);
         if (pageBook.isEmpty()) {
             response.setMessage("找不到資料");
+            response.setStatus(false);
             return response;
         }
         List<BooksResponse> list = new ArrayList<>();
@@ -111,11 +112,13 @@ public class BookService implements IBookService {
 
     @Override
     public BaseResponse upData(MultipartFile files, BookAddRequest addBook) {
+
+
         BaseResponse response = new BaseResponse();
         //判斷status是否正確
 
         if (BookStatusEnum.getStatus(addBook.getStatus()) == null) {
-            response.setMessage("Status錯誤");
+            response.setMessage("狀態錯誤");
             return response;
         }
         //用Id去資料庫找出舊資料
@@ -151,11 +154,12 @@ public class BookService implements IBookService {
         } catch (BeansException e) {
             response.setMessage("儲存失敗");
         }
-            bookDataRepository.save(book);
-//        if (bookDataRepository.save(book) != null){
+//            bookDataRepository.save(book);
+        if (bookDataRepository.save(book) != null){
 //            Book book1 =bookDataRepository.getById(book.getId());
-//            response.setStatus(true);
-//        }
+            response.setStatus(true);
+            response.setMessage("編輯成功");
+        }
 
 
         return response;
@@ -169,11 +173,16 @@ public class BookService implements IBookService {
             baseResponse.setMessage("無此ID");
             return baseResponse;
         }
-
+        if(book.getPhotoName()!=""&&book.getPhotoName()!=null){
+            photoService.deletePhoto(book.getPhotoName());}
         bookDataRepository.deleteById(id);
         if (bookDataRepository.getById(id) == null) {
+
             baseResponse.setStatus(true);
-            photoService.deletePhoto(book.getPhotoName());
+
+
+            baseResponse.setMessage("刪除成功");
+
         }
         return baseResponse;
     }
