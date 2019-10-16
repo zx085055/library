@@ -42,7 +42,7 @@ public class LdapAuthProvider implements AuthenticationProvider {
         if (!employeeRepository.existsById(account)) { //如果帳號不存在的話
             loginUser = findUserByLDAp(account, password);
         } else {//如果帳號存在
-            loginUser = employeeRepository.findById(account).get();//讀取所有該帳號的相關資料
+            loginUser = employeeRepository.getOne(account);//讀取所有該帳號的相關資料
             if (!encoder.matches(password, loginUser.getPassword())) {//比對密碼是否相符
                 throw new BadCredentialsException("請確認帳號或密碼");//如果不相符會丟出一個錯誤訊息
             }
