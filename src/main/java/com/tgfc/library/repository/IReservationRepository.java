@@ -18,7 +18,7 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Query("SELECT r FROM Reservation r LEFT JOIN r.book b WHERE (r.employee.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')) AND r.status=?2 ORDER BY r.startDate ASC")
     Page<Reservation> getReservationByKeywordLikeAndStatus(String keyword, Integer status, Pageable pageable);
 
-    @Query(value = "SELECT r.* FROM `reservation` r WHERE book_id=3 AND `status`=3 ORDER BY r.start_date LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT r.* FROM `reservation` r WHERE book_id=?2 AND `status`=?1 ORDER BY r.start_date LIMIT 1", nativeQuery = true)
     Reservation getReservationByStatusAndBookId(Integer status, Integer bookId);
 
     @Query("SELECT r from Reservation r where r.startDate>=?1 AND r.startDate<=?2")

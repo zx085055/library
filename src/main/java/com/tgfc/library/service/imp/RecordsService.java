@@ -93,6 +93,9 @@ public class RecordsService implements IRecordsService {
         if(nextReservation!=null) {
             MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
             nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
+            nextReservation.setEndDate(new Date());
+            Date current = new Date();
+            nextReservation.setEndDate(new Date(current.getTime() + 3 * 24 * 60 * 60 * 1000));
             reservationRepository.save(nextReservation);
         }
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
