@@ -17,8 +17,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -70,22 +68,7 @@ public class BookService implements IBookService {
                 if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
                     bookResponse.setPhotoName(photoService.getPhotoUrl(book.getPhotoName()));
                 }
-//                try {
-//                    bookResponse.setPhoto(ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(photoService.getPhoto(book.getPhotoName())));
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-
             }
-//            if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
-////                try {
-////                    bookResponse.setPhotoName(photoService.getPhotoUrl(book.getPhotoName()));
-////                } catch (IOException e) {
-////                    e.printStackTrace();
-////                }
-//
-//                bookResponse.setPhotoName(photoService.getApiPhotoUrl(book.getPhotoName()));
-//            }
         }
 
         BookCountResponse bookCountResponse = new BookCountResponse();
@@ -93,8 +76,6 @@ public class BookService implements IBookService {
         bookCountResponse.setCount(pageBook.getTotalElements());
         response.setData(bookCountResponse);
         response.setStatus(true);
-
-
         return response;
     }
 
@@ -125,12 +106,6 @@ public class BookService implements IBookService {
         Book book = bookDataRepository.getById(addBook.getId());
         if (book == null) {
             book = new Book();
-//                try {
-//                    BeanUtils.copyProperties(addBook, book);
-//                } catch (BeansException e) {
-//                    response.setMessage("addBook錯誤");
-//                }
-//                book=bookDataRepository.save(book);
             Recommend recommend = iRecommendRepository.findRecommendByIsbn(addBook.getIsbn());
             if (recommend != null)
                 recommend.setStatus(2);
@@ -173,16 +148,19 @@ public class BookService implements IBookService {
             baseResponse.setMessage("無此ID");
             return baseResponse;
         }
-        if(book.getPhotoName()!=""&&book.getPhotoName()!=null){
-            photoService.deletePhoto(book.getPhotoName());}
-        bookDataRepository.deleteById(id);
+        try {
+            bookDataRepository.deleteById(id);
+        } catch (Exception e) {
+            baseResponse.setMessage("無法刪除");
+            e.printStackTrace();
+        }
+
+
         if (bookDataRepository.getById(id) == null) {
-
+            if(book.getPhotoName()!=""&&book.getPhotoName()!=null){
+                photoService.deletePhoto(book.getPhotoName());}
             baseResponse.setStatus(true);
-
-
             baseResponse.setMessage("刪除成功");
-
         }
         return baseResponse;
     }
