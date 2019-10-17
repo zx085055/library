@@ -22,7 +22,7 @@ public class ResponseAdvice implements ResponseBodyAdvice {
             return o;
         } else {
             BaseResponse response=  new BaseResponse();
-            response.setMessage("回傳物件不支援");
+            response.setData(o);
             return response;
         }
 

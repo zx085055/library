@@ -17,7 +17,7 @@ public class Recommend implements Serializable {
     @Column(length = 100,nullable = false)
     private String name;
     @Column(length = 13,nullable = false)
-    @Pattern(regexp = "^[0-9X]{10,13}")
+    @Pattern(regexp = "^[0-9X]{10}|^[0-9X]{13}")
     private String isbn;
     @Column(length = 30,nullable = false)
     private String pubHouse;

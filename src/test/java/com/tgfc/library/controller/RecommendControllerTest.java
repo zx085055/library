@@ -65,7 +65,7 @@ public class RecommendControllerTest {
         Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
         String jsonData = gson.toJson(recommendModel);
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/recommend/insert1").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
         Assertions.assertEquals("成功新增一筆",new JSONObject(response.getContentAsString()).get("message"));
