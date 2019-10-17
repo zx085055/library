@@ -1,65 +1,60 @@
-package com.tgfc.library.login;
+package com.tgfc.library.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tgfc.library.LibraryApplication;
-import com.tgfc.library.entity.Employee;
-import com.tgfc.library.repository.IEmployeeRepository;
-import com.tgfc.library.security.LdapAuthProvider;
-import com.tgfc.library.security.LoginFilter;
-import com.tgfc.library.security.SecurityConfig;
-import org.aspectj.lang.annotation.Before;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @AutoConfigureMockMvc
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = LibraryApplication.class)
-public class LoginTest {
+public class SecurityConfigTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     MockMvc mockMvc;
 
-    @MockBean
-    SecurityConfig.ApiConfig config;
-
-//    @MockBean
-//    HttpSecurity httpSecurity;
+    @Mock
+    SecurityConfig.ApiConfig config = Mockito.mock(SecurityConfig.ApiConfig.class);
 
     @Autowired
     WebApplicationContext webApplicationContext;
 
+    MockHttpSession session;
 
-    @Test//帳號密碼皆對，且存在資料表中，測試假資料
+    @BeforeEach
+    void init() throws Exception{
+        Map<String, String> param = new HashMap<>();
+        param.put("account", "ROOT");
+        param.put("password", "12345678");
+
+        MockHttpServletRequestBuilder requestBuilder =
+                MockMvcRequestBuilders.post("/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(param));
+        session = (MockHttpSession) mockMvc.perform(requestBuilder).andReturn().getRequest().getSession();
+    }
+
+
+    @Test
     public void testLoginFilter() throws Exception {
         Map<String, String> param = new HashMap<>();
         param.put("account", "ROOT");
@@ -75,7 +70,7 @@ public class LoginTest {
     }
 
     @Test
-    public void testConfigure() throws Exception {
+    public void testForbiddenEntryPointHandler() throws Exception {
         Map<String, String> param = new HashMap<>();
         param.put("account", "");
         param.put("password", "");
@@ -100,9 +95,25 @@ public class LoginTest {
         Assertions.assertEquals("登出成功", new JSONObject(response.getContentAsString()).get("message"));
     }
 
+
+
     @Test
-    public void testMock() throws Exception {
-//        LoginFilter loginFilter = config.loginFilter();
-//        Assertions.assertNotNull(loginFilter);
+    public void testGetCurrentAuditor()throws Exception{
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("title", "我是公告");
+        param.put("context", "我是內容");
+        param.put("startTime", "2019-09-05");
+        param.put("endTime", "2019-09-06");
+        param.put("status", true);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
+        Assertions.assertEquals("新增公告成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertNotNull(config.getCurrentAuditor());
+
     }
+
+
 }
