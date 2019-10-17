@@ -1,6 +1,7 @@
 package com.tgfc.library.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tgfc.library.entity.Employee;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.EmployeeResponse;
 import com.tgfc.library.util.ContextUtil;
@@ -15,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -94,7 +97,9 @@ public class SecurityConfig {
 
         @Override
         public Optional<String> getCurrentAuditor() {
-            return Optional.of(((EmployeeResponse)ContextUtil.getPrincipal()).getAccount().toUpperCase());
+            return Optional.of(ContextUtil.getAccount());
         }
     }
+
+
 }
