@@ -51,11 +51,7 @@ public class BookService implements IBookService {
         BaseResponse response = new BaseResponse();
         Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
         Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", pageable);
-        if (pageBook.isEmpty()) {
-            response.setMessage("找不到資料");
-            response.setStatus(false);
-            return response;
-        }
+
         List<BooksResponse> list = new ArrayList<>();
         for (Book book : pageBook) {
 
@@ -72,6 +68,12 @@ public class BookService implements IBookService {
         }
 
         BookCountResponse bookCountResponse = new BookCountResponse();
+        if (pageBook.isEmpty()) {
+            response.setMessage("找不到資料");
+            response.setStatus(false);
+            bookCountResponse.setList(list);
+            return response;
+        }
         bookCountResponse.setList(list);
         bookCountResponse.setCount(pageBook.getTotalElements());
         response.setData(bookCountResponse);

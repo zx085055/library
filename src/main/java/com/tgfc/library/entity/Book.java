@@ -33,7 +33,7 @@ public class Book implements Serializable {
     private String photoOriginalName;
     @Column(name = "photo_name")
     private String photoName;
-    @Column(name = "purchase_date",nullable = false,updatable = false)
+    @Column(name = "purchase_date",nullable = false)
 //    @CreatedDate
     private Date purchaseDate;
     @Column(name = "publish_date",nullable = false)
