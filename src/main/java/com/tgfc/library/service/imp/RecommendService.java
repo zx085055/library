@@ -61,7 +61,7 @@ public class RecommendService implements IRecommendService {
         if (existRecommend!=null){
             baseResponse.setStatus(false);
             baseResponse.setMessage("已存在此推薦");
-        }else if (bookRepository.findByIsbn(recommend.getIsbn())!=null){
+        }else if (bookRepository.findByIsbn(recommend.getIsbn()).size() > 0){
             baseResponse.setStatus(false);
             baseResponse.setMessage("已存在此本書籍");
         }else {

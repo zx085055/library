@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface IBookRepository extends JpaRepository<Book,Integer> {
 
@@ -21,7 +23,7 @@ public interface IBookRepository extends JpaRepository<Book,Integer> {
     Book getById( Integer id);
 
     @Query(value = "SELECT u FROM Book u WHERE u.isbn = :Isbn")
-    Book findByIsbn(@Param("Isbn") String Isbn);
+    List<Book> findByIsbn(@Param("Isbn") String Isbn);
 
     @Query(value = "SELECT b From Book b where b.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.pubHouse LIKE CONCAT('%',?1,'%')")
     Page<Book> findBookByKeyWord (String keyWord,Pageable pageable);
