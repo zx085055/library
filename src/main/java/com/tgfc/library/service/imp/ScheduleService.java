@@ -223,11 +223,11 @@ public class ScheduleService implements IScheduleService {
             if (ScheduleStatusEnum.ENABLE.getCode().equals(schedule.getStatus())) {
                 myScheduler.pauseJob(jobKey);
                 scheduleRepository.pauseJob(id);
-                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatusEnum.ENABLE.getTrans() + "變為" + ScheduleStatusEnum.DISABLE.getTrans());
+                response.setMessage("狀態改變成功，排程由" + ScheduleStatusEnum.ENABLE.getTrans() + "變為" + ScheduleStatusEnum.DISABLE.getTrans());
             } else if (ScheduleStatusEnum.DISABLE.getCode().equals(schedule.getStatus())) {
                 myScheduler.resumeJob(jobKey);
                 scheduleRepository.resumeJob(id);
-                response.setMessage("狀態改變成功，排程" + id + "由" + ScheduleStatusEnum.DISABLE.getTrans() + "變為" + ScheduleStatusEnum.ENABLE.getTrans());
+                response.setMessage("狀態改變成功，排程由" + ScheduleStatusEnum.DISABLE.getTrans() + "變為" + ScheduleStatusEnum.ENABLE.getTrans());
             }
         } catch (SchedulerException e) {
             e.printStackTrace();
