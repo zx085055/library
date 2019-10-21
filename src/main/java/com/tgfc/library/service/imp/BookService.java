@@ -49,7 +49,7 @@ public class BookService implements IBookService {
     @Override
     public BaseResponse getBookList(BookDataPageRequest model) throws FileNotFoundException {
         BaseResponse response = new BaseResponse();
-        Pageable pageable = PageRequest.of(model.getPageNumber(), model.getPageSize());
+        Pageable pageable = model.getPageable();
         Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", pageable);
 
         List<BooksResponse> list = new ArrayList<>();
