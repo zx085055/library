@@ -80,7 +80,6 @@ public class responseAdviceTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete1").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
         mockMvc.perform(requestBuilder);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-
         Assertions.assertEquals(404,response.getStatus());
     }
 }
