@@ -29,7 +29,7 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Query("SELECT r from Records r where r.borrowDate>=?1 AND r.borrowDate<=?2")
     Page<Records> findByTimeInterval(Date borrowDate, Date returnDate, Pageable pageable);
 
-    @Query(value = "select r from Records r where r.endDate>=?1 and r.status=1")
+    @Query(value = "select r from Records r where r.endDate<=?1 and r.status=1")
     List<Records> getLendingExpiredList(Date currentDate);
 
     @Query(value = "select r from Records r where r.borrowId = ?1")
