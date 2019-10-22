@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 
 public interface IAnnouncementService {
-    BaseResponse select(String name, Date startTime, Date endTime, Pageable pageable);
+    BaseResponse select(String name, Date startTime, Date endTime, Boolean checkPermission, Pageable pageable);
 
     BaseResponse insert(Announcement announcement);
 

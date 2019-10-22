@@ -20,7 +20,7 @@ public class AnnouncementController {
     @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @PostMapping("/select")
     public BaseResponse select(@RequestBody AnnouncementPageRequest announcement) {
-        return announcementService.select(announcement.getTitle(), announcement.getStartTime(), announcement.getEndTime(), announcement.getPageable());
+        return announcementService.select(announcement.getTitle(), announcement.getStartTime(), announcement.getEndTime(), announcement.getStatus(), announcement.getPageable());
     }
 
     @RolesAllowed({PermissionEnum.Role.ADMIN})
