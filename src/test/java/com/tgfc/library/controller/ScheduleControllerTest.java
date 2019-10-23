@@ -80,7 +80,7 @@ public class ScheduleControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/schedule/create").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("新增排程no.2成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals("新增排程成功",new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test

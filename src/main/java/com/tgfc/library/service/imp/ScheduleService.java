@@ -140,7 +140,7 @@ public class ScheduleService implements IScheduleService {
         }
         setScheduleStatus(model);
         response.setData(true);
-        response.setMessage("新增排程no." + model.getId() + "成功");
+        response.setMessage("新增排程成功");
         response.setStatus(true);
         return response;
     }
