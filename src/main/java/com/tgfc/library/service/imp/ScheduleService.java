@@ -92,6 +92,7 @@ public class ScheduleService implements IScheduleService {
     }
 
     private SchedulePageRequset initKeyword(SchedulePageRequset model) {
+        model.setPageNumber(model.getPageNumber() < 1 ? 1 : model.getPageNumber());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
         Date endDate = null;
@@ -126,14 +127,16 @@ public class ScheduleService implements IScheduleService {
     @Override
     public BaseResponse create(SchedulePageRequset model) {
         BaseResponse response = new BaseResponse();
+        try {
         Schedule schedule = saveSchedule(model);
         model = getAndSetIdWithModelAndPo(model, schedule);
-        try {
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
         } catch (Exception e) {
             e.printStackTrace();
+            response.setMessage("排程參數異常");
+            return response;
         }
         setScheduleStatus(model);
         response.setData(true);

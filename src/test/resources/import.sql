@@ -11,3 +11,4 @@ INSERT INTO `records` VALUES (2,'2019-10-14 08:00:00', 'ROOT', 'ROOT', '2019-10-
 INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (1, '2019-10-14 13:00:00', '2019-10-17 13:00:00', 1,1,'ROOT');
 INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (2, '2019-10-14 13:00:00', '2019-10-17 13:00:00', 1,2,'TGFC062');
 INSERT INTO reservation (id,start_date,end_date,status,book_id,employee_id) VALUES (3, '2019-10-14 13:00:00', '2019-10-17 13:00:00', 3,3,'TGFC062');
+INSERT INTO `schedule` VALUES (1, '2019-10-21 08:55:33', '2019-10-31 08:00:00', 'Group245', '預約即將到期通知', '1', '前四個排程【勿刪】', '09:54:59', '2019-10-01 08:00:00', '1', '1', 'ROOT');
