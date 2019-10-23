@@ -35,7 +35,7 @@ public class AnnouncementService implements IAnnouncementService {
         title = (title == null) ? "" : title;
         startTime = (startTime == null) ? new Date(Long.valueOf("-62135798400000")) : startTime;
         endTime = (endTime == null) ? new Date(Long.valueOf("253402271999000")) : endTime;
-        checkPermission = (checkPermission == null) ? true : false;
+        checkPermission = (checkPermission == null) ? true : checkPermission;
 
         if(checkPermission) {
             announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeInterval(title, startTime, endTime, pageable);
