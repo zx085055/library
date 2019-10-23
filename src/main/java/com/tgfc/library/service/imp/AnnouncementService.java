@@ -31,15 +31,18 @@ public class AnnouncementService implements IAnnouncementService {
     @Transactional(readOnly = true)
     public BaseResponse select(String title, Date startTime, Date endTime, Boolean checkPermission, Pageable pageable) {
         BaseResponse baseResponse = new BaseResponse();
+        Page<Announcement> announcements;
         title = (title == null) ? "" : title;
         startTime = (startTime == null) ? new Date(Long.valueOf("-62135798400000")) : startTime;
         endTime = (endTime == null) ? new Date(Long.valueOf("253402271999000")) : endTime;
-        Page<Announcement> announcements;
+        checkPermission = (checkPermission == null) ? true : false;
+
         if(checkPermission) {
             announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeInterval(title, startTime, endTime, pageable);
         }else {
             announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeIntervalAndStatus(title, startTime, endTime, true, pageable);
         }
+
         Map<String, Object> data = new HashMap<>();
         data.put("totalCount", announcements.getTotalElements());
         data.put("results", announcements.getContent());

@@ -10,7 +10,6 @@ public class AnnouncementPageRequest extends PageableRequest {
     private Date startTime;
     private Date endTime;
     private Boolean status;
-    private String updateUsername;
     private Employee employee;
 
     public Integer getId() {
@@ -51,14 +50,6 @@ public class AnnouncementPageRequest extends PageableRequest {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public String getUpdateUsername() {
-        return updateUsername;
-    }
-
-    public void setUpdateUsername(String updateUsername) {
-        this.updateUsername = updateUsername;
     }
 
     public Employee getEmployee() {
