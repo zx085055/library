@@ -12,6 +12,7 @@ import com.tgfc.library.response.BookCountResponse;
 import com.tgfc.library.response.BooksResponse;
 import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IPhotoService;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.data.domain.Page;
@@ -117,7 +118,7 @@ public class BookService implements IBookService {
             addBook.setPhotoOriginalName(files.getOriginalFilename());
             //存檔案
             Date date = new Date();
-            String photoName = date.getTime() + ".jpg";
+            String photoName = date.getTime() + FilenameUtils.getExtension(files.getOriginalFilename());
             photoService.uploadPhoto(files, photoName);
 
             book.setPhotoName(photoName);
