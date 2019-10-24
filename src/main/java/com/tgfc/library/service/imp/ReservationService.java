@@ -71,10 +71,7 @@ public class ReservationService implements IReservationService {
 
         Book bookAbnormal = bookRepository.checkBookAbnormal(bookId,bookStatusList);
 
-        if (bookBorrowed != null){
-            baseResponse.setMessage("書籍出借中");
-            baseResponse.setStatus(false);
-        }else if (bookAbnormal != null){
+        if (bookAbnormal != null){
             baseResponse.setMessage("圖書狀況異常無法出借");
             baseResponse.setStatus(false);
         }else if (exist != null) {
@@ -85,7 +82,11 @@ public class ReservationService implements IReservationService {
             Date startDate = new Date();
             Date endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
             Integer status;
-            if (count >= 1) {
+            if (bookBorrowed != null){
+                status = ReservationEnum.RESERVATION_WAIT.getCode();
+                baseResponse.setMessage("此本書出借中,已加入排隊");
+                reservation.setStartDate(startDate);
+            } else if (count >= 1) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 baseResponse.setMessage("此本書有人預約,已加入排隊");
                 reservation.setStartDate(startDate);
