@@ -73,7 +73,6 @@ public class RecommendService implements IRecommendService {
             baseResponse.setStatus(true);
             baseResponse.setMessage("成功新增一筆");
         }
-
         return baseResponse;
     }
 

@@ -62,7 +62,22 @@ public class ReservationService implements IReservationService {
         statusList.add(ReservationEnum.RESERVATION_ALIVE.getCode());
         statusList.add(ReservationEnum.RESERVATION_WAIT.getCode());
         Reservation exist = reservationRepository.getReservationByStatus(bookId, empId,statusList);
-        if (exist != null) {
+        Book bookBorrowed = bookRepository.checkBookLended(bookId,BookStatusEnum.BOOK_STATUS_LEND.getCode());
+
+        List<Integer> bookStatusList = new ArrayList<>();
+        bookStatusList.add(BookStatusEnum.BOOK_STATUS_LOST.getCode());
+        bookStatusList.add(BookStatusEnum.BOOK_STATUS_BROKEN.getCode());
+        bookStatusList.add(BookStatusEnum.BOOK_STATUS_NOT_RETURNED.getCode());
+
+        Book bookAbnormal = bookRepository.checkBookAbnormal(bookId,bookStatusList);
+
+        if (bookBorrowed != null){
+            baseResponse.setMessage("書籍出借中");
+            baseResponse.setStatus(false);
+        }else if (bookAbnormal != null){
+            baseResponse.setMessage("圖書狀況異常無法出借");
+            baseResponse.setStatus(false);
+        }else if (exist != null) {
             baseResponse.setMessage("已有此預約");
             baseResponse.setStatus(false);
         } else {

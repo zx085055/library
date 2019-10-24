@@ -31,5 +31,10 @@ public interface IBookRepository extends JpaRepository<Book,Integer> {
     @Query(value = "delete from book  where id LIKE :id ", nativeQuery = true)
     void deleteById(@Param("id") Integer id);
 
+    @Query(value = "select b from Book b where b.id=?1 and b.status=?2")
+    Book checkBookLended(Integer id,Integer status);
+
+    @Query(value = "select b from Book b where b.id=?1 and b.status in ?2")
+    Book checkBookAbnormal(Integer id,List<Integer> status);
 
 }
