@@ -94,14 +94,17 @@ public class BookService implements IBookService {
         return response;
     }
 
-    private BaseResponse checkISBN( BookAddRequest addBook){
+    @Override
+    public BaseResponse checkISBN(BookAddRequest model){
         BaseResponse response = new BaseResponse();
-        List<Book> exist=bookDataRepository.findByIsbn(addBook.getIsbn());
+        List<Book> exist=bookDataRepository.findByIsbn(model.getIsbn());
         if(exist.size()>=1){
             response.setMessage("ISBN碼不可以重複");
             response.setStatus(false);
-
+            return response;
         }
+        response.setMessage("ISBN碼沒有重複");
+        response.setStatus(true);
         return response;
     }
 
@@ -126,7 +129,7 @@ public class BookService implements IBookService {
             }
 
         response = checkISBN(addBook);
-        if(response.getMessage().equals("ISBN碼不可以重複")){
+        if(!response.getStatus()){
             return response;
         }
 

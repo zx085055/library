@@ -24,5 +24,7 @@ public interface IBookService {
 
     BaseResponse deleteBook(int id);
 
+    BaseResponse checkISBN(BookAddRequest model);
+
 }
 

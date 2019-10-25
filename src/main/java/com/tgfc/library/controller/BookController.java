@@ -91,4 +91,14 @@ public class BookController {
         return bookDataService.findByKeyword(bookDataPageRequest.getKeyword(),bookDataPageRequest.getPageable());
     }
 
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
+    @GetMapping(value = "/checkISBN")
+    public BaseResponse checkISBN(@RequestParam("isbn") String isbn) {
+        BookAddRequest model = new BookAddRequest();
+        model.setIsbn(isbn);
+        return bookDataService.checkISBN(model);
+    }
+
+
+
 }
