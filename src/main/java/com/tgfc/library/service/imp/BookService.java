@@ -111,8 +111,16 @@ public class BookService implements IBookService {
             book = new Book();
             Recommend recommend = iRecommendRepository.findRecommendByIsbn(addBook.getIsbn());
             if (recommend != null)
-                recommend.setStatus(2);
+            recommend.setStatus(2);
+            }
+
+        List<Book> exist=bookDataRepository.findByIsbn(addBook.getIsbn());
+        if(exist.size()>=1){
+            response.setMessage("ISBN碼不可以重覆");
+            response.setStatus(false);
+            return response;
         }
+
         //是否有傳入檔案
         if (files != null) {
             addBook.setPhotoOriginalName(files.getOriginalFilename());
