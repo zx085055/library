@@ -116,7 +116,7 @@ public class BookService implements IBookService {
 
         List<Book> exist=bookDataRepository.findByIsbn(addBook.getIsbn());
         if(exist.size()>=1){
-            response.setMessage("ISBN碼不可以重覆");
+            response.setMessage("ISBN碼不可以重複");
             response.setStatus(false);
             return response;
         }
