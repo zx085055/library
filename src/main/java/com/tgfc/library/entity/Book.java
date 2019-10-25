@@ -21,13 +21,13 @@ public class Book implements Serializable {
     private String name;
     @Column(name = "author",length = 100,nullable = false)
     private String author;
-    @Column(name = "isbn",length = 30,nullable = false)
+    @Column(name = "isbn",length = 13,nullable = false)
     private String isbn;
     @Column(name = "pub_house",length = 30,nullable = false)
     private String pubHouse;
     @Column(name = "intro")
     private String intro;
-    @Column(name = "price",length = 10,nullable = false)
+    @Column(name = "price",length = 5,nullable = false)
     private Integer price;
     @Column(name = "photo_original_name")
     private String photoOriginalName;
@@ -40,9 +40,9 @@ public class Book implements Serializable {
     private Date publishDate;
     @Column(name="type",length = 20,nullable = false)
     private String type;
-    @Column(name = "page",length = 10,nullable = false)
+    @Column(name = "page",length = 5,nullable = false)
     private String page;
-    @Column(name="language",length = 20,nullable = false )
+    @Column(name="language",length = 10,nullable = false )
     private String language;
     @Column(name="status",length = 2,nullable = false )
     private Integer status;
