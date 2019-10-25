@@ -94,6 +94,17 @@ public class BookService implements IBookService {
         return response;
     }
 
+    private BaseResponse checkISBN( BookAddRequest addBook){
+        BaseResponse response = new BaseResponse();
+        List<Book> exist=bookDataRepository.findByIsbn(addBook.getIsbn());
+        if(exist.size()>=1){
+            response.setMessage("ISBN碼不可以重複");
+            response.setStatus(false);
+
+        }
+        return response;
+    }
+
     @Override
     public BaseResponse upData(MultipartFile files, BookAddRequest addBook) {
 
@@ -114,12 +125,12 @@ public class BookService implements IBookService {
             recommend.setStatus(2);
             }
 
-        List<Book> exist=bookDataRepository.findByIsbn(addBook.getIsbn());
-        if(exist.size()>=1){
-            response.setMessage("ISBN碼不可以重複");
-            response.setStatus(false);
+        response = checkISBN(addBook);
+        if(response.getMessage().equals("ISBN碼不可以重複")){
             return response;
         }
+
+
 
         //是否有傳入檔案
         if (files != null) {
