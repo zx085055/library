@@ -8,6 +8,7 @@ import com.tgfc.library.repository.*;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import com.tgfc.library.util.ContextUtil;
+import com.tgfc.library.util.MailUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -153,13 +154,25 @@ public class ReservationService implements IReservationService {
 
 
     @Override
-    public BaseResponse cancleReservation(Integer reservationId) {
+    public BaseResponse cancelReservation(Integer reservationId) {
         BaseResponse baseResponse = new BaseResponse();
         Boolean exist = reservationRepository.existsById(reservationId);
         if (exist) {
             reservationRepository.changeReservationStatus(ReservationEnum.RESERVATION_CANCLE.getCode(), reservationId);
+            Reservation reservation = reservationRepository.findById(reservationId).get();
+            Integer bookId = reservation.getBook().getId();
+            Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(),bookId);
+            if(nextReservation!=null) {
+                MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
+                nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
+                nextReservation.setEndDate(new Date());
+                Date current = new Date();
+                nextReservation.setEndDate(new Date(current.getTime() + 3 * 24 * 60 * 60 * 1000));
+                reservationRepository.save(nextReservation);
+            }
             baseResponse.setStatus(true);
             baseResponse.setMessage("成功更新一筆");
+
         } else {
             baseResponse.setStatus(false);
             baseResponse.setMessage("無此預約");

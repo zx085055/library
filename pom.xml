@@ -112,6 +112,12 @@
              <scope>test</scope>
              <version>2.1.6.RELEASE</version>
          </dependency>
+        <!-- 熱部署模組 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
          <!-- Java Mail -->
         <dependency>
             <groupId>javax.mail</groupId>

@@ -19,11 +19,12 @@ public interface IReservationService {
 
     BaseResponse findByEmpId(Pageable pageable);
 
-    BaseResponse cancleReservation(Integer reservationId);
+    BaseResponse cancelReservation(Integer reservationId);
 
     BaseResponse findAll(Pageable pageable);
 
     BaseResponse getBook(Integer id);
 
     BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable);
+
 }

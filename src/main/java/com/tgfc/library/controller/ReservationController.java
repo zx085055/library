@@ -37,7 +37,7 @@ public class ReservationController {
     @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/cancelReservation")
     public BaseResponse cancel(@RequestBody Reservation reservation) {
-        return reservationService.cancleReservation(reservation.getId());
+        return reservationService.cancelReservation(reservation.getId());
     }
 
     @RolesAllowed({PermissionEnum.Role.USER})
