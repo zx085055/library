@@ -170,9 +170,13 @@ public class ReservationService implements IReservationService {
                 nextReservation.setEndDate(new Date(current.getTime() + 3 * 24 * 60 * 60 * 1000));
                 reservationRepository.save(nextReservation);
             }
+            Map<String,Object> data = new HashMap<>();
+            List dataList = new ArrayList();
+            dataList.add(reservation);
+            data.put("results",dataList);
+            baseResponse.setData(data);
             baseResponse.setStatus(true);
             baseResponse.setMessage("成功更新一筆");
-
         } else {
             baseResponse.setStatus(false);
             baseResponse.setMessage("無此預約");
