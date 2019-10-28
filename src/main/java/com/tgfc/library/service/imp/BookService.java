@@ -97,15 +97,21 @@ public class BookService implements IBookService {
     @Override
     public BaseResponse checkISBN(BookAddRequest model) {
         BaseResponse response = new BaseResponse();
-        List<Book> exist = bookDataRepository.findByIsbn(model.getIsbn());
-        if (exist.size() >= 1) {
+        List<Book> exist;
+        if (model.getId() != null && !"".equals(model.getId())) {
+            exist = bookDataRepository.findByIsbnAndId(model.getId(), model.getIsbn());
+        } else {
+            exist = bookDataRepository.findByIsbn(model.getIsbn());
+        }
+        if (exist.size() > 0) {
             response.setMessage("ISBN碼不可以重複");
             response.setStatus(false);
             return response;
+        } else {
+            response.setMessage("ISBN碼沒有重複");
+            response.setStatus(true);
+            return response;
         }
-        response.setMessage("ISBN碼沒有重複");
-        response.setStatus(true);
-        return response;
     }
 
     @Override

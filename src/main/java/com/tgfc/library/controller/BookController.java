@@ -93,9 +93,10 @@ public class BookController {
 
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @GetMapping(value = "/checkISBN")
-    public BaseResponse checkISBN(@RequestParam("isbn") String isbn) {
+    public BaseResponse checkISBN(@RequestParam("isbn") String isbn,@RequestParam("id") Integer id) {
         BookAddRequest model = new BookAddRequest();
         model.setIsbn(isbn);
+        model.setId(id);
         return bookDataService.checkISBN(model);
     }
 
