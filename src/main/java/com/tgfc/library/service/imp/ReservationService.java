@@ -34,7 +34,7 @@ public class ReservationService implements IReservationService {
     @Autowired
     IBookRepository bookRepository;
 
-    BaseResponse.Builder builder = new BaseResponse.Builder();
+    BaseResponse.Builder builder ;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,12 +46,14 @@ public class ReservationService implements IReservationService {
         } else {
             all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable);
         }
+        builder = new BaseResponse.Builder();
         return builder.content(all).message("預約查詢成功").build();
     }
 
     @Override
     public BaseResponse insert(Reservation reservation) {
         BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Integer bookId = reservation.getBook().getBookId();
         String empId = ContextUtil.getAccount();
         List<Integer> statusList = new ArrayList<>();
@@ -67,72 +69,68 @@ public class ReservationService implements IReservationService {
 
         Book bookAbnormal = bookRepository.checkBookAbnormal(bookId,bookStatusList);
 
+
         if (bookAbnormal != null){
-            baseResponse.setMessage("圖書狀況異常無法出借");
-            baseResponse.setStatus(false);
+            builder.status(false).message("圖書狀況異常無法出借");
         }else if (exist != null) {
-            baseResponse.setMessage("已有此預約");
-            baseResponse.setStatus(false);
-        } else {
-            Integer count = reservationRepository.reservationStatusCount(bookId, ReservationEnum.RESERVATION_ALIVE.getCode());
+            builder.status(false).message("已有此預約");
+        }else {
+            int status;
             Date startDate = new Date();
-            Date endDate = new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000);
-            Integer status;
-            if (bookBorrowed != null){
+            if (bookRepository.checkBookLended(bookId, BookStatusEnum.BOOK_STATUS_LEND.getCode()) != null) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
-                baseResponse.setMessage("此本書出借中,已加入排隊");
+                builder.message("此本書出借中,已加入排隊");
                 reservation.setStartDate(startDate);
-            } else if (count >= 1) {
+            } else if (reservationRepository.reservationStatusCount(bookId, ReservationEnum.RESERVATION_ALIVE.getCode()) >= 1) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
-                baseResponse.setMessage("此本書有人預約,已加入排隊");
+                builder.message("此本書有人預約,已加入排隊");
                 reservation.setStartDate(startDate);
             } else {
                 status = ReservationEnum.RESERVATION_ALIVE.getCode();
                 reservation.setStartDate(startDate);
-                reservation.setEndDate(endDate);
-                baseResponse.setMessage("成功新增一筆預約");
+                reservation.setEndDate(new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000));
+                builder.message("成功新增一筆預約");
             }
             reservation.setStatus(status);
             reservation.setEmployee(employeeRepository.findById(empId).get());
             reservationRepository.save(reservation);
-            baseResponse.setStatus(true);
         }
-        return baseResponse;
+        return builder.build();
     }
 
     @Override
     public BaseResponse update(Reservation reservation) {
         boolean exist = reservationRepository.existsById(reservation.getId());
+        builder = new BaseResponse.Builder();
         if (exist) {
             Reservation dataReserv = reservationRepository.getOne(reservation.getId());
             BeanUtils.copyProperties(reservation, dataReserv);
             reservationRepository.save(dataReserv);
-            return builder.message("成功新增一筆").status(true).build();
+            builder.message("成功新增一筆");
         } else {
-            return builder.message("無此預約").status(false).build();
+            builder.message("無此預約").status(false);
         }
+        return builder.build();
     }
 
     @Override
     public BaseResponse delete(Integer id) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         boolean exist = reservationRepository.existsById(id);
         if (exist) {
             reservationRepository.deleteById(id);
-            baseResponse.setMessage("成功刪除一筆");
-            baseResponse.setStatus(true);
             builder.message("成功刪除一筆");
         } else {
-            baseResponse.setMessage("無此資料");
-            baseResponse.setStatus(false);
+            builder.message("無此資料").status(false);
         }
-        return baseResponse;
+        return builder.build();
     }
 
 
     @Override
     @Transactional(readOnly = true)
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
+        builder = new BaseResponse.Builder();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
         return  builder.content(reservations).message("查詢成功").build();
     }
@@ -171,6 +169,7 @@ public class ReservationService implements IReservationService {
 
     @Override
     public BaseResponse findAll(Pageable pageable) {
+        builder = new BaseResponse.Builder();
         Page<Reservation> all = reservationRepository.findAll(pageable);
         return builder.content(all).message("查詢成功").build();
     }
@@ -212,6 +211,7 @@ public class ReservationService implements IReservationService {
 
     @Override
     public BaseResponse findByEmpId(Pageable pageable) {
+        builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByEmpId(empId,pageable);
 
@@ -220,6 +220,7 @@ public class ReservationService implements IReservationService {
 
     @Override
     public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
+        builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
         return builder.content(reservations).message("查詢成功").build();
