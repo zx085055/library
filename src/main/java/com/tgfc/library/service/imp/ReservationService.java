@@ -9,7 +9,6 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
-import com.tgfc.library.util.ResponseBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,27 +34,19 @@ public class ReservationService implements IReservationService {
     @Autowired
     IBookRepository bookRepository;
 
-    @Autowired
-    ResponseBuilder responseBuilder;
+    BaseResponse.Builder builder = new BaseResponse.Builder();
 
     @Override
     @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
         Integer status = ReservationEnum.RESERVATION_ALIVE.getCode();
-        Map<String,Object> data = new HashMap<>();
-        Page<Reservation> all = null;
+        Page<Reservation> all;
         if (keyword == null) {
             all = reservationRepository.findAll(pageable);
         } else {
             all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable);
         }
-        data.put("totalCount",all.getTotalElements());
-        data.put("results",all.getContent());
-        baseResponse.setData(data);
-        baseResponse.setMessage("預約查詢成功");
-        baseResponse.setStatus(true);
-        return baseResponse;
+        return builder.content(all).message("預約查詢成功").build();
     }
 
     @Override
@@ -111,19 +102,15 @@ public class ReservationService implements IReservationService {
 
     @Override
     public BaseResponse update(Reservation reservation) {
-        BaseResponse baseResponse = new BaseResponse();
         boolean exist = reservationRepository.existsById(reservation.getId());
         if (exist) {
             Reservation dataReserv = reservationRepository.getOne(reservation.getId());
             BeanUtils.copyProperties(reservation, dataReserv);
             reservationRepository.save(dataReserv);
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("成功新增一筆");
+            return builder.message("成功新增一筆").status(true).build();
         } else {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("無此預約");
+            return builder.message("無此預約").status(false).build();
         }
-        return baseResponse;
     }
 
     @Override
@@ -134,6 +121,7 @@ public class ReservationService implements IReservationService {
             reservationRepository.deleteById(id);
             baseResponse.setMessage("成功刪除一筆");
             baseResponse.setStatus(true);
+            builder.message("成功刪除一筆");
         } else {
             baseResponse.setMessage("無此資料");
             baseResponse.setStatus(false);
@@ -146,7 +134,7 @@ public class ReservationService implements IReservationService {
     @Transactional(readOnly = true)
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
-        return  responseBuilder.content(reservations).message("查詢成功").build();
+        return  builder.content(reservations).message("查詢成功").build();
     }
 
 
@@ -184,7 +172,7 @@ public class ReservationService implements IReservationService {
     @Override
     public BaseResponse findAll(Pageable pageable) {
         Page<Reservation> all = reservationRepository.findAll(pageable);
-        return responseBuilder.content(all).message("查詢成功").build();
+        return builder.content(all).message("查詢成功").build();
     }
 
     @Override
@@ -226,13 +214,14 @@ public class ReservationService implements IReservationService {
     public BaseResponse findByEmpId(Pageable pageable) {
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByEmpId(empId,pageable);
-        return responseBuilder.content(reservations).message("查詢成功").build();
+
+        return builder.content(reservations).message("查詢成功").build();
     }
 
     @Override
     public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
-        return responseBuilder.content(reservations).message("查詢成功").build();
+        return builder.content(reservations).message("查詢成功").build();
     }
 }
