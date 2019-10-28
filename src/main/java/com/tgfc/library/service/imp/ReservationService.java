@@ -9,6 +9,7 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
+import com.tgfc.library.util.ResponseBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,9 @@ public class ReservationService implements IReservationService {
 
     @Autowired
     IBookRepository bookRepository;
+
+    @Autowired
+    ResponseBuilder responseBuilder;
 
     @Override
     @Transactional(readOnly = true)
@@ -141,15 +145,8 @@ public class ReservationService implements IReservationService {
     @Override
     @Transactional(readOnly = true)
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",reservations.getTotalElements());
-        data.put("results",reservations.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return  responseBuilder.build(reservations,"查詢成功");
     }
 
 
