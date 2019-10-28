@@ -51,7 +51,7 @@ public class BookService implements IBookService {
     public BaseResponse getBookList(BookDataPageRequest model) throws FileNotFoundException {
         BaseResponse response = new BaseResponse();
         Pageable pageable = model.getPageable();
-        Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", pageable);
+        Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", model.getKeyword(), pageable);
 
         List<BooksResponse> list = new ArrayList<>();
         for (Book book : pageBook) {
@@ -95,10 +95,10 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public BaseResponse checkISBN(BookAddRequest model){
+    public BaseResponse checkISBN(BookAddRequest model) {
         BaseResponse response = new BaseResponse();
-        List<Book> exist=bookDataRepository.findByIsbn(model.getIsbn());
-        if(exist.size()>=1){
+        List<Book> exist = bookDataRepository.findByIsbn(model.getIsbn());
+        if (exist.size() >= 1) {
             response.setMessage("ISBN碼不可以重複");
             response.setStatus(false);
             return response;
@@ -125,14 +125,13 @@ public class BookService implements IBookService {
             book = new Book();
             Recommend recommend = iRecommendRepository.findRecommendByIsbn(addBook.getIsbn());
             if (recommend != null)
-            recommend.setStatus(2);
-            }
-
-        response = checkISBN(addBook);
-        if(!response.getStatus()){
-            return response;
+                recommend.setStatus(2);
         }
 
+        response = checkISBN(addBook);
+        if (!response.getStatus()) {
+            return response;
+        }
 
 
         //是否有傳入檔案
@@ -163,13 +162,12 @@ public class BookService implements IBookService {
             return response;
         }
 
-        if (bookDataRepository.save(book) != null){
+        if (bookDataRepository.save(book) != null) {
 //            Book book1 =bookDataRepository.getById(book.getId());
             response.setStatus(true);
             response.setMessage("編輯成功");
             return response;
         }
-
 
 
         return response;
@@ -192,8 +190,9 @@ public class BookService implements IBookService {
 
 
         if (bookDataRepository.getById(id) == null) {
-            if(book.getPhotoName()!=""&&book.getPhotoName()!=null){
-                photoService.deletePhoto(book.getPhotoName());}
+            if (book.getPhotoName() != "" && book.getPhotoName() != null) {
+                photoService.deletePhoto(book.getPhotoName());
+            }
             baseResponse.setStatus(true);
             baseResponse.setMessage("刪除成功");
         }
