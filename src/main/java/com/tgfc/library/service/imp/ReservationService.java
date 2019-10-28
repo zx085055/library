@@ -146,7 +146,7 @@ public class ReservationService implements IReservationService {
     @Transactional(readOnly = true)
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
-        return  responseBuilder.build(reservations,"查詢成功");
+        return  responseBuilder.content(reservations).message("查詢成功").build();
     }
 
 
@@ -183,15 +183,8 @@ public class ReservationService implements IReservationService {
 
     @Override
     public BaseResponse findAll(Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
         Page<Reservation> all = reservationRepository.findAll(pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",all.getTotalElements());
-        data.put("results",all.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return responseBuilder.content(all).message("查詢成功").build();
     }
 
     @Override
@@ -231,29 +224,15 @@ public class ReservationService implements IReservationService {
 
     @Override
     public BaseResponse findByEmpId(Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByEmpId(empId,pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",reservations.getTotalElements());
-        data.put("results",reservations.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return responseBuilder.content(reservations).message("查詢成功").build();
     }
 
     @Override
     public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",reservations.getTotalElements());
-        data.put("results",reservations.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return responseBuilder.content(reservations).message("查詢成功").build();
     }
 }
