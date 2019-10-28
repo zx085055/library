@@ -154,22 +154,20 @@ public class BookService implements IBookService {
             book.setPhotoName(null);
         }
         try {
-//                addBook.setId(book.getId());
             BeanUtils.copyProperties(addBook, book);
         } catch (BeansException e) {
             response.setMessage("儲存失敗");
             return response;
         }
-//            bookDataRepository.save(book);
+        Book save;
         try {
-            bookDataRepository.save(book);
+            save = bookDataRepository.save(book);
         } catch (Exception e) {
             response.setMessage("修改失敗");
             return response;
         }
 
-        if (bookDataRepository.save(book) != null) {
-//            Book book1 =bookDataRepository.getById(book.getId());
+        if (save != null) {
             response.setStatus(true);
             response.setMessage("編輯成功");
             return response;
