@@ -52,7 +52,6 @@ public class ReservationService implements IReservationService {
 
     @Override
     public BaseResponse insert(Reservation reservation) {
-        BaseResponse baseResponse = new BaseResponse();
         builder = new BaseResponse.Builder();
         Integer bookId = reservation.getBook().getBookId();
         String empId = ContextUtil.getAccount();
@@ -60,7 +59,6 @@ public class ReservationService implements IReservationService {
         statusList.add(ReservationEnum.RESERVATION_ALIVE.getCode());
         statusList.add(ReservationEnum.RESERVATION_WAIT.getCode());
         Reservation exist = reservationRepository.getReservationByStatus(bookId, empId,statusList);
-        Book bookBorrowed = bookRepository.checkBookLended(bookId,BookStatusEnum.BOOK_STATUS_LEND.getCode());
 
         List<Integer> bookStatusList = new ArrayList<>();
         bookStatusList.add(BookStatusEnum.BOOK_STATUS_LOST.getCode());
@@ -214,7 +212,6 @@ public class ReservationService implements IReservationService {
         builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByEmpId(empId,pageable);
-
         return builder.content(reservations).message("查詢成功").build();
     }
 
