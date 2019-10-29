@@ -50,13 +50,15 @@ public class ScheduleService implements IScheduleService {
     @Autowired
     IEmployeeRepository employeeRepository;
 
+    private BaseResponse.Builder builder;
+
 
     /**
      * 動態查詢各參數(排程名稱，起始時間，結束時間)
      */
     @Override
     public BaseResponse list(SchedulePageRequset model) {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         EntityManager entityManager = emf.createEntityManager();
         EntityTransaction etx = entityManager.getTransaction();
         etx.begin();
@@ -85,10 +87,7 @@ public class ScheduleService implements IScheduleService {
         resultMap.put("totalCount", totalCount);
         resultMap.put("results", scheduleListToResponseList(list));
 
-        response.setData(resultMap);
-        response.setMessage("查詢成功");
-        response.setStatus(true);
-        return response;
+        return builder.content(resultMap).message("查詢成功").status(true).build();
     }
 
     private SchedulePageRequset initKeyword(SchedulePageRequset model) {
@@ -126,7 +125,7 @@ public class ScheduleService implements IScheduleService {
      */
     @Override
     public BaseResponse create(SchedulePageRequset model) {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         try {
         Schedule schedule = saveSchedule(model);
         model = getAndSetIdWithModelAndPo(model, schedule);
@@ -135,14 +134,10 @@ public class ScheduleService implements IScheduleService {
             myScheduler.addJob(job, trigger);
         } catch (Exception e) {
             e.printStackTrace();
-            response.setMessage("排程參數異常");
-            return response;
+            return builder.message("排程參數異常").status(false).build();
         }
         setScheduleStatus(model);
-        response.setData(true);
-        response.setMessage("新增排程成功");
-        response.setStatus(true);
-        return response;
+        return builder.content(true).message("新增排程成功").status(true).build();
     }
 
     private void setScheduleStatus(SchedulePageRequset model) {
@@ -214,30 +209,26 @@ public class ScheduleService implements IScheduleService {
      */
     @Override
     public BaseResponse changeStatus(int id) {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Schedule schedule = scheduleRepository.getById(id);
         if (schedule == null) {
-            response.setMessage("查無此排程");
-            response.setStatus(false);
-            return response;
+            return builder.message("查無此排程").status(false).build();
         }
         JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + schedule.getId(), ScheduleEnum.GROUP.getCode() + schedule.getId());
         try {
             if (ScheduleStatusEnum.ENABLE.getCode().equals(schedule.getStatus())) {
                 myScheduler.pauseJob(jobKey);
                 scheduleRepository.pauseJob(id);
-                response.setMessage("狀態改變成功，排程由" + ScheduleStatusEnum.ENABLE.getTrans() + "變為" + ScheduleStatusEnum.DISABLE.getTrans());
+                builder.message("狀態改變成功，排程由" + ScheduleStatusEnum.ENABLE.getTrans() + "變為" + ScheduleStatusEnum.DISABLE.getTrans());
             } else if (ScheduleStatusEnum.DISABLE.getCode().equals(schedule.getStatus())) {
                 myScheduler.resumeJob(jobKey);
                 scheduleRepository.resumeJob(id);
-                response.setMessage("狀態改變成功，排程由" + ScheduleStatusEnum.DISABLE.getTrans() + "變為" + ScheduleStatusEnum.ENABLE.getTrans());
+                builder.message("狀態改變成功，排程由" + ScheduleStatusEnum.DISABLE.getTrans() + "變為" + ScheduleStatusEnum.ENABLE.getTrans());
             }
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
-        response.setData(true);
-        response.setStatus(true);
-        return response;
+        return builder.status(true).content(true).build();
     }
 
     @Override
@@ -286,40 +277,31 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public BaseResponse delete(int id) {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Schedule schedule = scheduleRepository.getById(id);
         if (schedule == null) {
-            response.setMessage("查無此排程");
-            response.setStatus(false);
-            return response;
+           return builder.message("查無此排程").status(false).build();
         }
         JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + schedule.getId(), ScheduleEnum.GROUP.getCode() + schedule.getId());
         try {
-            response.setData(myScheduler.deleteJob(jobKey));
+            builder.content(myScheduler.deleteJob(jobKey));
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
         scheduleRepository.deleteById(id);
-        response.setMessage("刪除指定排程成功");
-        response.setStatus(true);
-        return response;
+        return builder.message("刪除指定排程成功").status(true).build();
     }
 
     @Override
     public BaseResponse edit(SchedulePageRequset model) {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         if (scheduleRepository.getById(model.getId()) == null) {
-            response.setMessage("查無此排程");
-            response.setStatus(false);
-            return response;
+            return builder.message("查無此排程").status(false).build();
         }
         model.setIsEdit(true);
         model.setLastExecute(scheduleRepository.getLastExecute(model.getId()));
         this.delete(model.getId());
-        response.setData(this.create(model).getStatus());
-        response.setMessage("修改成功");
-        response.setStatus(true);
-        return response;
+        return builder.content(this.create(model).getStatus()).message("修改成功").status(true).build();
     }
 
 }
