@@ -1,6 +1,6 @@
 package com.tgfc.library.service;
 
-import com.tgfc.library.request.SchedulePageRequset;
+import com.tgfc.library.request.SchedulePageRequest;
 import com.tgfc.library.response.BaseResponse;
 
 import java.text.ParseException;
@@ -13,7 +13,7 @@ public interface IScheduleService {
      * Job的name與group和Trigger的group相同，Trigger為每日x點x分執行
      * 讀取表得到需要通知的對象名單scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
      */
-    BaseResponse create(SchedulePageRequset model);
+    BaseResponse create(SchedulePageRequest model);
 
     /**
      * 刪除排程
@@ -25,12 +25,12 @@ public interface IScheduleService {
      * 編輯排程
      * 邏輯:通過排程ID編輯該排程
      */
-    BaseResponse edit(SchedulePageRequset model);
+    BaseResponse edit(SchedulePageRequest model);
 
     /**
      * 查詢排程
      */
-    BaseResponse list(SchedulePageRequset model) throws ParseException;
+    BaseResponse list(SchedulePageRequest model) throws ParseException;
 
     /**
      * 改變排成狀態

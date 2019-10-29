@@ -7,7 +7,7 @@ import com.tgfc.library.enums.ScheduleEnum;
 import com.tgfc.library.enums.ScheduleStatusEnum;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IScheduleRepository;
-import com.tgfc.library.request.SchedulePageRequset;
+import com.tgfc.library.request.SchedulePageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.SchedulePageResponse;
 import com.tgfc.library.schedule.job.NoticeJob;
@@ -57,7 +57,7 @@ public class ScheduleService implements IScheduleService {
      * 動態查詢各參數(排程名稱，起始時間，結束時間)
      */
     @Override
-    public BaseResponse list(SchedulePageRequset model) {
+    public BaseResponse list(SchedulePageRequest model) {
         builder = new BaseResponse.Builder();
         EntityManager entityManager = emf.createEntityManager();
         EntityTransaction etx = entityManager.getTransaction();
@@ -90,7 +90,7 @@ public class ScheduleService implements IScheduleService {
         return builder.content(resultMap).message("查詢成功").status(true).build();
     }
 
-    private SchedulePageRequset initKeyword(SchedulePageRequset model) {
+    private SchedulePageRequest initKeyword(SchedulePageRequest model) {
         model.setPageNumber(model.getPageNumber() < 1 ? 1 : model.getPageNumber());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
@@ -124,7 +124,7 @@ public class ScheduleService implements IScheduleService {
      * 新增排程
      */
     @Override
-    public BaseResponse create(SchedulePageRequset model) {
+    public BaseResponse create(SchedulePageRequest model) {
         builder = new BaseResponse.Builder();
         try {
         Schedule schedule = saveSchedule(model);
@@ -140,14 +140,14 @@ public class ScheduleService implements IScheduleService {
         return builder.content(true).message("新增排程成功").status(true).build();
     }
 
-    private void setScheduleStatus(SchedulePageRequset model) {
+    private void setScheduleStatus(SchedulePageRequest model) {
         if (ScheduleStatusEnum.DISABLE.getCode().equals(model.getScheduleStatus())) {
             this.changeStatus(model.getId());
         }
         scheduleRepository.setStatus(model.getId(), model.getScheduleStatus());
     }
 
-    private SchedulePageRequset getAndSetIdWithModelAndPo(SchedulePageRequset model, Schedule schedule) {
+    private SchedulePageRequest getAndSetIdWithModelAndPo(SchedulePageRequest model, Schedule schedule) {
         if (model.getIsEdit() != null && model.getIsEdit()) {
             scheduleRepository.setId(schedule.getId(), model.getId());
         } else {
@@ -157,7 +157,7 @@ public class ScheduleService implements IScheduleService {
         return model;
     }
 
-    private Schedule saveSchedule(SchedulePageRequset model) {
+    private Schedule saveSchedule(SchedulePageRequest model) {
         Schedule schedule = modelToPo(model);
         schedule.setStatus(ScheduleStatusEnum.UNDONE.getCode());
         if (model.getIsEdit() != null && model.getIsEdit()) {
@@ -169,7 +169,7 @@ public class ScheduleService implements IScheduleService {
         return scheduleRepository.save(schedule);
     }
 
-    private Schedule modelToPo(SchedulePageRequset model) {
+    private Schedule modelToPo(SchedulePageRequest model) {
         Schedule schedule = new Schedule();
         schedule.setName(model.getName());
         schedule.setType(model.getType());
@@ -181,8 +181,8 @@ public class ScheduleService implements IScheduleService {
         return schedule;
     }
 
-    private SchedulePageRequset poToModel(Schedule schedule) {
-        SchedulePageRequset model = new SchedulePageRequset();
+    private SchedulePageRequest poToModel(Schedule schedule) {
+        SchedulePageRequest model = new SchedulePageRequest();
         model.setName(schedule.getName());
         model.setType(schedule.getType());
         model.setNoticeTime(schedule.getNoticeTime());
@@ -194,7 +194,7 @@ public class ScheduleService implements IScheduleService {
     }
 
 
-    private JobDetail getJob(SchedulePageRequset model) {
+    private JobDetail getJob(SchedulePageRequest model) {
         JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + model.getId(), ScheduleEnum.GROUP.getCode() + model.getId());
         JobDetail job = JobBuilder.newJob(NoticeJob.class)
                 .withIdentity(jobKey)
@@ -289,7 +289,7 @@ public class ScheduleService implements IScheduleService {
     }
 
     @Override
-    public BaseResponse edit(SchedulePageRequset model) {
+    public BaseResponse edit(SchedulePageRequest model) {
         builder = new BaseResponse.Builder();
         if (scheduleRepository.getById(model.getId()) == null) {
             return builder.message("查無此排程").status(false).build();

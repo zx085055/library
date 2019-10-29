@@ -1,7 +1,7 @@
 package com.tgfc.library.controller;
 
 import com.tgfc.library.enums.PermissionEnum;
-import com.tgfc.library.request.SchedulePageRequset;
+import com.tgfc.library.request.SchedulePageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IScheduleService;
 import org.springframework.web.bind.annotation.*;
@@ -21,34 +21,34 @@ public class ScheduleController {
 
     /**
      * 新增排程
-     * 傳入值:SchedulePageRequset (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
+     * 傳入值:SchedulePageRequest (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * 回傳值:Boolean
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/schedule/create")
-    public BaseResponse create(@RequestBody SchedulePageRequset model) {
+    public BaseResponse create(@RequestBody SchedulePageRequest model) {
         return scheduleService.create(model);
     }
 
     /**
      * 編輯排程
-     * 傳入值:SchedulePageRequset (id，排程名稱，類型，通知時間，起始日期，結束日期，狀態)
+     * 傳入值:SchedulePageRequest (id，排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * 回傳值:Boolean
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/schedule/edit")
-    public BaseResponse edit(@RequestBody SchedulePageRequset model) {
+    public BaseResponse edit(@RequestBody SchedulePageRequest model) {
         return scheduleService.edit(model);
     }
 
     /**
      * 查詢排程列表
-     * 傳入值:SchedulePageRequset (排程名稱，起始日期，結束日期，分頁頁數，分頁容量)
+     * 傳入值:SchedulePageRequest (排程名稱，起始日期，結束日期，分頁頁數，分頁容量)
      * 回傳值:SchedulePageResponse (排程名稱，起始日期，結束日期，上次執行情況，狀態)
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/schedule/list")
-    public BaseResponse list(@RequestBody SchedulePageRequset model) throws ParseException {
+    public BaseResponse list(@RequestBody SchedulePageRequest model) throws ParseException {
         return scheduleService.list(model);
     }
 
@@ -70,7 +70,7 @@ public class ScheduleController {
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PutMapping("/schedule/changeStatus")
-    public BaseResponse changeStatus(@RequestBody SchedulePageRequset model) {
+    public BaseResponse changeStatus(@RequestBody SchedulePageRequest model) {
         return scheduleService.changeStatus(model.getId());
     }
 

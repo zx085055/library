@@ -3,7 +3,7 @@ package com.tgfc.library.request;
 import java.sql.Time;
 import java.util.Date;
 
-public class SchedulePageRequset extends PageableRequest {
+public class SchedulePageRequest extends PageableRequest {
     private Integer id;
     private String type;
     private String name;
