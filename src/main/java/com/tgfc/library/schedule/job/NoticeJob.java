@@ -86,11 +86,11 @@ public class NoticeJob implements Job {
         return success;
     }
 
-    private void setLastExecute(int id, Boolean success) {
+    private int setLastExecute(int id, Boolean success) {
         if (success) {
-            scheduleRepository.setLastExecute(id, JobLastExecuteEnum.DONE.getCode());
+             return scheduleRepository.setLastExecute(id, JobLastExecuteEnum.DONE.getCode());
         } else {
-            scheduleRepository.setLastExecute(id, JobLastExecuteEnum.FAIL.getCode());
+            return scheduleRepository.setLastExecute(id, JobLastExecuteEnum.FAIL.getCode());
         }
     }
 
