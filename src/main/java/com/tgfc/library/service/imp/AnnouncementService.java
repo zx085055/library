@@ -25,7 +25,7 @@ public class AnnouncementService implements IAnnouncementService {
     @Autowired
     IEmployeeRepositorySafty employeeRepository;
 
-    BaseResponse.Builder builder;
+    private BaseResponse.Builder builder;
 
     @Override
     @Transactional(readOnly = true)
