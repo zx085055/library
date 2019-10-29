@@ -42,7 +42,7 @@ public class AnnouncementService implements IAnnouncementService {
         } else {
             announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeIntervalAndStatus(title, startTime, endTime, true, pageable);
         }
-        return builder.content(announcements).message("公告查詢成功").build();
+        return builder.content(announcements).status(true).message("公告查詢成功").build();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class AnnouncementService implements IAnnouncementService {
         EmployeeSafty employee = employeeRepository.findById(id).get();
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
-        builder.message("新增公告成功");
+        builder.status(true).message("新增公告成功");
         return builder.build();
     }
 
@@ -71,7 +71,7 @@ public class AnnouncementService implements IAnnouncementService {
         BeanUtils.copyProperties(announcement, existAnnouncement);
         existAnnouncement.setEmployee(employee);
         announcementRepository.save(existAnnouncement);
-        builder.message("公告編輯成功");
+        builder.status(true).message("公告編輯成功");
         return builder.build();
     }
 
@@ -83,7 +83,7 @@ public class AnnouncementService implements IAnnouncementService {
             return builder.build();
         }
         announcementRepository.deleteById(id);
-        builder.message("公告刪除成功");
+        builder.status(true).message("公告刪除成功");
         return builder.build();
     }
 
@@ -97,7 +97,7 @@ public class AnnouncementService implements IAnnouncementService {
         existAnnouncement.setEmployee(employee);
         existAnnouncement.setStatus(announcement.getStatus());
         announcementRepository.save(existAnnouncement);
-        builder.message("公告狀態切換成功");
+        builder.status(true).message("公告狀態切換成功");
         return builder.build();
     }
 
@@ -105,6 +105,6 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse getAnnouncementsByTimeInterval(Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Announcement> announcements = announcementRepository.getAnnouncementsByTimeInterval(new Date(), true, pageable);
-        return builder.content(announcements).message("公告未過期查詢成功").build();
+        return builder.content(announcements).status(true).message("公告未過期查詢成功").build();
     }
 }
