@@ -16,9 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Transactional
 @Service
 public class RecommendService implements IRecommendService {
@@ -32,16 +29,16 @@ public class RecommendService implements IRecommendService {
     @Autowired
     IBookRepository bookRepository;
 
-    BaseResponse.Builder builder ;
+    BaseResponse.Builder builder;
 
     @Override
     @Transactional(readOnly = true)
-    public BaseResponse select(String name,Pageable pageable) {
+    public BaseResponse select(String name, Pageable pageable) {
         builder = new BaseResponse.Builder();
-        if (name==null){
+        if (name == null) {
             Page<Recommend> recommends = recommendRepository.findAll(pageable);
             builder.content(recommends);
-        }else {
+        } else {
             Page<Recommend> recommends = recommendRepository.getRecommendsByNameLike(name, pageable);
             builder.content(recommends);
         }
@@ -52,12 +49,12 @@ public class RecommendService implements IRecommendService {
     @Override
     public BaseResponse insert(Recommend recommend) {
         builder = new BaseResponse.Builder();
-        Recommend existRecommend  = recommendRepository.findRecommendByIsbn(recommend.getIsbn());
-        if (existRecommend!=null){
+        Recommend existRecommend = recommendRepository.findRecommendByIsbn(recommend.getIsbn());
+        if (existRecommend != null) {
             builder.status(false).message("已存在此推薦");
-        }else if (bookRepository.findByIsbn(recommend.getIsbn()).size() > 0){
+        } else if (bookRepository.findByIsbn(recommend.getIsbn()).size() > 0) {
             builder.status(false).message("已存在此本書籍");
-        }else {
+        } else {
             String id = ContextUtil.getAccount();
             EmployeeSafty employee = employeeRepository.findById(id).get();
             recommend.setEmployee(employee);
@@ -72,12 +69,12 @@ public class RecommendService implements IRecommendService {
     public BaseResponse update(Recommend recommend) {
         builder = new BaseResponse.Builder();
         Boolean exist = recommendRepository.existsById(recommend.getId());
-        if (exist){
+        if (exist) {
             Recommend dateRecommend = recommendRepository.getOne(recommend.getId());
-            BeanUtils.copyProperties(recommend,dateRecommend);
+            BeanUtils.copyProperties(recommend, dateRecommend);
             recommendRepository.save(dateRecommend);
             builder.message("成功更新一筆");
-        }else {
+        } else {
             builder.status(false).message("無此推薦");
         }
 
@@ -88,10 +85,10 @@ public class RecommendService implements IRecommendService {
     public BaseResponse delete(Integer id) {
         builder = new BaseResponse.Builder();
         boolean exist = recommendRepository.existsById(id);
-        if (exist){
+        if (exist) {
             recommendRepository.deleteById(id);
             builder.message("成功刪除一筆");
-        }else {
+        } else {
             builder.status(false).message("無此推薦");
         }
         return builder.build();
