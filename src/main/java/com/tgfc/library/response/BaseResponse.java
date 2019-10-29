@@ -77,6 +77,11 @@ public class BaseResponse {
             return this;
         }
 
+        public Builder content(Object data) {
+            this.data = data;
+            return this;
+        }
+
         public Builder content(Page page) {
             this.page = page;
             return this;
