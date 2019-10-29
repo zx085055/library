@@ -233,46 +233,42 @@ public class ScheduleService implements IScheduleService {
 
     @Override
     public BaseResponse deleteAllJobs() {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         try {
-            response.setData(myScheduler.deleteAllJobs());
+            builder.content(myScheduler.deleteAllJobs());
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
         scheduleRepository.deleteAll();
-        response.setMessage("全部刪除完成");
-        response.setStatus(true);
-        return response;
+        return builder.message("全部刪除完成").status(true).build();
     }
 
     @Override
     public BaseResponse pauseAll() {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         try {
             myScheduler.pauseAll();
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
         scheduleRepository.pauseAll();
-        response.setData(true);
-        response.setMessage("全部排程暫停");
-        response.setStatus(true);
-        return response;
+        return builder.content(true).status(true).message("全部排程暫停").build();
     }
 
     @Override
     public BaseResponse resumeAll() {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         try {
             myScheduler.resumeAll();
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
         scheduleRepository.resumeAll();
-        response.setData(true);
-        response.setMessage("全部暫停排程恢復");
-        response.setStatus(true);
-        return response;
+//        response.setData(true);
+//        response.setMessage("全部暫停排程恢復");
+//        response.setStatus(true);
+//        return response;
+        return builder.content(true).status(true).message("全部暫停排程恢復").build();
     }
 
     @Override
