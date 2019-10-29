@@ -42,7 +42,7 @@ public class RecommendService implements IRecommendService {
             Page<Recommend> recommends = recommendRepository.getRecommendsByNameLike(name, pageable);
             builder.content(recommends);
         }
-        builder.message("成功查詢");
+        builder.message("成功查詢").status(true);
         return builder.build();
     }
 
@@ -60,7 +60,7 @@ public class RecommendService implements IRecommendService {
             recommend.setEmployee(employee);
             recommend.setStatus(RecommendEnum.RECOMMEND_ALIVE.getCode());
             recommendRepository.save(recommend);
-            builder.message("成功新增一筆");
+            builder.message("成功新增一筆").status(true);
         }
         return builder.build();
     }
@@ -73,7 +73,7 @@ public class RecommendService implements IRecommendService {
             Recommend dateRecommend = recommendRepository.getOne(recommend.getId());
             BeanUtils.copyProperties(recommend, dateRecommend);
             recommendRepository.save(dateRecommend);
-            builder.message("成功更新一筆");
+            builder.message("成功更新一筆").status(true);
         } else {
             builder.status(false).message("無此推薦");
         }
@@ -87,7 +87,7 @@ public class RecommendService implements IRecommendService {
         boolean exist = recommendRepository.existsById(id);
         if (exist) {
             recommendRepository.deleteById(id);
-            builder.message("成功刪除一筆");
+            builder.message("成功刪除一筆").status(true);
         } else {
             builder.status(false).message("無此推薦");
         }

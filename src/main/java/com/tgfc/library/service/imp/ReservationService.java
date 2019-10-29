@@ -47,7 +47,7 @@ public class ReservationService implements IReservationService {
             all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable);
         }
         builder = new BaseResponse.Builder();
-        return builder.content(all).status(true).message("預約查詢成功").build();
+        return builder.content(all).message("預約查詢成功").status(true).build();
     }
 
     @Override
@@ -89,6 +89,7 @@ public class ReservationService implements IReservationService {
                 reservation.setEndDate(new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000));
                 builder.message("成功新增一筆預約");
             }
+            builder.status(true);
             reservation.setStatus(status);
             reservation.setEmployee(employeeRepository.findById(empId).get());
             reservationRepository.save(reservation);
@@ -104,7 +105,7 @@ public class ReservationService implements IReservationService {
             Reservation dataReserv = reservationRepository.getOne(reservation.getId());
             BeanUtils.copyProperties(reservation, dataReserv);
             reservationRepository.save(dataReserv);
-            builder.status(true).message("成功新增一筆");
+            builder.message("成功新增一筆").status(true);
         } else {
             builder.message("無此預約").status(false);
         }
@@ -117,7 +118,7 @@ public class ReservationService implements IReservationService {
         boolean exist = reservationRepository.existsById(id);
         if (exist) {
             reservationRepository.deleteById(id);
-            builder.status(true).message("成功刪除一筆");
+            builder.message("成功刪除一筆").status(true);
         } else {
             builder.message("無此資料").status(false);
         }
@@ -130,7 +131,7 @@ public class ReservationService implements IReservationService {
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
-        return  builder.content(reservations).status(true).message("查詢成功").build();
+        return  builder.content(reservations).message("查詢成功").status(true).build();
     }
 
 
@@ -169,7 +170,7 @@ public class ReservationService implements IReservationService {
     public BaseResponse findAll(Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Reservation> all = reservationRepository.findAll(pageable);
-        return builder.content(all).status(true).message("查詢成功").build();
+        return builder.content(all).message("查詢成功").status(true).build();
     }
 
     @Override
@@ -212,7 +213,7 @@ public class ReservationService implements IReservationService {
         builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByEmpId(empId,pageable);
-        return builder.content(reservations).status(true).message("查詢成功").build();
+        return builder.content(reservations).message("查詢成功").status(true).build();
     }
 
     @Override
@@ -220,6 +221,6 @@ public class ReservationService implements IReservationService {
         builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
-        return builder.content(reservations).status(true).message("查詢成功").build();
+        return builder.content(reservations).message("查詢成功").status(true).build();
     }
 }

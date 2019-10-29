@@ -44,10 +44,10 @@ public class RecordsService implements IRecordsService {
         builder = new BaseResponse.Builder();
         if (status.equals(RecordsStatusEnum.RECORDSSTATUS_ALL.getCode())) {
             Page<Records> records = recordsRepository.getRecordsByNameLike(keyword, pageable);
-            builder.content(records).status(true).message("出借全查成功");
+            builder.content(records).message("出借全查成功").status(true);
         } else {
             Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
-            builder.content(records).status(true).message("出借查詢成功");
+            builder.content(records).message("出借查詢成功").status(true);
         }
 
         return builder.build();
