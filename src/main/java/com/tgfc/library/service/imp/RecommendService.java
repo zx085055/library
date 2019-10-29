@@ -32,80 +32,68 @@ public class RecommendService implements IRecommendService {
     @Autowired
     IBookRepository bookRepository;
 
+    BaseResponse.Builder builder ;
+
     @Override
     @Transactional(readOnly = true)
     public BaseResponse select(String name,Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         if (name==null){
             Page<Recommend> recommends = recommendRepository.findAll(pageable);
-            Map<String,Object> data = new HashMap<>();
-            data.put("totalCount",recommends.getTotalElements());
-            data.put("results",recommends.getContent());
-            baseResponse.setData(data);
+            builder.content(recommends);
         }else {
             Page<Recommend> recommends = recommendRepository.getRecommendsByNameLike(name, pageable);
-            Map<String,Object> data = new HashMap<>();
-            data.put("totalCount",recommends.getTotalElements());
-            data.put("results",recommends.getContent());
-            baseResponse.setData(data);
+            builder.content(recommends);
         }
-        baseResponse.setMessage("成功查詢");
-        baseResponse.setStatus(true);
-        return baseResponse;
+        builder.message("成功查詢");
+        return builder.build();
     }
 
     @Override
     public BaseResponse insert(Recommend recommend) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Recommend existRecommend  = recommendRepository.findRecommendByIsbn(recommend.getIsbn());
         if (existRecommend!=null){
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("已存在此推薦");
+            builder.status(false).message("已存在此推薦");
         }else if (bookRepository.findByIsbn(recommend.getIsbn()).size() > 0){
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("已存在此本書籍");
+            builder.status(false).message("已存在此本書籍");
         }else {
             String id = ContextUtil.getAccount();
             EmployeeSafty employee = employeeRepository.findById(id).get();
             recommend.setEmployee(employee);
             recommend.setStatus(RecommendEnum.RECOMMEND_ALIVE.getCode());
             recommendRepository.save(recommend);
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("成功新增一筆");
+            builder.message("成功新增一筆");
         }
-        return baseResponse;
+        return builder.build();
     }
 
     @Override
     public BaseResponse update(Recommend recommend) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Boolean exist = recommendRepository.existsById(recommend.getId());
         if (exist){
             Recommend dateRecommend = recommendRepository.getOne(recommend.getId());
             BeanUtils.copyProperties(recommend,dateRecommend);
             recommendRepository.save(dateRecommend);
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("成功更新一筆");
+            builder.message("成功更新一筆");
         }else {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("無此推薦");
+            builder.status(false).message("無此推薦");
         }
 
-        return baseResponse;
+        return builder.build();
     }
 
     @Override
     public BaseResponse delete(Integer id) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         boolean exist = recommendRepository.existsById(id);
         if (exist){
             recommendRepository.deleteById(id);
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("成功刪除一筆");
+            builder.message("成功刪除一筆");
         }else {
-            baseResponse.setStatus(false);
-            baseResponse.setMessage("無此推薦");
+            builder.status(false).message("無此推薦");
         }
-        return baseResponse;
+        return builder.build();
     }
 }

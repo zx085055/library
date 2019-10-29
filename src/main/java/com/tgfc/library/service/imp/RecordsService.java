@@ -35,59 +35,45 @@ public class RecordsService implements IRecordsService {
     @Autowired
     IReservationRepository reservationRepository;
 
+    BaseResponse.Builder builder ;
+
     @Override
     @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         if (status.equals(RecordsStatusEnum.RECORDSSTATUS_ALL.getCode())) {
             Page<Records> records = recordsRepository.getRecordsByNameLike(keyword, pageable);
-            Map<String,Object> data = new HashMap<>();
-            data.put("totalCount",records.getTotalElements());
-            data.put("results",records.getContent());
-            baseResponse.setData(data);
-            baseResponse.setMessage("出借全查成功");
-            baseResponse.setStatus(true);
+            builder.content(records).message("出借全查成功");
         } else {
             Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
-            Map<String,Object> data = new HashMap<>();
-            data.put("totalCount",records.getTotalElements());
-            data.put("results",records.getContent());
-            baseResponse.setData(data);
-            baseResponse.setMessage("出借查詢成功");
-            baseResponse.setStatus(true);
+            builder.content(records).message("出借查詢成功");
         }
 
-        return baseResponse;
+        return builder.build();
     }
 
     @Override
     public BaseResponse delete(Integer id) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         if (!recordsRepository.existsById(id)) {
-            baseResponse.setMessage("出借無此資料");
-            baseResponse.setStatus(false);
-            return baseResponse;
+           return builder.message("出借無此資料").status(false).build();
         }
         recordsRepository.deleteById(id);
-        baseResponse.setMessage("出借刪除成功");
-        baseResponse.setStatus(true);
-        return baseResponse;
+        return builder.message("出借刪除成功").build();
     }
 
     @Override
     public BaseResponse returnNotify(SendMailRequest model) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         Records records = recordsRepository.findById(model.getId()).get();
         model.setEmail(employeeRepository.findById(records.getBorrowId()).get().getEmail());
         MailUtil.sendMail(model.getTitle(), model.getContext(), model.getEmail());
-        baseResponse.setMessage("還書通知成功");
-        baseResponse.setStatus(true);
-        return baseResponse;
+        return builder.message("還書通知成功").build();
     }
 
     @Override
     public BaseResponse returnBook(Integer id) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         Records records = recordsRepository.findById(id).get();
         Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), records.getBook().getId());
         if(nextReservation!=null) {
@@ -101,62 +87,36 @@ public class RecordsService implements IRecordsService {
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
         records.getBook().setStatus(BookStatusEnum.BOOK_STATUS_INSIDE.getCode());
         recordsRepository.save(records);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("歸還成功");
-        return baseResponse;
+        return builder.message("歸還成功").build();
     }
 
     @Override
     public BaseResponse findAll(Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         Page<Records> records = recordsRepository.findAll(pageable);
-        Map<String ,Object> data = new HashMap<>();
-        data.put("totalCount",records.getTotalElements());
-        data.put("results",records.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return builder.content(records).message("查詢成功").build();
     }
 
     @Override
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         Page<Records> reservations = recordsRepository.findByTimeInterval(startDate, endDate, pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",reservations.getTotalElements());
-        data.put("results",reservations.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return builder.content(reservations).message("查詢成功").build();
     }
 
     @Override
     public BaseResponse findByEmpId(Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Records> reservations = recordsRepository.getRecordsByEmpId(empId,pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",reservations.getTotalElements());
-        data.put("results",reservations.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return builder.content(reservations).message("查詢成功").build();
     }
 
     @Override
     public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder=new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Records> reservations = recordsRepository.findByTimeIntervalWithEmpId(empId,startDate, endDate, pageable);
-        Map<String,Object> data = new HashMap<>();
-        data.put("totalCount",reservations.getTotalElements());
-        data.put("results",reservations.getContent());
-        baseResponse.setData(data);
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return builder.content(reservations).message("查詢成功").build();
     }
 }
