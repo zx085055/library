@@ -76,6 +76,9 @@ public class ReservationService implements IReservationService {
             int status;
             Date startDate = new Date();
             if (bookRepository.checkBookLended(bookId, BookStatusEnum.BOOK_STATUS_LEND.getCode()) != null) {
+                if (recordsRepository.checkOwnBorrowed(bookId)!=null){
+                    return builder.message("你正借閱本書中").build();
+                }
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 builder.message("此本書出借中,已加入排隊");
                 reservation.setStartDate(startDate);

@@ -20,6 +20,9 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Override
     Page<Records> findAll(Pageable pageable);
 
+    @Query(value = "SELECT * FROM `records` WHERE records.id = (SELECT MAX(records.id) FROM `records` where records.book_id = ?1",nativeQuery = true)
+    Records checkOwnBorrowed(Integer id);
+
     @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE (r.borrowUsername LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')) AND r.status=?2")
     Page<Records> getRecordsByNameLikeAndStatus(String name, Integer status, Pageable pageable);
 
