@@ -16,12 +16,10 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +37,7 @@ public class BookService implements IBookService {
     private final
     IRecommendRepository iRecommendRepository;
 
+    private BaseResponse.Builder builder;
 
     public BookService(IBookRepository bookDataRepository, IPhotoService photoService, IRecommendRepository iRecommendRepository) {
         this.bookDataRepository = bookDataRepository;
@@ -48,8 +47,8 @@ public class BookService implements IBookService {
 
 
     @Override
-    public BaseResponse getBookList(BookDataPageRequest model) throws FileNotFoundException {
-        BaseResponse response = new BaseResponse();
+    public BaseResponse getBookList(BookDataPageRequest model)  {
+        builder  = new BaseResponse.Builder();
         Pageable pageable = model.getPageable();
         Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", model.getKeyword(), pageable);
 
@@ -70,33 +69,25 @@ public class BookService implements IBookService {
 
         BookCountResponse bookCountResponse = new BookCountResponse();
         if (pageBook.isEmpty()) {
-            response.setMessage("找不到資料");
-            response.setStatus(false);
-            bookCountResponse.setList(list);
-            return response;
+            return builder.content(list).message("找不到資料").status(false).build();
         }
         bookCountResponse.setList(list);
         bookCountResponse.setCount(pageBook.getTotalElements());
-        response.setData(bookCountResponse);
-        response.setStatus(true);
-        return response;
+        return builder.content(bookCountResponse).status(true).build();
     }
 
     @Override
     public BaseResponse getById(int id) {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Book book = bookDataRepository.getById(id);
         if (book.getPhotoName() != null && book.getPhotoName().length() != 0)
             book.setPhotoName(photoService.getApiPhotoUrl(book.getPhotoName()));
-        response.setMessage("");
-        response.setStatus(true);
-        response.setData(book);
-        return response;
+        return builder.content(book).message("").status(true).build();
     }
 
     @Override
     public BaseResponse checkISBN(BookAddRequest model) {
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         List<Book> exist;
         if (model.getId() != null && !"".equals(model.getId())) {
             exist = bookDataRepository.findByIsbnAndId(model.getId(), model.getIsbn());
@@ -104,13 +95,11 @@ public class BookService implements IBookService {
             exist = bookDataRepository.findByIsbn(model.getIsbn());
         }
         if (exist.size() > 0) {
-            response.setMessage("ISBN碼不可以重複");
-            response.setStatus(false);
-            return response;
+            return builder.message("ISBN碼不可以重複").status(false).build();
+
         } else {
-            response.setMessage("ISBN碼沒有重複");
-            response.setStatus(true);
-            return response;
+            return builder.message("ISBN碼沒有重複").status(true).build();
+
         }
     }
 
@@ -118,12 +107,12 @@ public class BookService implements IBookService {
     public BaseResponse upData(MultipartFile files, BookAddRequest addBook) {
 
 
-        BaseResponse response = new BaseResponse();
+        builder = new BaseResponse.Builder();
         //判斷status是否正確
 
         if (BookStatusEnum.getStatus(addBook.getStatus()) == null) {
-            response.setMessage("狀態錯誤");
-            return response;
+            return builder.message("狀態錯誤").build();
+
         }
         //用Id去資料庫找出舊資料
         Book book = bookDataRepository.getById(addBook.getId());
@@ -132,11 +121,6 @@ public class BookService implements IBookService {
             Recommend recommend = iRecommendRepository.findRecommendByIsbn(addBook.getIsbn());
             if (recommend != null)
                 recommend.setStatus(2);
-        }
-
-        response = checkISBN(addBook);
-        if (!response.getStatus()) {
-            return response;
         }
 
 
@@ -156,71 +140,65 @@ public class BookService implements IBookService {
         try {
             BeanUtils.copyProperties(addBook, book);
         } catch (BeansException e) {
-            response.setMessage("儲存失敗");
-            return response;
+            return builder.message("儲存失敗").build();
+
         }
         Book save;
         try {
             save = bookDataRepository.save(book);
         } catch (Exception e) {
-            response.setMessage("修改失敗");
-            return response;
+            return  builder.message("修改失敗").build();
+
         }
 
         if (save != null) {
-            response.setStatus(true);
-            response.setMessage("編輯成功");
-            return response;
+             return builder.message("編輯成功").status(true).build();
+
         }
 
+        return builder.message("異常狀況").build();
 
-        return response;
     }
 
     @Override
     public BaseResponse deleteBook(int id) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Book book = bookDataRepository.getById(id);
         if (book == null) {
-            baseResponse.setMessage("無此ID");
-            return baseResponse;
-        }
+            return builder.message("無此ID").build();
+       }
         try {
             bookDataRepository.deleteById(id);
         } catch (Exception e) {
-            baseResponse.setMessage("無法刪除");
-            e.printStackTrace();
+            return builder.message("無法刪除").build();
         }
 
 
         if (bookDataRepository.getById(id) == null) {
-            if (book.getPhotoName() != "" && book.getPhotoName() != null) {
+            if (book.getPhotoName() != null && !book.getPhotoName() .equals("")) {
                 photoService.deletePhoto(book.getPhotoName());
             }
-            baseResponse.setStatus(true);
-            baseResponse.setMessage("刪除成功");
+           return  builder.message("刪除成功").status(true).build();
+
         }
-        return baseResponse;
+            return builder.message("異常狀況").build();
+
     }
 
     @Override
     public BaseResponse findAll(Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder  = new BaseResponse.Builder();
         Page<Book> books = bookDataRepository.findAll(pageable);
-        baseResponse.setData(books.getContent());
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢完成");
-        return baseResponse;
+        return builder.content(books.getContent()).message("查詢完成").status(true).build();
+
     }
 
     @Override
     public BaseResponse findByKeyword(String keyword, Pageable pageable) {
-        BaseResponse baseResponse = new BaseResponse();
+        builder = new BaseResponse.Builder();
         Page<Book> books = bookDataRepository.findBookByKeyWord(keyword, pageable);
-        baseResponse.setData(books.getContent());
-        baseResponse.setStatus(true);
-        baseResponse.setMessage("查詢成功");
-        return baseResponse;
+        return builder.content(books.getContent()).message("查詢成功").status(true).build();
+
     }
 
 
