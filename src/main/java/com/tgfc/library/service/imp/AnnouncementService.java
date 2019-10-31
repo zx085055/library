@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
@@ -104,7 +106,12 @@ public class AnnouncementService implements IAnnouncementService {
     @Override
     public BaseResponse getAnnouncementsByTimeInterval(Pageable pageable) {
         builder = new BaseResponse.Builder();
-        Page<Announcement> announcements = announcementRepository.getAnnouncementsByTimeInterval(new Date(), true, pageable);
+        Page<Announcement> announcements = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        try {
+            announcements = announcementRepository.getAnnouncementsByTimeInterval(sdf.parse(sdf.format(new Date())), true, pageable);
+        } catch (Exception e) {
+        }
         return builder.content(announcements).status(true).message("公告未過期查詢成功").build();
     }
 }
