@@ -11,12 +11,15 @@ import org.springframework.stereotype.Component;
 import java.time.LocalTime;
 import java.util.Date;
 
-/**
- * 觸發器 : 固定一天執行一次
- * 傳入值 : SchedulePageRequest (需要 NoticeTime, StartTime, EndTime )
- */
+
 @Component
 public class OneDayOneTimeTrigger {
+    /**
+     * 觸發器 : 固定一天執行一次
+     * 傳入值 : SchedulePageRequest (需要 NoticeTime, StartTime, EndTime )
+     * @param model
+     * @return CronTrigger
+     */
     public CronTrigger getTrigger(SchedulePageRequest model) {
         LocalTime noticeTime = model.getNoticeTime().toLocalTime();
 

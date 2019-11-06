@@ -16,15 +16,21 @@ public class MyScheduler {
     private Scheduler scheduler;
 
     /**
-     *
+     * 新增Job
+     * @param job
+     * @param trigger
+     * @return Boolean
+     * @throws SchedulerException
      */
     public Boolean addJob(JobDetail job, Trigger trigger) throws SchedulerException {
         scheduler.scheduleJob(job, trigger);
         return null;
     }
 
+
     /**
      * 啟動一個Scheduler
+     * @throws SchedulerException
      */
     public void start() throws SchedulerException {
         scheduler.start();
@@ -32,6 +38,7 @@ public class MyScheduler {
 
     /**
      * 关闭调度器
+     * @throws SchedulerException
      */
     public void shutdown() throws SchedulerException {
         scheduler.shutdown();
@@ -39,6 +46,8 @@ public class MyScheduler {
 
     /**
      * 檢查是否啟動
+     * @return boolean
+     * @throws SchedulerException
      */
     public boolean isStarted() throws SchedulerException {
         return scheduler.isStarted();
@@ -46,13 +55,21 @@ public class MyScheduler {
 
     /**
      * 停止調度Job任務
+     * @param triggerkey
+     * @return boolean
+     * @throws SchedulerException
      */
     public boolean unscheduleJob(TriggerKey triggerkey) throws SchedulerException {
         return scheduler.unscheduleJob(triggerkey);
     }
 
+
     /**
      * 重新恢复触发器相关的job任务
+     * @param triggerkey
+     * @param trigger
+     * @return Date
+     * @throws SchedulerException
      */
     public Date rescheduleJob(TriggerKey triggerkey, Trigger trigger) throws SchedulerException {
         return scheduler.rescheduleJob(triggerkey, trigger);
@@ -60,9 +77,8 @@ public class MyScheduler {
 
     /**
      * 删除相关的job任务
-     *
      * @param jobkey
-     * @return
+     * @return boolean
      * @throws SchedulerException
      */
     public boolean deleteJob(JobKey jobkey) throws SchedulerException {
@@ -71,7 +87,6 @@ public class MyScheduler {
 
     /**
      * 暂停调度中所有的job任务
-     *
      * @throws SchedulerException
      */
     public void pauseAll() throws SchedulerException {
@@ -80,15 +95,17 @@ public class MyScheduler {
 
     /**
      * 恢复调度中所有的job的任务
-     *
      * @throws SchedulerException
      */
     public void resumeAll() throws SchedulerException {
         scheduler.resumeAll();
     }
 
+
     /**
      * 刪除全部job
+     * @return Boolean
+     * @throws SchedulerException
      */
     public Boolean deleteAllJobs() throws SchedulerException {
         for (String groupName : scheduler.getJobGroupNames()) {
@@ -105,8 +122,11 @@ public class MyScheduler {
         return true;
     }
 
+
     /**
      * 暫停指定Job
+     * @param jobKey
+     * @throws SchedulerException
      */
     public void pauseJob(JobKey jobKey) throws SchedulerException {
         scheduler.pauseJob(jobKey);
@@ -114,6 +134,8 @@ public class MyScheduler {
 
     /**
      * 恢復指定Job
+     * @param jobKey
+     * @throws SchedulerException
      */
     public void resumeJob(JobKey jobKey) throws SchedulerException {
         scheduler.resumeJob(jobKey);

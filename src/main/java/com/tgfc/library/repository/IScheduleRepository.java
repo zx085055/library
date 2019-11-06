@@ -19,6 +19,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 恢復全部暫停job時變更狀態
+     * @return
      */
     @Modifying
     @Transactional
@@ -27,14 +28,18 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 暫停全部job時變更狀態
+     * @return int
      */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status='2' where r.status='1'")
     int pauseAll();
 
+
     /**
      * 暫停job時變更狀態
+     * @param id
+     * @return int
      */
     @Modifying
     @Transactional
@@ -43,6 +48,8 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 恢復暫停job時變更狀態
+     * @param id
+     * @return int
      */
     @Modifying
     @Transactional
@@ -51,44 +58,67 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 設定Group
+     * @param id
+     * @param group
+     * @return int
      */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.group=?2 where r.id=?1")
     int setGroup(int id, String group);
 
+
     /**
      * 設置Job上次執行狀態紀錄
+     * @param id
+     * @param lastExecute
+     * @return int
      */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.lastExecute=?2 where r.id=?1")
     int setLastExecute(int id, String lastExecute);
 
+
     /**
      * 建立時初始化
+     * @param id
+     * @param lastExecute
+     * @param group
+     * @return int
      */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.lastExecute=?2 , r.group=?3  where r.id=?1")
     int setInitStatus(int id, String lastExecute, String group);
 
+
     /**
      * 設置狀態
+     * @param id
+     * @param Status
+     * @return int
      */
     @Modifying
     @Transactional
     @Query(value = "update Schedule r set r.status=?2 where r.id=?1")
     int setStatus(int id, String Status);
 
+
     /**
      * 查詢上次執行狀態
+     * @param id
+     * @return String
      */
     @Query("SELECT r.lastExecute from Schedule r where r.id=?1 ")
     String getLastExecute(int id);
 
+
     /**
      * 設置Id
+     * @param oleId
+     * @param newId
+     * @return int
      */
     @Modifying
     @Transactional

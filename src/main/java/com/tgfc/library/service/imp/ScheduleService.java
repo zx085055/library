@@ -52,10 +52,6 @@ public class ScheduleService implements IScheduleService {
 
     private BaseResponse.Builder builder;
 
-
-    /**
-     * 動態查詢各參數(排程名稱，起始時間，結束時間)
-     */
     @Override
     public BaseResponse list(SchedulePageRequest model) {
         builder = new BaseResponse.Builder();
@@ -108,9 +104,6 @@ public class ScheduleService implements IScheduleService {
         return model;
     }
 
-    /**
-     * schedule轉為SchedulePageResponse
-     */
     private List<SchedulePageResponse> scheduleListToResponseList(List<Schedule> list) {
         return list.stream()
                 .map(schedule -> {
@@ -120,9 +113,7 @@ public class ScheduleService implements IScheduleService {
                 }).collect(Collectors.toList());
     }
 
-    /**
-     * 新增排程
-     */
+
     @Override
     public BaseResponse create(SchedulePageRequest model) {
         builder = new BaseResponse.Builder();
@@ -204,9 +195,7 @@ public class ScheduleService implements IScheduleService {
         return job;
     }
 
-    /**
-     * 改變排程狀態 ( 啟用 <---> 禁用 )
-     */
+
     @Override
     public BaseResponse changeStatus(int id) {
         builder = new BaseResponse.Builder();

@@ -47,7 +47,8 @@ public class MailService implements IMailService {
 
     /**
      * 批量寄信
-     * 目前sendMail被擋，無法使用
+     * @param list
+     * @return Boolean
      */
     @Override
     public Boolean batchMailing(List<Map<String, String>> list) {
@@ -110,6 +111,8 @@ public class MailService implements IMailService {
 
     /**
      * 計算即將到期的時間(3天)
+     * @param date
+     * @return Date
      */
     private Date addThreeDays(java.util.Date date) {
         Calendar calendar = new GregorianCalendar();

@@ -7,49 +7,21 @@ import java.text.ParseException;
 
 public interface IScheduleService {
 
-    /**
-     * 新增排程
-     * 邏輯:根據排程類型選擇Job，預設每日執行一次通知，
-     * Job的name與group和Trigger的group相同，Trigger為每日x點x分執行
-     * 讀取表得到需要通知的對象名單scheduleMailListRequset (收件人，收件人信箱，書名，到期日期)
-     */
+
     BaseResponse create(SchedulePageRequest model);
 
-    /**
-     * 刪除排程
-     * 邏輯:通過排程ID刪除該排程
-     */
     BaseResponse delete(int id);
 
-    /**
-     * 編輯排程
-     * 邏輯:通過排程ID編輯該排程
-     */
     BaseResponse edit(SchedulePageRequest model);
 
-    /**
-     * 查詢排程
-     */
     BaseResponse list(SchedulePageRequest model) throws ParseException;
 
-    /**
-     * 改變排成狀態
-     */
     BaseResponse changeStatus(int id);
 
-    /**
-     * 刪除全部排程
-     */
     BaseResponse deleteAllJobs();
 
-    /**
-     * 暫停全部排程
-     */
     BaseResponse pauseAll();
 
-    /**
-     * 恢復全部被暫停排程
-     */
     BaseResponse resumeAll();
 
 }
