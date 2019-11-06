@@ -10,21 +10,35 @@
     </parent>
     <groupId>com.tgfc</groupId>
     <artifactId>library</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>library</name>
     <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>
+        <nexus.ip>192.168.1.5:8081</nexus.ip>
     </properties>
 
     <repositories>
         <repository>
             <id>nexus-snapshots</id>
             <name>TGFC nexus</name>
-            <url>http://192.168.1.5:8081/repository/maven-snapshots/</url>
+            <url>http://${nexus.ip}/repository/maven-snapshots/</url>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>releases</name>
+            <url>http://${nexus.ip}/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>snapshots</name>
+            <url>http://${nexus.ip}/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <build>
         <finalName>api</finalName>
@@ -51,6 +65,14 @@
                 <version>3.0.0-M3</version>
                 <configuration>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
         </plugins>
@@ -86,7 +108,6 @@
             <scope>test</scope>
             <version>1.4.194</version>
         </dependency>
-
         <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -128,15 +149,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
-
-
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -156,18 +174,15 @@
             <artifactId>c3p0</artifactId>
             <version>0.9.5.2</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.6</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -179,7 +194,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <!-- junit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -211,7 +225,6 @@
             <version>1.4.2</version>
             <scope>test</scope>
         </dependency>
-
         <!-- mock data tool -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -225,6 +238,11 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
+
+    <scm>
+        <connection>scm:git:https://git.tgfc.tw/java-team/library.git</connection>
+        <developerConnection>scm:git:https://git.tgfc.tw/java-team/library.git</developerConnection>
+    </scm>
+
 </project>
