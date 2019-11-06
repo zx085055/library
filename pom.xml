@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <nexus.ip>192.168.1.5:8081</nexus.ip>
+        <project.scm.id>git-user</project.scm.id>
     </properties>
 
     <repositories>
