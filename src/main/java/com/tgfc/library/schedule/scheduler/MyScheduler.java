@@ -22,9 +22,8 @@ public class MyScheduler {
      * @return Boolean
      * @throws SchedulerException
      */
-    public Boolean addJob(JobDetail job, Trigger trigger) throws SchedulerException {
+    public void addJob(JobDetail job, Trigger trigger) throws SchedulerException {
         scheduler.scheduleJob(job, trigger);
-        return null;
     }
 
 
