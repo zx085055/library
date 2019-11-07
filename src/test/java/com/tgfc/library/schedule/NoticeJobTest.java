@@ -122,7 +122,7 @@ public class NoticeJobTest {
 
         Mockito.when(mailService.batchTemplateMailing(new ArrayList<>(), "5")).thenReturn(false);
 
-        Assertions.assertEquals(false, privateStringMethod.invoke(noticeJob, "4"));
+        Assertions.assertEquals(false, privateStringMethod.invoke(noticeJob, "5"));
 
         privateStringMethod.setAccessible(false);
     }
