@@ -219,7 +219,7 @@ public class NoticeJobTest {
 
         Mockito.when(mailService.getReservationExpiredList()).thenReturn(new ArrayList<>());
         Mockito.when(mailService.batchTemplateMailing(new ArrayList<>(), "2")).thenReturn(false);
-        Mockito.when(reservationRepository.reservationExpiredStatus(new Date())).thenReturn(0);
+        Mockito.when(reservationRepository.reservationExpiredStatus(Mockito.any())).thenReturn(0);
 
         Assertions.assertEquals(false, privateStringMethod.invoke(noticeJob));
         privateStringMethod.setAccessible(false);
@@ -253,13 +253,14 @@ public class NoticeJobTest {
 
     @Test
     public void lendingExpiredTest() throws Exception {
+        Date date = new Date(1573093382);
         Method privateStringMethod = NoticeJob.class.
                 getDeclaredMethod("lendingExpired");
         privateStringMethod.setAccessible(true);
 
         Mockito.when(mailService.getLendingExpiredJobList()).thenReturn(new ArrayList<>());
         Mockito.when(mailService.batchTemplateMailing(new ArrayList<>(), "4")).thenReturn(true);
-        Mockito.when(recordsRepository.lendingExpiredStatus(new Date())).thenReturn(1);
+        Mockito.when(recordsRepository.lendingExpiredStatus(Mockito.any())).thenReturn(1);
 
         Assertions.assertEquals(true, privateStringMethod.invoke(noticeJob));
         privateStringMethod.setAccessible(false);
