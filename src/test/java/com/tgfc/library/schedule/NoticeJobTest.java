@@ -114,6 +114,20 @@ public class NoticeJobTest {
     }
 
     @Test
+    public void chooseJobUndefinedTest() throws Exception {
+        Method privateStringMethod = NoticeJob.class.
+                getDeclaredMethod("chooseJob", String.class);
+
+        privateStringMethod.setAccessible(true);
+
+        Mockito.when(mailService.batchTemplateMailing(new ArrayList<>(), "5")).thenReturn(false);
+
+        Assertions.assertEquals(false, privateStringMethod.invoke(noticeJob, "4"));
+
+        privateStringMethod.setAccessible(false);
+    }
+
+    @Test
     public void chooseJob1FalseTest() throws Exception {
         Method privateStringMethod = NoticeJob.class.
                 getDeclaredMethod("chooseJob", String.class);
