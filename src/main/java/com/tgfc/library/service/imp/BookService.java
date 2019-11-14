@@ -47,8 +47,8 @@ public class BookService implements IBookService {
 
 
     @Override
-    public BaseResponse getBookList(BookDataPageRequest model)  {
-        builder  = new BaseResponse.Builder();
+    public BaseResponse getBookList(BookDataPageRequest model) {
+        builder = new BaseResponse.Builder();
         Pageable pageable = model.getPageable();
         Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", model.getKeyword(), pageable);
 
@@ -129,7 +129,7 @@ public class BookService implements IBookService {
             addBook.setPhotoOriginalName(files.getOriginalFilename());
             //存檔案
             Date date = new Date();
-            String photoName = date.getTime() + FilenameUtils.getExtension(files.getOriginalFilename());
+            String photoName = date.getTime() + "." + FilenameUtils.getExtension(files.getOriginalFilename());
             photoService.uploadPhoto(files, photoName);
 
             book.setPhotoName(photoName);
@@ -147,12 +147,12 @@ public class BookService implements IBookService {
         try {
             save = bookDataRepository.save(book);
         } catch (Exception e) {
-            return  builder.message("修改失敗").build();
+            return builder.message("修改失敗").build();
 
         }
 
         if (save != null) {
-             return builder.message("編輯成功").status(true).build();
+            return builder.message("編輯成功").status(true).build();
 
         }
 
@@ -166,7 +166,7 @@ public class BookService implements IBookService {
         Book book = bookDataRepository.getById(id);
         if (book == null) {
             return builder.message("無此ID").build();
-       }
+        }
         try {
             bookDataRepository.deleteById(id);
         } catch (Exception e) {
@@ -175,19 +175,19 @@ public class BookService implements IBookService {
 
 
         if (bookDataRepository.getById(id) == null) {
-            if (book.getPhotoName() != null && !book.getPhotoName() .equals("")) {
+            if (book.getPhotoName() != null && !book.getPhotoName().equals("")) {
                 photoService.deletePhoto(book.getPhotoName());
             }
-           return  builder.message("刪除成功").status(true).build();
+            return builder.message("刪除成功").status(true).build();
 
         }
-            return builder.message("異常狀況").build();
+        return builder.message("異常狀況").build();
 
     }
 
     @Override
     public BaseResponse findAll(Pageable pageable) {
-        builder  = new BaseResponse.Builder();
+        builder = new BaseResponse.Builder();
         Page<Book> books = bookDataRepository.findAll(pageable);
         return builder.content(books.getContent()).message("查詢完成").status(true).build();
 
