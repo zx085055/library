@@ -77,15 +77,6 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public BaseResponse getById(int id) {
-        builder = new BaseResponse.Builder();
-        Book book = bookDataRepository.getById(id);
-        if (book.getPhotoName() != null && book.getPhotoName().length() != 0)
-            book.setPhotoName(photoService.getApiPhotoUrl(book.getPhotoName()));
-        return builder.content(book).message("").status(true).build();
-    }
-
-    @Override
     public BaseResponse checkISBN(BookAddRequest model) {
         builder = new BaseResponse.Builder();
         List<Book> exist;

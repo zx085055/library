@@ -24,8 +24,11 @@ public class PhotoService implements IPhotoService {
     @Value("${nginx.port}")
     String filePort;
 
-    @Value("${file.photo.path}")
-    String urlString;
+    @Value("${file.photo.protocol}")
+    String protocol;
+
+    @Value("${file.photo.host}")
+    String host;
 
     @Override
     public void uploadPhoto(MultipartFile file, String newName) {
@@ -50,14 +53,7 @@ public class PhotoService implements IPhotoService {
 
         String urlString = "";
         try {
-            InetAddress address = InetAddress.getLocalHost();
-            String protocol = "http";
-            String host = address.getHostAddress();
-            Socket point = new Socket();
-            //point.getLocalPort();
             String path = imageRootUrl + photoFileName;
-//                URL url = new URL(protocol, host, point.getLocalPort(), path);
-
             URL url = new URL(protocol, host, Integer.valueOf(filePort), path);
             System.out.println(url.toString() + "?");
             urlString = url.toString();
@@ -72,28 +68,9 @@ public class PhotoService implements IPhotoService {
     public boolean deletePhoto(String newName) {
         File file = new File(this.filePath + newName);
         if (file.isFile() && file.exists()) {
-            //file.delete();//"刪除單個檔案"+name+"成功！"
             return file.delete();
-        }//"刪除單個檔案"+name+"失敗！"
-        return false;
-    }
-
-    @Override
-    public byte[] getPhoto(String fileName) throws FileNotFoundException {
-        String filePath = this.filePath + fileName;
-        Path path = Paths.get(filePath);
-        try {
-//            byte[]   data = Files.readAllBytes(path);
-            return Files.readAllBytes(path);
-        } catch (IOException e) {
-            throw new FileNotFoundException();
         }
-    }
-
-    @Override
-    public String getApiPhotoUrl(String photoFileName) {
-        //String url =urlString+photoFileName;
-        return urlString + photoFileName;
+        return false;
     }
 
 

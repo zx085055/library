@@ -8,14 +8,11 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IPhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.security.RolesAllowed;
 import java.io.IOException;
 
-//import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 @RestController
 @RequestMapping("/book")
@@ -29,11 +26,6 @@ public class BookController {
     public BookController(IBookService bookDataService,IPhotoService photoService) {
         this.bookDataService = bookDataService;
         this.photoService = photoService;
-    }
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
-    @GetMapping(value = "/find")
-    public BaseResponse get(@RequestParam("id") Integer id) throws IOException{
-        return bookDataService.getById(id);
     }
 
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
@@ -70,13 +62,6 @@ public class BookController {
     public BaseResponse deleteBook(@RequestParam("id") int id) {
 
         return bookDataService.deleteBook(id);
-    }
-
-//    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
-    @RequestMapping("/getPhoto")
-    public ResponseEntity<byte[]> showPhoto( @RequestParam("fileName") String fileName)throws Exception {
-            byte[] image = photoService.getPhoto(fileName);
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
     }
 
     @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})

@@ -14,8 +14,6 @@ import java.io.IOException;
 public interface IBookService {
     BaseResponse getBookList(BookDataPageRequest model) throws IOException;
 
-    BaseResponse getById(int storeId)throws IOException;
-
     BaseResponse upData(MultipartFile files,  BookAddRequest bookAddRequest);
 
     BaseResponse findAll(Pageable pageable);

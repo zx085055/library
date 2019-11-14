@@ -12,7 +12,4 @@ public interface IPhotoService {
 
     boolean deletePhoto(String newName);
 
-    byte[] getPhoto(String fileName) throws FileNotFoundException;
-
-    String getApiPhotoUrl(String photoFileName);
 }
