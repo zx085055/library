@@ -56,8 +56,7 @@ public class MailService implements IMailService {
             String title = map.get("title");
             String context = map.get("context");
             String email = map.get("email");
-//            MailUtil.sendMail(title, context, email);
-            System.out.println(title + " " + context + " " + email);
+            MailUtil.sendMail(title, context, email);
         });
         return true;
     }

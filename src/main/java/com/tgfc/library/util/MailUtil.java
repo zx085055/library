@@ -49,7 +49,6 @@ public class MailUtil {
         message.setSubject(title); //標題
         message.setTo(email); //發給誰  對方郵箱
         message.setText(content); //內容
-        System.out.println(from);
         mailSender.send(message); //發送
     }
 
