@@ -55,7 +55,6 @@ public class PhotoService implements IPhotoService {
         try {
             String path = imageRootUrl + photoFileName;
             URL url = new URL(protocol, host, Integer.valueOf(filePort), path);
-            System.out.println(url.toString() + "?");
             urlString = url.toString();
         } catch (Exception e) {
             e.printStackTrace();

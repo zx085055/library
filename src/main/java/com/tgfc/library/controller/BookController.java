@@ -37,8 +37,6 @@ public class BookController {
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping(value = "/addBook")
     public BaseResponse addBook(MultipartFile files, BookAddRequest bookAddRequest){
-//    public BaseResponse addBook(  BookAddRequest bookAddRequest){
-//        MultipartFile files =null;
         BaseResponse baseResponse=new BaseResponse();
         if(files != null && files.getOriginalFilename()!=null&&!files.getOriginalFilename().matches("(.+)(\\.jpg|\\.gif|\\.jpeg|\\.png){1}$")){
             baseResponse.setMessage("上傳格式錯誤");
@@ -84,7 +82,4 @@ public class BookController {
         model.setId(id);
         return bookDataService.checkISBN(model);
     }
-
-
-
 }
