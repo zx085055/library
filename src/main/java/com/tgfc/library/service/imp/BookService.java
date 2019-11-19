@@ -53,17 +53,13 @@ public class BookService implements IBookService {
 
         List<BooksResponse> list = new ArrayList<>();
         for (Book book : pageBook) {
-
-            book.setStatus(book.getStatus());
             BooksResponse bookResponse = new BooksResponse();
             BeanUtils.copyProperties(book, bookResponse);
             list.add(bookResponse);
-            if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
-
                 if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
                     bookResponse.setPhotoName(photoService.getPhotoUrl(book.getPhotoName()));
                 }
-            }
+
         }
 
         BookCountResponse bookCountResponse = new BookCountResponse();
