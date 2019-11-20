@@ -24,5 +24,6 @@ public interface IBookService {
 
     BaseResponse checkISBN(BookAddRequest model);
 
+    BaseResponse checkPropertyCode(BookAddRequest model);
 }
 

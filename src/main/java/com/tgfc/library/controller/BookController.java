@@ -82,4 +82,13 @@ public class BookController {
         model.setId(id);
         return bookDataService.checkISBN(model);
     }
+
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
+    @GetMapping(value = "/checkPropertyCode")
+    public BaseResponse checkPropertyCode(@RequestParam("propertyCode") String propertyCode,@RequestParam("id") Integer id) {
+        BookAddRequest model = new BookAddRequest();
+        model.setPropertyCode(propertyCode);
+        model.setId(id);
+        return bookDataService.checkPropertyCode(model);
+    }
 }

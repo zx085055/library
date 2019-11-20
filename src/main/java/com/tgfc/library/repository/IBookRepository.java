@@ -30,6 +30,12 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     @Query(value = "SELECT u FROM Book u WHERE u.isbn = :isbn and u.id <> :id")
     List<Book> findByIsbnAndId(@Param("id") Integer id,@Param("isbn") String isbn);
 
+    @Query(value = "SELECT u FROM Book u WHERE u.propertyCode = :propertyCode")
+    List<Book> findByPropertyCode(String propertyCode);
+
+    @Query(value = "SELECT u FROM Book u WHERE u.propertyCode = :propertyCode and u.id <> :id")
+    List<Book> findByPropertyCodeAndId(Integer id, String propertyCode);
+
     @Query(value = "SELECT b From Book b where b.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.pubHouse LIKE CONCAT('%',?1,'%')")
     Page<Book> findBookByKeyWord(String keyWord, Pageable pageable);
 

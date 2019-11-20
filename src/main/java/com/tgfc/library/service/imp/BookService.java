@@ -90,6 +90,24 @@ public class BookService implements IBookService {
     }
 
     @Override
+    public BaseResponse checkPropertyCode(BookAddRequest model) {
+        builder = new BaseResponse.Builder();
+        List<Book> exist;
+        if (model.getId() != null && !"".equals(model.getId())) {
+            exist = bookDataRepository.findByPropertyCodeAndId(model.getId(), model.getPropertyCode());
+        } else {
+            exist = bookDataRepository.findByPropertyCode(model.getPropertyCode());
+        }
+        if (exist.size() > 0) {
+            return builder.message("財產編號不可以重複").status(false).build();
+
+        } else {
+            return builder.message("財產編號沒有重複").status(true).build();
+
+        }
+    }
+
+    @Override
     public BaseResponse upData(MultipartFile files, BookAddRequest addBook) {
 
 
