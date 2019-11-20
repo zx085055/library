@@ -5,7 +5,8 @@ public enum BookStatusEnum {
     BOOK_STATUS_LEND(2, "出借中"),
     BOOK_STATUS_LOST(3, "遺失"),
     BOOK_STATUS_BROKEN(4, "破損"),
-    BOOK_STATUS_NOT_RETURNED(5, "未歸還");
+    BOOK_STATUS_NOT_RETURNED(5, "未歸還"),
+    BOOL_STATUS_SCRAP(6, "報廢");
 
     private Integer code;
     private String trans;
@@ -40,6 +41,8 @@ public enum BookStatusEnum {
                 return BOOK_STATUS_LOST;
             case 4:
                 return BOOK_STATUS_BROKEN;
+            case 6:
+                return BOOL_STATUS_SCRAP;
             default:
                 return null;
         }
