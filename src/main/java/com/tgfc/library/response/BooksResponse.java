@@ -19,7 +19,6 @@ public class BooksResponse {
     private Integer price;
     private String photoName;
     private Date purchaseDate;
-    private String page;
     private String language;
 
 //    ResponseEntity<byte[]> photo=null;
@@ -54,14 +53,6 @@ public class BooksResponse {
 
     public void setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
-    }
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
     }
 
     public String getLanguage() {

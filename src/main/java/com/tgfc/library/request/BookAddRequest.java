@@ -24,8 +24,6 @@ public class BookAddRequest {
     @NotNull
     private String type;
     @NotNull
-    private String page;
-    @NotNull
     private String language;
     private String photoOriginalName;
     @NotNull
@@ -118,16 +116,6 @@ public class BookAddRequest {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
     }
 
     public String getLanguage() {

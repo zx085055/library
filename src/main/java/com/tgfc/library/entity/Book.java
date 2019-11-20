@@ -40,8 +40,6 @@ public class Book implements Serializable {
     private Date publishDate;
     @Column(name="type",length = 20,nullable = false)
     private String type;
-    @Column(name = "page",length = 5,nullable = false)
-    private String page;
     @Column(name="language",length = 10,nullable = false )
     private String language;
     @Column(name="status",length = 2,nullable = false )
@@ -54,14 +52,6 @@ public class Book implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
     }
 
     public String getLanguage() {
