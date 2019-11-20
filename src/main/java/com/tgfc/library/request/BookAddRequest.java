@@ -12,6 +12,8 @@ public class BookAddRequest {
     @NotNull
     private String isbn;
     @NotNull
+    private String propertyCode;
+    @NotNull
     private String pubHouse;
 //    @NotNull
     private String intro;
@@ -134,5 +136,11 @@ public class BookAddRequest {
         this.photoOriginalName = photoOriginalName;
     }
 
+    public String getPropertyCode() {
+        return propertyCode;
+    }
 
+    public void setPropertyCode(String propertyCode) {
+        this.propertyCode = propertyCode;
+    }
 }

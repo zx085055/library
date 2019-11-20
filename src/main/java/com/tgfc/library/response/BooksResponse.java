@@ -10,6 +10,7 @@ public class BooksResponse {
     private String name;
     private String author;
     private String isbn;
+    private String propertyCode;
     private String pubHouse;
     private Date publishDate;
     private String type;
@@ -141,5 +142,13 @@ public class BooksResponse {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getPropertyCode() {
+        return propertyCode;
+    }
+
+    public void setPropertyCode(String propertyCode) {
+        this.propertyCode = propertyCode;
     }
 }

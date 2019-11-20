@@ -23,6 +23,8 @@ public class Book implements Serializable {
     private String author;
     @Column(name = "isbn",length = 13,nullable = false)
     private String isbn;
+    @Column(name = "property_code",nullable = false)
+    private String propertyCode;
     @Column(name = "pub_house",length = 30,nullable = false)
     private String pubHouse;
     @Column(name = "intro")
@@ -164,5 +166,13 @@ public class Book implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getPropertyCode() {
+        return propertyCode;
+    }
+
+    public void setPropertyCode(String propertyCode) {
+        this.propertyCode = propertyCode;
     }
 }
