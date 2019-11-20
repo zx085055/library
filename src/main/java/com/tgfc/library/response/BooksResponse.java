@@ -17,7 +17,7 @@ public class BooksResponse {
     private String photoOriginalName;
     private Integer status;
     private String intro;
-    private Integer price;
+    private String floor;
     private String photoName;
     private Date purchaseDate;
     private String language;
@@ -32,12 +32,13 @@ public class BooksResponse {
 //        this.photo = photo;
 //    }
 
-    public Integer getPrice() {
-        return price;
+
+    public String getFloor() {
+        return floor;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
+    public void setFloor(String floor) {
+        this.floor = floor;
     }
 
     public String getPhotoName() {

@@ -29,8 +29,8 @@ public class Book implements Serializable {
     private String pubHouse;
     @Column(name = "intro")
     private String intro;
-    @Column(name = "price",length = 5,nullable = false)
-    private Integer price;
+    @Column(name = "floor",length = 11,nullable = false)
+    private String floor;
     @Column(name = "photo_original_name")
     private String photoOriginalName;
     @Column(name = "photo_name")
@@ -112,12 +112,12 @@ public class Book implements Serializable {
         this.intro = intro;
     }
 
-    public Integer getPrice() {
-        return price;
+    public String getFloor() {
+        return floor;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
+    public void setFloor(String floor) {
+        this.floor = floor;
     }
 
     public String getPhotoOriginalName() {

@@ -18,7 +18,7 @@ public class BookAddRequest {
 //    @NotNull
     private String intro;
     @NotNull
-    private Integer price;
+    private String floor;
     @NotNull
     private Date publishDate;
     @NotNull
@@ -95,14 +95,13 @@ public class BookAddRequest {
         this.intro = intro;
     }
 
-    public Integer getPrice() {
-        return price;
+    public String getFloor() {
+        return floor;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
+    public void setFloor(String floor) {
+        this.floor = floor;
     }
-
 
     public Date getPublishDate() {
         return publishDate;
