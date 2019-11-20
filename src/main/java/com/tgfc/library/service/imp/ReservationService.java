@@ -64,6 +64,7 @@ public class ReservationService implements IReservationService {
         bookStatusList.add(BookStatusEnum.BOOK_STATUS_LOST.getCode());
         bookStatusList.add(BookStatusEnum.BOOK_STATUS_BROKEN.getCode());
         bookStatusList.add(BookStatusEnum.BOOK_STATUS_NOT_RETURNED.getCode());
+        bookStatusList.add(BookStatusEnum.BOOK_STATUS_SCRAP.getCode());
 
         Book bookAbnormal = bookRepository.checkBookAbnormal(bookId,bookStatusList);
 
