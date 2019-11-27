@@ -8,6 +8,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
@@ -44,12 +45,16 @@ public class MailUtil {
     private static ITemplateEngine templateEngine;
 
     public static void sendMail(String title, String content, String email) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(from); // 發送人的郵箱
-        message.setSubject(title); //標題
-        message.setTo(email); //發給誰  對方郵箱
-        message.setText(content); //內容
-        mailSender.send(message); //發送
+        MimeMessagePreparator mailMessage = mimeMessage -> {
+            MimeMessageHelper message = new MimeMessageHelper(
+                    mimeMessage, true, "UTF-8");
+
+            message.setFrom(from, "TGFC 圖書管理系統");
+            message.setSubject(title); //標題
+            message.setTo(email); //發給誰  對方郵箱
+            message.setText(content); //內容
+        };
+        mailSender.send(mailMessage); //發送
     }
 
     public static void sendHtmlMail(String title, String content, String email) {
