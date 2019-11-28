@@ -39,12 +39,13 @@ public class ReservationService implements IReservationService {
     @Override
     @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Pageable pageable) {
-        Integer status = ReservationEnum.RESERVATION_ALIVE.getCode();
+        Integer aliveStatus = ReservationEnum.RESERVATION_ALIVE.getCode();
+        Integer waitStatus = ReservationEnum.RESERVATION_WAIT.getCode();
         Page<Reservation> all;
         if (keyword == null) {
             all = reservationRepository.findAll(pageable);
         } else {
-            all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, status, pageable);
+            all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, aliveStatus, waitStatus, pageable);
         }
         builder = new BaseResponse.Builder();
         return builder.content(all).message("預約查詢成功").status(true).build();
@@ -149,7 +150,7 @@ public class ReservationService implements IReservationService {
             Integer bookId = reservation.getBook().getId();
             Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(),bookId);
             if(nextReservation!=null) {
-                MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
+                MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。借閱的書名：（" + nextReservation.getBook().getName() + "）", nextReservation.getEmployee().getEmail());
                 nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
                 nextReservation.setEndDate(new Date());
                 Date current = new Date();

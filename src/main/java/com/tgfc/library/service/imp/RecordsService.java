@@ -78,7 +78,7 @@ public class RecordsService implements IRecordsService {
         Records records = recordsRepository.findById(id).get();
         Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), records.getBook().getId());
         if (nextReservation != null) {
-            MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。", nextReservation.getEmployee().getEmail());
+            MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。借閱的書名：（" + nextReservation.getBook().getName() + "）", nextReservation.getEmployee().getEmail());
             nextReservation.setEndDate(new Date());
             nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
             nextReservation.setEndDate(new Date(new Date().getTime() + 3 * 24 * 60 * 60 * 1000));
