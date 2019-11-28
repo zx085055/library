@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.tgfc</groupId>
     <artifactId>library</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>library</name>
     <packaging>war</packaging>
 
@@ -243,7 +243,7 @@
     <scm>
         <connection>scm:git:https://git.tgfc.tw/java-team/library.git</connection>
         <developerConnection>scm:git:https://git.tgfc.tw/java-team/library.git</developerConnection>
-      <tag>v1.0.2</tag>
+      <tag>HEAD</tag>
   </scm>
 
 </project>
