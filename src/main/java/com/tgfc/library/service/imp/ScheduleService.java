@@ -10,7 +10,7 @@ import com.tgfc.library.repository.IScheduleRepository;
 import com.tgfc.library.request.SchedulePageRequest;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.response.SchedulePageResponse;
-import com.tgfc.library.schedule.job.NoticeJob;
+import com.tgfc.library.schedule.job.AbstractJob;
 import com.tgfc.library.schedule.scheduler.MyScheduler;
 import com.tgfc.library.schedule.trigger.OneDayOneTimeTrigger;
 import com.tgfc.library.service.IScheduleService;
@@ -79,7 +79,7 @@ public class ScheduleService implements IScheduleService {
         etx.commit();
         entityManager.close();
 
-        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>(16);
         resultMap.put("totalCount", totalCount);
         resultMap.put("results", scheduleListToResponseList(list));
 
@@ -118,8 +118,8 @@ public class ScheduleService implements IScheduleService {
     public BaseResponse create(SchedulePageRequest model) {
         builder = new BaseResponse.Builder();
         try {
-        Schedule schedule = saveSchedule(model);
-        model = getAndSetIdWithModelAndPo(model, schedule);
+            Schedule schedule = saveSchedule(model);
+            model = getAndSetIdWithModelAndPo(model, schedule);
             JobDetail job = getJob(model);
             CronTrigger trigger = oneDayOneTimeTrigger.getTrigger(model);
             myScheduler.addJob(job, trigger);
@@ -184,17 +184,21 @@ public class ScheduleService implements IScheduleService {
         return model;
     }
 
-
     private JobDetail getJob(SchedulePageRequest model) {
         JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + model.getId(), ScheduleEnum.GROUP.getCode() + model.getId());
-        JobDetail job = JobBuilder.newJob(NoticeJob.class)
-                .withIdentity(jobKey)
-                .usingJobData("id", model.getId())
-                .usingJobData("jobType", model.getType())
-                .build();
+        JobDetail job = null;
+        String fullName = "com.tgfc.library.schedule.job." + JobTypeEnum.codeToName(model.getType());
+        try {
+            job = JobBuilder.newJob(Class.forName(fullName).asSubclass(AbstractJob.class))
+                    .withIdentity(jobKey)
+                    .usingJobData("id", model.getId())
+                    .usingJobData("jobType", model.getType())
+                    .build();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return job;
     }
-
 
     @Override
     public BaseResponse changeStatus(int id) {
@@ -253,10 +257,6 @@ public class ScheduleService implements IScheduleService {
             e.printStackTrace();
         }
         scheduleRepository.resumeAll();
-//        response.setData(true);
-//        response.setMessage("全部暫停排程恢復");
-//        response.setStatus(true);
-//        return response;
         return builder.content(true).status(true).message("全部暫停排程恢復").build();
     }
 
@@ -265,7 +265,7 @@ public class ScheduleService implements IScheduleService {
         builder = new BaseResponse.Builder();
         Schedule schedule = scheduleRepository.getById(id);
         if (schedule == null) {
-           return builder.message("查無此排程").status(false).build();
+            return builder.message("查無此排程").status(false).build();
         }
         JobKey jobKey = new JobKey(ScheduleEnum.JOB.getCode() + schedule.getId(), ScheduleEnum.GROUP.getCode() + schedule.getId());
         try {

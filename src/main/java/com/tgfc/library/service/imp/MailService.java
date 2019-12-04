@@ -72,7 +72,7 @@ public class MailService implements IMailService {
     @Override
     public List<Map<String, String>> getMailDetail(List<MailResponse> list, String jobType) {
         return list.stream().map(mailResponse -> {
-            Map<String, String> map = new HashMap<>();
+            Map<String, String> map = new HashMap<>(16);
             map.put("title", "預約即將到期通知");
             map.put("context", mailResponse.getEmployee() + "您好，您預約的書" + mailResponse.getBookName()
                     + " 將在" + mailResponse.getEndDate().toString() + "過期，，謝謝請在期限內取書");
