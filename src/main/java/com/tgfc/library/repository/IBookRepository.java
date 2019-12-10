@@ -4,11 +4,9 @@ import com.tgfc.library.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +19,9 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     @Query(value = "SELECT b FROM Book b WHERE b.name LIKE :keyword or b.author LIKE :keyword or b.pubHouse LIKE :keyword or b.type LIKE :keyword or b.isbn = :isbn ")
     Page<Book> findAllByKeyword(@Param("keyword") String keyword, @Param("isbn") String isbn, Pageable pageable);
 
+    @Query(value = "SELECT b FROM Book b WHERE (b.name LIKE :keyword or b.author LIKE :keyword or b.pubHouse LIKE :keyword or b.type LIKE :keyword or b.isbn = :isbn) AND b.status<>:checkPermission")
+    Page<Book> findNotScrapByKeyword(@Param("keyword") String keyword, @Param("isbn") String isbn,  @Param("checkPermission")Integer checkPermission, Pageable pageable);
+
     @Query(value = "SELECT u FROM Book u WHERE u.id = :id")
     Book getById(Integer id);
 
@@ -28,7 +29,7 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     List<Book> findByIsbn(@Param("Isbn") String Isbn);
 
     @Query(value = "SELECT u FROM Book u WHERE u.isbn = :isbn and u.id <> :id")
-    List<Book> findByIsbnAndId(@Param("id") Integer id,@Param("isbn") String isbn);
+    List<Book> findByIsbnAndId(@Param("id") Integer id, @Param("isbn") String isbn);
 
     @Query(value = "SELECT u FROM Book u WHERE u.propertyCode = :propertyCode")
     List<Book> findByPropertyCode(String propertyCode);

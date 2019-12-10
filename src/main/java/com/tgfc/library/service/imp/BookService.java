@@ -47,9 +47,14 @@ public class BookService implements IBookService {
 
     @Override
     public BaseResponse getBookList(BookDataPageRequest model) {
+        Page<Book> pageBook=null;
         builder = new BaseResponse.Builder();
         Pageable pageable = model.getPageable();
-        Page<Book> pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", model.getKeyword(), pageable);
+        if(model.getCheckPermission()) {
+            pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", model.getKeyword(), pageable);
+        }else {
+            pageBook = bookDataRepository.findNotScrapByKeyword("%" + model.getKeyword() + "%", model.getKeyword(),BookStatusEnum.BOOK_STATUS_SCRAP.getCode(), pageable);
+        }
 
         List<BooksResponse> list = new ArrayList<>();
         for (Book book : pageBook) {
