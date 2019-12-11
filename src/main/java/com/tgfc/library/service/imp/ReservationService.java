@@ -69,7 +69,6 @@ public class ReservationService implements IReservationService {
 
         Book bookAbnormal = bookRepository.checkBookAbnormal(bookId, bookStatusList);
 
-        String reservationResult = "";
         if (bookAbnormal != null) {
             builder.status(false).message("圖書狀況異常無法出借");
         } else if (exist != null) {
@@ -77,26 +76,26 @@ public class ReservationService implements IReservationService {
         } else {
             int status;
             Date startDate = new Date();
+            int count = reservationRepository.reservationCount(bookId);
             if (bookRepository.checkBookLended(bookId, BookStatusEnum.BOOK_STATUS_LEND.getCode()) != null) {
                 if (recordsRepository.checkOwnBorrowed(bookId).getBorrowId().equals(ContextUtil.getAccount())) {
                     return builder.message("你正借閱本書中").build();
                 }
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
-                builder.message("此本書出借中,已加入排隊");
                 reservation.setStartDate(startDate);
-            } else if (reservationRepository.reservationStatusCount(bookId, ReservationEnum.RESERVATION_ALIVE.getCode()) >= 1) {
-                int count = reservationRepository.reservationStatusCount(bookId, ReservationEnum.RESERVATION_ALIVE.getCode());
+                builder.content(count);
+                builder.message("此書出借中，將您排入等候隊伍");
+            }  else if (count > 0) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 builder.content(count);
-                builder.message("此本書有" + count + "人預約,已加入排隊");
+                builder.message("已有他人預約，將您排入等候隊伍");
                 reservation.setStartDate(startDate);
             } else {
-                reservationResult = "可以直接取書囉！";
                 status = ReservationEnum.RESERVATION_ALIVE.getCode();
                 reservation.setStartDate(startDate);
                 reservation.setEndDate(new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000));
-                builder.content(0);
-                builder.message("成功新增一筆預約," + reservationResult);
+                builder.content(count);
+                builder.message("可以直接取書囉！");
             }
             builder.status(true);
             reservation.setStatus(status);

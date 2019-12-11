@@ -80,17 +80,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     int setLastExecute(int id, String lastExecute);
 
 
-    /**
-     * 建立時初始化
-     * @param id
-     * @param lastExecute
-     * @param group
-     * @return int
-     */
-    @Modifying
-    @Transactional
-    @Query(value = "update Schedule r set r.lastExecute=?2 , r.group=?3  where r.id=?1")
-    int setInitStatus(int id, String lastExecute, String group);
+
 
 
     /**
