@@ -152,8 +152,14 @@ public class ReservationService implements IReservationService {
             reservationRepository.changeReservationStatus(ReservationEnum.RESERVATION_CANCLE.getCode(), reservationId);
             Reservation reservation = reservationRepository.findById(reservationId).get();
             Integer bookId = reservation.getBook().getId();
-            Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(ReservationEnum.RESERVATION_WAIT.getCode(), bookId);
-            if (nextReservation != null) {
+            Integer bookStatus = reservation.getBook().getStatus();
+            String id = reservation.getEmployee().getId();
+            List<Integer> statusList = new ArrayList<>();
+            statusList.add(ReservationEnum.RESERVATION_ALIVE.getCode());
+            statusList.add(ReservationEnum.RESERVATION_WAIT.getCode());
+
+            Reservation nextReservation = reservationRepository.getReservationByStatusAndBookId(statusList, bookId, id);//搜尋預約此本書狀態含ALIVE及WAIT等人且只取日期最早的
+            if (BookStatusEnum.BOOK_STATUS_INSIDE.getCode().equals(bookStatus) && nextReservation != null && nextReservation.getStatus().equals(ReservationEnum.RESERVATION_WAIT.getCode())) {//判斷書籍出借中則不變更預約狀態
                 MailUtil.sendMail("取書通知", "親愛的" + nextReservation.getEmployee().getName() + "先生/小姐，您可以來圖書館取書了。借閱的書名：（" + nextReservation.getBook().getName() + "）", nextReservation.getEmployee().getEmail());
                 nextReservation.setStatus(ReservationEnum.RESERVATION_ALIVE.getCode());
                 nextReservation.setEndDate(new Date());

@@ -18,14 +18,17 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Query("SELECT r FROM Reservation r LEFT JOIN r.book b WHERE (r.employee.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')) AND (r.status=?2 OR r.status=?3) ORDER BY b.name ASC, r.status ASC, r.startDate ASC")
     Page<Reservation> getReservationByKeywordLikeAndStatus(String keyword, Integer aliveStatus, Integer waitStatus, Pageable pageable);
 
+    @Query(value = "SELECT r.* FROM `reservation` r WHERE book_id=?2 AND `status` IN ?1 AND r.employee_id <> ?3 ORDER BY `status`,r.start_date LIMIT 1", nativeQuery = true)
+    Reservation getReservationByStatusAndBookId(List<Integer> status, Integer bookId, String id);
+
     @Query(value = "SELECT r.* FROM `reservation` r WHERE book_id=?2 AND `status`=?1 ORDER BY r.start_date LIMIT 1", nativeQuery = true)
-    Reservation getReservationByStatusAndBookId(Integer status, Integer bookId);
+    Reservation notifyNextByStatusAndBookId(Integer status, Integer bookId);
 
     @Query("SELECT r from Reservation r where r.startDate>=?1 AND r.startDate<=?2")
     Page<Reservation> findByTimeInterval(Date startDate, Date endDate, Pageable pageable);
 
     @Query("SELECT r from Reservation r inner join r.employee e where e.id =?1 And r.startDate>=?2 AND r.startDate<=?3")
-    Page<Reservation> findByTimeIntervalWithEmpId(String empId,Date startDate, Date endDate, Pageable pageable);
+    Page<Reservation> findByTimeIntervalWithEmpId(String empId, Date startDate, Date endDate, Pageable pageable);
 
     @Query(value = "select r from Reservation r inner join r.book b where b.id = ?1 and r.employee.id = ?2 and r.status in ?3")
     Reservation getReservationByStatus(Integer bookId, String empId, List<Integer> status);
@@ -49,5 +52,5 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     int reservationExpiredStatus(Date currentDate);
 
     @Query(value = "select r from Reservation r inner join r.employee e where e.id = ?1")
-    Page<Reservation> findByEmpId(String empId,Pageable pageable);
+    Page<Reservation> findByEmpId(String empId, Pageable pageable);
 }
