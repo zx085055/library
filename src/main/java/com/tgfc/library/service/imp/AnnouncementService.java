@@ -7,6 +7,7 @@ import com.tgfc.library.repository.IEmployeeRepositorySafty;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IAnnouncementService;
 import com.tgfc.library.util.ContextUtil;
+import com.tgfc.library.util.MessageUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +45,7 @@ public class AnnouncementService implements IAnnouncementService {
         } else {
             announcements = announcementRepository.getAnnouncementsByNameLikeAndTimeIntervalAndStatus(title, startTime, endTime, true, pageable);
         }
-        return builder.content(announcements).status(true).message("公告查詢成功").build();
+        return builder.content(announcements).status(true).message(MessageUtil.getMessage("announcement.selectSuccess")).build();
     }
 
     @Override
@@ -53,14 +54,14 @@ public class AnnouncementService implements IAnnouncementService {
         String id = ContextUtil.getAccount();
 
         if (announcement.getEndTime().before(announcement.getStartTime())) {
-            builder.status(false).message("新增公告日期有誤");
+            builder.status(false).message(MessageUtil.getMessage("announcement.insertDateError"));
             return builder.build();
         }
 
         EmployeeSafty employee = employeeRepository.findById(id).get();
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
-        builder.status(true).message("新增公告成功");
+        builder.status(true).message(MessageUtil.getMessage("announcement.insertSuccess"));
         return builder.build();
     }
 
@@ -73,7 +74,7 @@ public class AnnouncementService implements IAnnouncementService {
         BeanUtils.copyProperties(announcement, existAnnouncement);
         existAnnouncement.setEmployee(employee);
         announcementRepository.save(existAnnouncement);
-        builder.status(true).message("公告編輯成功");
+        builder.status(true).message(MessageUtil.getMessage("announcement.updateSuccess"));
         return builder.build();
     }
 
@@ -81,11 +82,11 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse delete(Integer id) {
         builder = new BaseResponse.Builder();
         if (!announcementRepository.existsById(id)) {
-            builder.status(false).message("公告無此資料");
+            builder.status(false).message(MessageUtil.getMessage("announcement.findNoData"));
             return builder.build();
         }
         announcementRepository.deleteById(id);
-        builder.status(true).message("公告刪除成功");
+        builder.status(true).message(MessageUtil.getMessage("announcement.deleteSuccess"));
         return builder.build();
     }
 
@@ -99,7 +100,7 @@ public class AnnouncementService implements IAnnouncementService {
         existAnnouncement.setEmployee(employee);
         existAnnouncement.setStatus(announcement.getStatus());
         announcementRepository.save(existAnnouncement);
-        builder.status(true).message("公告狀態切換成功");
+        builder.status(true).message(MessageUtil.getMessage("announcement.switchStatusSuccess"));
         return builder.build();
     }
 
@@ -112,6 +113,6 @@ public class AnnouncementService implements IAnnouncementService {
             announcements = announcementRepository.getAnnouncementsByTimeInterval(sdf.parse(sdf.format(new Date())), true, pageable);
         } catch (Exception e) {
         }
-        return builder.content(announcements).status(true).message("公告未過期查詢成功").build();
+        return builder.content(announcements).status(true).message(MessageUtil.getMessage("announcement.selectNotExpiredSuccess")).build();
     }
 }
