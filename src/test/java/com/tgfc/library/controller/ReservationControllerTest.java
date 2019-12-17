@@ -8,6 +8,7 @@ import com.tgfc.library.entity.Book;
 import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.request.ReservationPageRequest;
+import com.tgfc.library.util.MessageUtil;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ class ReservationControllerTest {
 
     @Autowired
     WebApplicationContext webApplicationContext;
+
+    @Autowired
+    MessageUtil messageUtil;
 
     @BeforeEach
     void init() throws Exception{
@@ -137,7 +141,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("成功新增一筆預約",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(messageUtil.getMessage("reservation.addWaitSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
