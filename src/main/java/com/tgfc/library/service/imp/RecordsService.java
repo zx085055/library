@@ -14,6 +14,7 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecordsService;
 import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
+import com.tgfc.library.util.MessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,10 +45,10 @@ public class RecordsService implements IRecordsService {
         builder = new BaseResponse.Builder();
         if (status.equals(RecordsStatusEnum.RECORDSSTATUS_ALL.getCode())) {
             Page<Records> records = recordsRepository.getRecordsByNameLike(keyword, pageable);
-            builder.content(records).message("出借全查成功").status(true);
+            builder.content(records).message(MessageUtil.getMessage("records.findAllSuccess")).status(true);
         } else {
             Page<Records> records = recordsRepository.getRecordsByNameLikeAndStatus(keyword, status, pageable);
-            builder.content(records).message("出借查詢成功").status(true);
+            builder.content(records).message(MessageUtil.getMessage("records.selectSuccess")).status(true);
         }
 
         return builder.build();
@@ -57,10 +58,10 @@ public class RecordsService implements IRecordsService {
     public BaseResponse delete(Integer id) {
         builder = new BaseResponse.Builder();
         if (!recordsRepository.existsById(id)) {
-            return builder.message("出借無此資料").status(false).build();
+            return builder.message(MessageUtil.getMessage("records.findNoData")).status(false).build();
         }
         recordsRepository.deleteById(id);
-        return builder.message("出借刪除成功").status(true).build();
+        return builder.message(MessageUtil.getMessage("records.deleteSuccess")).status(true).build();
     }
 
     @Override
@@ -69,7 +70,7 @@ public class RecordsService implements IRecordsService {
         Records records = recordsRepository.findById(model.getId()).get();
         model.setEmail(employeeRepository.findById(records.getBorrowId()).get().getEmail());
         MailUtil.sendMail(model.getTitle(), model.getContext(), model.getEmail());
-        return builder.message("還書通知成功").status(true).build();
+        return builder.message(MessageUtil.getMessage("records.returnNoticeSuccess")).status(true).build();
     }
 
     @Override
@@ -87,21 +88,21 @@ public class RecordsService implements IRecordsService {
         records.setStatus(RecordsStatusEnum.RECORDSSTATUS_RETURNED.getCode());
         records.getBook().setStatus(BookStatusEnum.BOOK_STATUS_INSIDE.getCode());
         recordsRepository.save(records);
-        return builder.message("歸還成功").status(true).build();
+        return builder.message(MessageUtil.getMessage("records.returnSuccess")).status(true).build();
     }
 
     @Override
     public BaseResponse findAll(Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Records> records = recordsRepository.findAll(pageable);
-        return builder.content(records).message("查詢成功").status(true).build();
+        return builder.content(records).message(MessageUtil.getMessage("records.searchSuccess")).status(true).build();
     }
 
     @Override
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Records> reservations = recordsRepository.findByTimeInterval(startDate, endDate, pageable);
-        return builder.content(reservations).message("查詢成功").status(true).build();
+        return builder.content(reservations).message(MessageUtil.getMessage("records.searchSuccess")).status(true).build();
     }
 
     @Override
@@ -109,13 +110,13 @@ public class RecordsService implements IRecordsService {
         builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Records> reservations = recordsRepository.getRecordsByEmpId(empId, pageable);
-        return builder.content(reservations).message("查詢成功").status(true).build();
+        return builder.content(reservations).message(MessageUtil.getMessage("records.searchSuccess")).status(true).build();
     }
 
     @Override
     public BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Records> reservations = recordsRepository.findByTimeIntervalWithEmpId(ContextUtil.getAccount(), startDate, endDate, pageable);
-        return builder.content(reservations).message("查詢成功").status(true).build();
+        return builder.content(reservations).message(MessageUtil.getMessage("records.searchSuccess")).status(true).build();
     }
 }
