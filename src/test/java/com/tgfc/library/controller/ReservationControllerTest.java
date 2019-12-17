@@ -67,7 +67,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("預約查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchReservationSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -75,7 +75,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/reservation/getBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("取書成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.receiveBookSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -84,7 +84,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/reservation/getBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","3");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("請檢查預約狀態",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.checkReservationStatus"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -97,7 +97,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findAll").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -112,7 +112,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findByDate").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -125,7 +125,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findByEmp").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -141,7 +141,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(messageUtil.getMessage("reservation.addWaitSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.addWaitSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -158,7 +158,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("已有此預約",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.reservationExisted"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -175,7 +175,7 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("此本書有人預約,已加入排隊",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.addWaitSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -190,6 +190,6 @@ class ReservationControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findByDateWithEmpId").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 }
