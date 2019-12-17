@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tgfc.library.LibraryApplication;
 import com.tgfc.library.request.RecommendPageRequest;
+import com.tgfc.library.util.MessageUtil;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +70,7 @@ public class RecommendControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("成功新增一筆",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("recommend.insertSuccess"),new JSONObject(response.getContentAsString()).get("message"));
 
     }
 
@@ -89,7 +91,7 @@ public class RecommendControllerTest {
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
 
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("已存在此推薦",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("recommend.recommendExisted"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -107,7 +109,7 @@ public class RecommendControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("已存在此本書籍",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("recommend.bookExisted"),new JSONObject(response.getContentAsString()).get("message"));
 
     }
 
@@ -119,7 +121,7 @@ public class RecommendControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("成功刪除一筆",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("recommend.deleteSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -128,7 +130,7 @@ public class RecommendControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","2");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("無此推薦",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("recommend.findNoData"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
 }
