@@ -12,6 +12,7 @@ import com.tgfc.library.response.BookCountResponse;
 import com.tgfc.library.response.BooksResponse;
 import com.tgfc.library.service.IBookService;
 import com.tgfc.library.service.IPhotoService;
+import com.tgfc.library.util.MessageUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
@@ -69,7 +70,7 @@ public class BookService implements IBookService {
 
         BookCountResponse bookCountResponse = new BookCountResponse();
         if (pageBook.isEmpty()) {
-            return builder.content(list).message("找不到資料").status(false).build();
+            return builder.content(list).message(MessageUtil.getMessage("book.findNoData")).status(false).build();
         }
         bookCountResponse.setList(list);
         bookCountResponse.setCount(pageBook.getTotalElements());
@@ -86,10 +87,10 @@ public class BookService implements IBookService {
             exist = bookDataRepository.findByIsbn(model.getIsbn());
         }
         if (exist.size() > 0) {
-            return builder.message("ISBN碼不可以重複").status(false).build();
+            return builder.message(MessageUtil.getMessage("book.ISBNCodeCannotDuplicate")).status(false).build();
 
         } else {
-            return builder.message("ISBN碼沒有重複").status(true).build();
+            return builder.message(MessageUtil.getMessage("book.ISBNCodeNoDuplicate")).status(true).build();
 
         }
     }
@@ -104,10 +105,10 @@ public class BookService implements IBookService {
             exist = bookDataRepository.findByPropertyCode(model.getPropertyCode());
         }
         if (exist.size() > 0) {
-            return builder.message("財產編號不可以重複").status(false).build();
+            return builder.message(MessageUtil.getMessage("book.produceCodeCannotDuplicate")).status(false).build();
 
         } else {
-            return builder.message("財產編號沒有重複").status(true).build();
+            return builder.message(MessageUtil.getMessage("book.produceCodeNoDuplicate")).status(true).build();
 
         }
     }
@@ -120,7 +121,7 @@ public class BookService implements IBookService {
         //判斷status是否正確
 
         if (BookStatusEnum.getStatus(addBook.getStatus()) == null) {
-            return builder.message("狀態錯誤").build();
+            return builder.message(MessageUtil.getMessage("book.statusWrong")).build();
 
         }
         //用Id去資料庫找出舊資料
@@ -149,23 +150,23 @@ public class BookService implements IBookService {
         try {
             BeanUtils.copyProperties(addBook, book);
         } catch (BeansException e) {
-            return builder.message("儲存失敗").build();
+            return builder.message(MessageUtil.getMessage("book.saveFail")).build();
 
         }
         Book save;
         try {
             save = bookDataRepository.save(book);
         } catch (Exception e) {
-            return builder.message("修改失敗").build();
+            return builder.message(MessageUtil.getMessage("book.updateFail")).build();
 
         }
 
         if (save != null) {
-            return builder.message("編輯成功").status(true).build();
+            return builder.message(MessageUtil.getMessage("book.updateSuccess")).status(true).build();
 
         }
 
-        return builder.message("異常狀況").build();
+        return builder.message(MessageUtil.getMessage("book.abnormalCondition")).build();
 
     }
 
@@ -174,12 +175,12 @@ public class BookService implements IBookService {
         builder = new BaseResponse.Builder();
         Book book = bookDataRepository.getById(id);
         if (book == null) {
-            return builder.message("無此ID").build();
+            return builder.message(MessageUtil.getMessage("book.findNoID")).build();
         }
         try {
             bookDataRepository.deleteById(id);
         } catch (Exception e) {
-            return builder.message("無法刪除").build();
+            return builder.message(MessageUtil.getMessage("book.deleteFail")).build();
         }
 
 
@@ -187,10 +188,10 @@ public class BookService implements IBookService {
             if (book.getPhotoName() != null && !book.getPhotoName().equals("")) {
                 photoService.deletePhoto(book.getPhotoName());
             }
-            return builder.message("刪除成功").status(true).build();
+            return builder.message(MessageUtil.getMessage("book.deleteSuccess")).status(true).build();
 
         }
-        return builder.message("異常狀況").build();
+        return builder.message(MessageUtil.getMessage("book.abnormalCondition")).build();
 
     }
 
@@ -198,7 +199,7 @@ public class BookService implements IBookService {
     public BaseResponse findAll(Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Book> books = bookDataRepository.findAll(pageable);
-        return builder.content(books.getContent()).message("查詢完成").status(true).build();
+        return builder.content(books.getContent()).message(MessageUtil.getMessage("book.searchSuccess")).status(true).build();
 
     }
 
@@ -206,7 +207,7 @@ public class BookService implements IBookService {
     public BaseResponse findByKeyword(String keyword, Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Book> books = bookDataRepository.findBookByKeyWord(keyword, pageable);
-        return builder.content(books.getContent()).message("查詢成功").status(true).build();
+        return builder.content(books.getContent()).message(MessageUtil.getMessage("book.searchSuccess")).status(true).build();
 
     }
 
