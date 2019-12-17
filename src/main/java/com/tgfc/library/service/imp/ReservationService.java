@@ -9,6 +9,7 @@ import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import com.tgfc.library.util.ContextUtil;
 import com.tgfc.library.util.MailUtil;
+import com.tgfc.library.util.MessageUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -48,7 +49,7 @@ public class ReservationService implements IReservationService {
             all = reservationRepository.getReservationByKeywordLikeAndStatus(keyword, aliveStatus, waitStatus, pageable);
         }
         builder = new BaseResponse.Builder();
-        return builder.content(all).message("預約查詢成功").status(true).build();
+        return builder.content(all).message(MessageUtil.getMessage("reservation.searchReservationSuccess")).status(true).build();
     }
 
     @Override
@@ -70,32 +71,32 @@ public class ReservationService implements IReservationService {
         Book bookAbnormal = bookRepository.checkBookAbnormal(bookId, bookStatusList);
 
         if (bookAbnormal != null) {
-            builder.status(false).message("圖書狀況異常無法出借");
+            builder.status(false).message(MessageUtil.getMessage("reservation.abnormalStatus"));
         } else if (exist != null) {
-            builder.status(false).message("已有此預約");
+            builder.status(false).message(MessageUtil.getMessage("reservation.reservationExisted"));
         } else {
             int status;
             Date startDate = new Date();
             int count = reservationRepository.reservationCount(bookId);
             if (bookRepository.checkBookLended(bookId, BookStatusEnum.BOOK_STATUS_LEND.getCode()) != null) {
                 if (recordsRepository.checkOwnBorrowed(bookId).getBorrowId().equals(ContextUtil.getAccount())) {
-                    return builder.message("你正借閱本書中").build();
+                    return builder.message(MessageUtil.getMessage("reservation.borrowingBook")).build();
                 }
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 reservation.setStartDate(startDate);
                 builder.content(count);
-                builder.message("此書出借中，將您排入等候隊伍");
+                builder.message(MessageUtil.getMessage("reservation.bookBorrowingCauseWait"));
             }  else if (count > 0) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 builder.content(count);
-                builder.message("已有他人預約，將您排入等候隊伍");
+                builder.message(MessageUtil.getMessage("reservation.addWaitSuccess"));
                 reservation.setStartDate(startDate);
             } else {
                 status = ReservationEnum.RESERVATION_ALIVE.getCode();
                 reservation.setStartDate(startDate);
                 reservation.setEndDate(new Date(startDate.getTime() + 3 * 24 * 60 * 60 * 1000));
                 builder.content(count);
-                builder.message("可以直接取書囉！");
+                builder.message(MessageUtil.getMessage("reservation.receiveBookNotice"));
             }
             builder.status(true);
             reservation.setStatus(status);
@@ -113,9 +114,9 @@ public class ReservationService implements IReservationService {
             Reservation dataReserv = reservationRepository.getOne(reservation.getId());
             BeanUtils.copyProperties(reservation, dataReserv);
             reservationRepository.save(dataReserv);
-            builder.message("成功新增一筆").status(true);
+            builder.message(MessageUtil.getMessage("reservation.inertSuccess")).status(true);
         } else {
-            builder.message("無此預約").status(false);
+            builder.message(MessageUtil.getMessage("reservation.findNoData")).status(false);
         }
         return builder.build();
     }
@@ -126,9 +127,9 @@ public class ReservationService implements IReservationService {
         boolean exist = reservationRepository.existsById(id);
         if (exist) {
             reservationRepository.deleteById(id);
-            builder.message("成功刪除一筆").status(true);
+            builder.message(MessageUtil.getMessage("reservation.deleteSuccess")).status(true);
         } else {
-            builder.message("無此資料").status(false);
+            builder.message(MessageUtil.getMessage("reservation.findNoData")).status(false);
         }
         return builder.build();
     }
@@ -139,7 +140,7 @@ public class ReservationService implements IReservationService {
     public BaseResponse findByTimeInterval(Date startDate, Date endDate, Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Reservation> reservations = reservationRepository.findByTimeInterval(startDate, endDate, pageable);
-        return builder.content(reservations).message("查詢成功").status(true).build();
+        return builder.content(reservations).message(MessageUtil.getMessage("reservation.searchSuccess")).status(true).build();
     }
 
 
@@ -172,10 +173,10 @@ public class ReservationService implements IReservationService {
             data.put("results", dataList);
             baseResponse.setData(data);
             baseResponse.setStatus(true);
-            baseResponse.setMessage("成功更新一筆");
+            baseResponse.setMessage(MessageUtil.getMessage("reservation.updateSuccess"));
         } else {
             baseResponse.setStatus(false);
-            baseResponse.setMessage("無此預約");
+            baseResponse.setMessage(MessageUtil.getMessage("reservation.findNoData"));
         }
         return baseResponse;
     }
@@ -184,7 +185,7 @@ public class ReservationService implements IReservationService {
     public BaseResponse findAll(Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Reservation> all = reservationRepository.findAll(pageable);
-        return builder.content(all).message("查詢成功").status(true).build();
+        return builder.content(all).message(MessageUtil.getMessage("reservation.searchSuccess")).status(true).build();
     }
 
     @Override
@@ -195,7 +196,7 @@ public class ReservationService implements IReservationService {
         Reservation reservation = reservationRepository.findById(id).get();
         if (!ReservationEnum.RESERVATION_ALIVE.getCode().equals(reservation.getStatus())) {
             baseResponse.setStatus(false);
-            baseResponse.setMessage("請檢查預約狀態");
+            baseResponse.setMessage(MessageUtil.getMessage("reservation.checkReservationStatus"));
             return baseResponse;
         }
 
@@ -218,7 +219,7 @@ public class ReservationService implements IReservationService {
         recordsRepository.save(records);
         reservationRepository.save(reservation);
         baseResponse.setStatus(true);
-        baseResponse.setMessage("取書成功");
+        baseResponse.setMessage(MessageUtil.getMessage("reservation.receiveBookSuccess"));
         return baseResponse;
     }
 
@@ -227,7 +228,7 @@ public class ReservationService implements IReservationService {
         builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByEmpId(empId, pageable);
-        return builder.content(reservations).message("查詢成功").status(true).build();
+        return builder.content(reservations).message(MessageUtil.getMessage("reservation.searchSuccess")).status(true).build();
     }
 
     @Override
@@ -235,6 +236,6 @@ public class ReservationService implements IReservationService {
         builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
         Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId, startDate, endDate, pageable);
-        return builder.content(reservations).message("查詢成功").status(true).build();
+        return builder.content(reservations).message(MessageUtil.getMessage("reservation.searchSuccess")).status(true).build();
     }
 }
