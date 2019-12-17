@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.tgfc.library.LibraryApplication;
 import com.tgfc.library.request.PageableRequest;
 import com.tgfc.library.request.RecordsSearchPageRequest;
+import com.tgfc.library.util.MessageUtil;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +62,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("出借全查成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.findAllSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -73,7 +74,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("出借查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.selectSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -81,7 +82,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","999");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("出借無此資料",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.findNoData"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -89,7 +90,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("出借刪除成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.deleteSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -102,7 +103,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/returnNotify").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("還書通知成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.returnNoticeSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -110,7 +111,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/records/returnBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("歸還成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.returnSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -118,7 +119,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findAll").contentType(MediaType.APPLICATION_JSON).session(session).content("{}");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -133,7 +134,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findByDate").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
 
     }
 
@@ -147,7 +148,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findByEmpId").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
@@ -162,7 +163,7 @@ class RecordsControllerTest {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findByDateWithEmpId").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
         Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
 
     }
 
