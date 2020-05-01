@@ -36,7 +36,7 @@ public class ScheduleControllerTest {
     WebApplicationContext webApplicationContext;
 
     @BeforeEach
-    void init() throws Exception{
+    void init() throws Exception {
         Map<String, String> param = new HashMap<>();
         param.put("account", "ROOT");
         param.put("password", "12345678");
@@ -47,28 +47,28 @@ public class ScheduleControllerTest {
     }
 
     @Test
-    void testSelect() throws Exception{
+    void testSelect() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/schedule/list").contentType(MediaType.APPLICATION_JSON).session(session).content("{}");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("查詢成功", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testSelectByTimeInterval() throws Exception{
+    void testSelectByTimeInterval() throws Exception {
         Map<String, String> param = new HashMap<>();
-        param.put("name","name");
+        param.put("name", "name");
         param.put("startTime", "2019-09-04");
         param.put("endTime", "2019-09-06");
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/schedule/list").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查詢成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("查詢成功", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testInsert() throws Exception{
+    void testInsert() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("type", "2");
         param.put("name", "分頁測試用");
@@ -79,60 +79,60 @@ public class ScheduleControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/schedule/create").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("新增排程成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("新增排程成功", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testInsertError() throws Exception{
+    void testInsertError() throws Exception {
         Map<String, Object> param = new HashMap<>();
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/schedule/create").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("排程參數異常",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("排程參數異常", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testChangeStatus() throws Exception{
+    void testChangeStatus() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("id", "1");
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/schedule/changeStatus").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("狀態改變成功，排程由啟用變為停用",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("狀態改變成功，排程由啟用變為停用", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testChangeStatusWithNoSchedule() throws Exception{
+    void testChangeStatusWithNoSchedule() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("id", "2");
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/schedule/changeStatus").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查無此排程",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("查無此排程", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testDelete() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/schedule/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+    void testDelete() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/schedule/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("刪除指定排程成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("刪除指定排程成功", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testDeleteWithNoSchedule() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/schedule/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","2");
+    void testDeleteWithNoSchedule() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/schedule/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "2");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查無此排程",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("查無此排程", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testEditStatus() throws Exception{
+    void testEditStatus() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("id", "1");
         param.put("type", "2");
@@ -144,12 +144,12 @@ public class ScheduleControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/schedule/edit").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("修改成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("修改成功", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testEditStatusWithNoSchedule() throws Exception{
+    void testEditStatusWithNoSchedule() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("id", "2");
         param.put("type", "2");
@@ -161,15 +161,9 @@ public class ScheduleControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.put("/schedule/edit").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("查無此排程",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("查無此排程", new JSONObject(response.getContentAsString()).get("message"));
     }
-
-
-
-
-
-
 
 
 }

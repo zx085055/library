@@ -9,39 +9,13 @@
     </parent>
     <groupId>com.tgfc</groupId>
     <artifactId>library</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
     <name>library</name>
     <packaging>war</packaging>
 
-    <properties>
-        <java.version>1.8</java.version>
-        <nexus.ip>nexus:8081</nexus.ip>
-        <project.scm.id>git-user</project.scm.id>
-    </properties>
-
-    <repositories>
-        <repository>
-            <id>nexus-snapshots</id>
-            <name>TGFC nexus</name>
-            <url>http://${nexus.ip}/repository/maven-snapshots/</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>nexus</id>
-            <name>releases</name>
-            <url>http://${nexus.ip}/repository/maven-releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <name>snapshots</name>
-            <url>http://${nexus.ip}/repository/maven-snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
-        <finalName>api</finalName>
+        <finalName>library</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
@@ -102,12 +76,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-            <version>1.4.194</version>
-        </dependency>
         <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -122,17 +90,6 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>2.1.9.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>com.tgfc.common</groupId>
-            <artifactId>spring-ldap</artifactId>
-            <version>1.0.5.RELEASE</version>
-        </dependency>
-         <dependency>
-             <groupId>org.springframework.boot</groupId>
-             <artifactId>spring-boot-starter-test</artifactId>
-             <scope>test</scope>
-             <version>2.1.6.RELEASE</version>
-         </dependency>
         <!-- 熱部署模組 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -239,11 +196,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <scm>
-        <connection>scm:git:https://git.tgfc.tw/java-team/library.git</connection>
-        <developerConnection>scm:git:https://git.tgfc.tw/java-team/library.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
 
 </project>

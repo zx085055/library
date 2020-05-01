@@ -35,7 +35,7 @@ public class AnnouncementService implements IAnnouncementService {
     public BaseResponse select(String title, Date startTime, Date endTime, Boolean checkPermission, Pageable pageable) {
         builder = new BaseResponse.Builder();
         Page<Announcement> announcements;
-        title = (title == null) ? "" : title;
+        title = (title == null) ? "" : title.replace("/","//").replace("%","/%").replace("_","/_");
         startTime = (startTime == null) ? new Date(Long.valueOf("-62135798400000")) : startTime;
         endTime = (endTime == null) ? new Date(Long.valueOf("253402271999000")) : endTime;
         checkPermission = (checkPermission == null) ? true : checkPermission;

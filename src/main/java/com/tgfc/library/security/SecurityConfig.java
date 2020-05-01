@@ -31,10 +31,9 @@ public class SecurityConfig {
     @EnableGlobalMethodSecurity(jsr250Enabled = true)
     public static class ApiConfig extends WebSecurityConfigurerAdapter implements AuditorAware<String> {
 
+        private ObjectMapper mapper = new ObjectMapper();
         @Autowired
         LdapAuthProvider ldapAuthProvider;
-
-        private ObjectMapper mapper = new ObjectMapper();
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -80,8 +79,8 @@ public class SecurityConfig {
             };
         }
 
-        private AuthenticationEntryPoint forbiddenEntryPointHandler(){
-            return (HttpServletRequest request, HttpServletResponse response, AuthenticationException var) ->{
+        private AuthenticationEntryPoint forbiddenEntryPointHandler() {
+            return (HttpServletRequest request, HttpServletResponse response, AuthenticationException var) -> {
                 BaseResponse customResponse = new BaseResponse();
                 customResponse.setStatus(false);
                 customResponse.setMessage("請登入後再使用");

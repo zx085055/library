@@ -43,6 +43,7 @@ public class RecordsService implements IRecordsService {
     @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Integer status, Pageable pageable) {
         builder = new BaseResponse.Builder();
+        keyword = keyword.replace("/", "//").replace("%", "/%").replace("_", "/_");
         if (status.equals(RecordsStatusEnum.RECORDSSTATUS_ALL.getCode())) {
             Page<Records> records = recordsRepository.getRecordsByNameLike(keyword, pageable);
             builder.content(records).message(MessageUtil.getMessage("records.findAllSuccess")).status(true);
@@ -109,8 +110,16 @@ public class RecordsService implements IRecordsService {
     public BaseResponse findByEmpId(Pageable pageable) {
         builder = new BaseResponse.Builder();
         String empId = ContextUtil.getAccount();
-        Page<Records> reservations = recordsRepository.getRecordsByEmpId(empId, pageable);
-        return builder.content(reservations).message(MessageUtil.getMessage("records.searchSuccess")).status(true).build();
+        Page<Records> records = recordsRepository.getRecordsByEmpId(empId, pageable);
+        for (Records record : records) {
+            if (record.getStatus().equals(RecordsStatusEnum.RECORDSSTATUS_BORROWING.getCode()) && !record.isRenewed()) {
+                int waitingAmount = reservationRepository.checkReservationQue(record.getBook().getId());
+                if (waitingAmount == 0) {
+                    record.setRenewable(true);
+                }
+            }
+        }
+        return builder.content(records).message(MessageUtil.getMessage("records.searchSuccess")).status(true).build();
     }
 
     @Override
@@ -118,5 +127,25 @@ public class RecordsService implements IRecordsService {
         builder = new BaseResponse.Builder();
         Page<Records> reservations = recordsRepository.findByTimeIntervalWithEmpId(ContextUtil.getAccount(), startDate, endDate, pageable);
         return builder.content(reservations).message(MessageUtil.getMessage("records.searchSuccess")).status(true).build();
+    }
+
+    @Override
+    public BaseResponse renew(Integer bookId, Integer recordId) {
+        builder = new BaseResponse.Builder();
+        int waitingPerson = reservationRepository.checkReservationQue(bookId);
+        Date endDate = null;
+        if (waitingPerson == 0) {
+            Records record = recordsRepository.getOne(recordId);
+            if (!record.isRenewed()) {
+                endDate = new Date(record.getEndDate().getTime() + 60 * 60 * 24 * 1000 * 14);
+                record.setRenewed(true);
+                record.setEndDate(endDate);
+                recordsRepository.save(record);
+                return builder.status(true).content(endDate).message(MessageUtil.getMessage("records.renew.success")).build();
+            } else {
+                return builder.status(false).message(MessageUtil.getMessage("records.renew.hasRenewed")).build();
+            }
+        }
+        return builder.status(false).message(MessageUtil.getMessage("records.renew.hasWaited")).build();
     }
 }

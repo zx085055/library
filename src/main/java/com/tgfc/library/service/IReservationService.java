@@ -27,4 +27,6 @@ public interface IReservationService {
 
     BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable);
 
+    BaseResponse checkReservationQue(Integer bookId);
+
 }

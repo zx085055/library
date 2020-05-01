@@ -43,7 +43,7 @@ class RecordsControllerTest {
     WebApplicationContext webApplicationContext;
 
     @BeforeEach
-    void init() throws Exception{
+    void init() throws Exception {
         Map<String, String> param = new HashMap<>();
         param.put("account", "ROOT");
         param.put("password", "12345678");
@@ -54,47 +54,47 @@ class RecordsControllerTest {
     }
 
     @Test
-    void testAllSelect() throws Exception{
+    void testAllSelect() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", "");
         param.put("status", 0);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.findAllSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.findAllSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testSelect() throws Exception{
+    void testSelect() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", "");
         param.put("status", 1);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.selectSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.selectSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testDeleteNotFound() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","999");
+    void testDeleteNotFound() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "999");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.findNoData"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.findNoData"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testDelete() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+    void testDelete() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/records/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.deleteSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.deleteSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testReturnNotify() throws Exception{
+    void testReturnNotify() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("id", 2);
         param.put("title", "該還書了");
@@ -102,44 +102,44 @@ class RecordsControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/returnNotify").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.returnNoticeSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.returnNoticeSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testReturnBook() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/records/returnBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+    void testReturnBook() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/records/returnBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.returnSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.returnSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testFindAll() throws Exception{
+    void testFindAll() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findAll").contentType(MediaType.APPLICATION_JSON).session(session).content("{}");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void testFindByDate() throws Exception{
+    public void testFindByDate() throws Exception {
         RecordsSearchPageRequest records = new RecordsSearchPageRequest();
-        records.setStartDate(new Date(2019,9,3));
-        records.setEndDate(new Date(2019,9,10));
+        records.setStartDate(new Date(2019, 9, 3));
+        records.setEndDate(new Date(2019, 9, 10));
 
         Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
         String jsonData = gson.toJson(records);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findByDate").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
 
     }
 
     @Test
-    public void testFindByEmpId() throws Exception{
+    public void testFindByEmpId() throws Exception {
         PageableRequest request = new PageableRequest();
 
         Gson gson = new GsonBuilder().create();
@@ -147,24 +147,32 @@ class RecordsControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findByEmpId").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void testFindByDateWithEmpId() throws Exception{
+    public void testFindByDateWithEmpId() throws Exception {
         RecordsSearchPageRequest request = new RecordsSearchPageRequest();
-        request.setStartDate(new Date(2019,9,3));
-        request.setEndDate(new Date(2019,9,10));
+        request.setStartDate(new Date(2019, 9, 3));
+        request.setEndDate(new Date(2019, 9, 10));
 
         Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
         String jsonData = gson.toJson(request);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/records/findByDateWithEmpId").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
 
+    }
+
+    @Test
+    public void testRenew() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/records/renew").contentType(MediaType.APPLICATION_JSON).session(session).param("bookId", "4").param("recordId", "3");
+        MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("records.renew.success"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
 }

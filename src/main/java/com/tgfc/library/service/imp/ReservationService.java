@@ -40,6 +40,7 @@ public class ReservationService implements IReservationService {
     @Override
     @Transactional(readOnly = true)
     public BaseResponse select(String keyword, Pageable pageable) {
+        keyword = keyword.replace("/", "//").replace("%", "/%").replace("_", "/_");
         Integer aliveStatus = ReservationEnum.RESERVATION_ALIVE.getCode();
         Integer waitStatus = ReservationEnum.RESERVATION_WAIT.getCode();
         Page<Reservation> all;
@@ -202,6 +203,7 @@ public class ReservationService implements IReservationService {
 
         reservation.setStatus(ReservationEnum.RESERVATION_SUCCESS.getCode());
 
+
         Records records = new Records();
         EmployeeSafty employee = employeeRepository.findById(reservation.getEmployee().getId()).get();
         Book book = bookRepository.findById(reservation.getBook().getId()).get();
@@ -238,4 +240,12 @@ public class ReservationService implements IReservationService {
         Page<Reservation> reservations = reservationRepository.findByTimeIntervalWithEmpId(empId, startDate, endDate, pageable);
         return builder.content(reservations).message(MessageUtil.getMessage("reservation.searchSuccess")).status(true).build();
     }
+
+    @Override
+    public BaseResponse checkReservationQue(Integer bookId) {
+        builder = new BaseResponse.Builder();
+        int queLength = reservationRepository.checkReservationQue(bookId);
+        return builder.content(queLength).message(MessageUtil.getMessage("reservation.searchSuccess")).status(true).build();
+    }
+
 }

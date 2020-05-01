@@ -37,7 +37,7 @@ public class responseAdviceTest {
     MockHttpSession session;
 
     @BeforeEach
-    void init() throws Exception{
+    void init() throws Exception {
         Map<String, String> param = new HashMap<>();
         param.put("account", "TGFC062");
         param.put("password", "Tgfc@3B1234");
@@ -48,17 +48,17 @@ public class responseAdviceTest {
     }
 
     @Test
-    public void accessDeniedTest() throws Exception{
+    public void accessDeniedTest() throws Exception {
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "1");
         mockMvc.perform(requestBuilder);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(),response.getStatus());
-        Assertions.assertEquals("權限不足,請檢查授權",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
+        Assertions.assertEquals("權限不足,請檢查授權", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void methodArgumentNotValidTest() throws Exception{
+    public void methodArgumentNotValidTest() throws Exception {
         RecommendPageRequest recommendModel = new RecommendPageRequest();
         recommendModel.setName("NightMare");
         recommendModel.setAuther("Steven King");
@@ -71,15 +71,15 @@ public class responseAdviceTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/recommend/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(),response.getStatus());
-        Assertions.assertEquals("參數錯誤,請檢查參數內容",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        Assertions.assertEquals("參數錯誤,請檢查參數內容", new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void beforeBodyWriteTest() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete1").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+    public void beforeBodyWriteTest() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.delete("/recommend/delete1").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "1");
         mockMvc.perform(requestBuilder);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(404,response.getStatus());
+        Assertions.assertEquals(404, response.getStatus());
     }
 }

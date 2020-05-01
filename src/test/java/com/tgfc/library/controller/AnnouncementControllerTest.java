@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,8 +33,7 @@ class AnnouncementControllerTest {
 
     MockHttpSession session;
 
-    @Autowired
-    WebApplicationContext webApplicationContext;
+
 
     @BeforeEach
     void init() throws Exception{

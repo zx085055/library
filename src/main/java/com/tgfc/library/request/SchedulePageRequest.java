@@ -14,6 +14,19 @@ public class SchedulePageRequest extends PageableRequest {
     private String lastExecute;
     private Boolean isEdit;
 
+    public Boolean getEdit() {
+        return isEdit;
+    }
+
+    public void setEdit(Boolean edit) {
+        isEdit = edit;
+    }
+
+    @Override
+    public void setPageNumber(int pageNumber) {
+        super.setPageNumber(pageNumber - 1);
+    }
+
     public Integer getId() {
         return id;
     }

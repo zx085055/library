@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages ={"com.tgfc.library.*","tw.tgfc.common.spring.ldap.conf"})
+@SpringBootApplication(scanBasePackages ={"com.tgfc.library.*"})
 @EnableJpaRepositories(basePackages = "com.tgfc.library.repository" )
 @EntityScan(basePackages = {"com.tgfc.library.entity"})
 @EnableJpaAuditing

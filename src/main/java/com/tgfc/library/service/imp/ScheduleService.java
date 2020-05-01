@@ -19,15 +19,9 @@ import com.tgfc.library.util.MessageUtil;
 import org.quartz.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.criteria.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +32,6 @@ public class ScheduleService implements IScheduleService {
 
     @Autowired
     IScheduleRepository scheduleRepository;
-
-    @Autowired
-    private EntityManagerFactory emf;
 
     @Autowired
     OneDayOneTimeTrigger oneDayOneTimeTrigger;
@@ -56,53 +47,11 @@ public class ScheduleService implements IScheduleService {
     @Override
     public BaseResponse list(SchedulePageRequest model) {
         builder = new BaseResponse.Builder();
-        EntityManager entityManager = emf.createEntityManager();
-        EntityTransaction etx = entityManager.getTransaction();
-        etx.begin();
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Schedule> query = criteriaBuilder.createQuery(Schedule.class);
-        Root<Schedule> rootEntity = query.from(Schedule.class);
-
-        model = initKeyword(model);
-
-        Predicate predicate = criteriaBuilder.and(criteriaBuilder.like(rootEntity.get("name"), model.getName()),
-                criteriaBuilder.greaterThanOrEqualTo(rootEntity.get("startTime"), model.getStartTime()),
-                criteriaBuilder.lessThanOrEqualTo(rootEntity.get("endTime"), model.getEndTime()));
-
-        query = query.select(rootEntity).where(predicate);
-        List<Schedule> list = entityManager.createQuery(query)
-                .setFirstResult((model.getPageNumber() - 1) * model.getPageSize())
-                .setMaxResults(model.getPageSize())
-                .getResultList();
-
-        int totalCount = entityManager.createQuery(query).getResultList().size();
-
-        etx.commit();
-        entityManager.close();
-
+        Page<Schedule> page = scheduleRepository.getList(model.getName(), model.getStartTime(), model.getEndTime(), model.getPageable());
         Map<String, Object> resultMap = new HashMap<>(16);
-        resultMap.put("totalCount", totalCount);
-        resultMap.put("results", scheduleListToResponseList(list));
-
+        resultMap.put("totalCount", page.getTotalElements());
+        resultMap.put("results", scheduleListToResponseList(page.getContent()));
         return builder.content(resultMap).message(MessageUtil.getMessage("schedule.searchSuccess")).status(true).build();
-    }
-
-    private SchedulePageRequest initKeyword(SchedulePageRequest model) {
-        model.setPageNumber(model.getPageNumber() < 1 ? 1 : model.getPageNumber());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date startDate = null;
-        Date endDate = null;
-        try {
-            startDate = sdf.parse("0000-01-01");
-            endDate = sdf.parse("3099-01-01");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        model.setName(model.getName() == null ? "%" : "%" + model.getName() + "%");
-        model.setStartTime(model.getStartTime() == null ? startDate : model.getStartTime());
-        model.setEndTime(model.getEndTime() == null ? endDate : model.getEndTime());
-
-        return model;
     }
 
     private List<SchedulePageResponse> scheduleListToResponseList(List<Schedule> list) {

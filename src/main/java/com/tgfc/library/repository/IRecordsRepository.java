@@ -23,26 +23,30 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Query(value = "SELECT * FROM `records` WHERE records.id = (SELECT MAX(id) FROM `records` where records.book_id = ?1)",nativeQuery = true)
     Records checkOwnBorrowed(Integer id);
 
-    @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE (r.borrowUsername LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')) AND r.status=?2")
+    @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE (r.borrowUsername LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.name LIKE CONCAT('%',?1,'%') ESCAPE '/') AND r.status=?2")
     Page<Records> getRecordsByNameLikeAndStatus(String name, Integer status, Pageable pageable);
 
-    @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE r.borrowUsername LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')")
+    @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE r.borrowUsername LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.name LIKE CONCAT('%',?1,'%') ESCAPE '/'")
     Page<Records> getRecordsByNameLike(String name, Pageable pageable);
 
     @Query("SELECT r from Records r where r.borrowDate>=?1 AND r.borrowDate<=?2")
     Page<Records> findByTimeInterval(Date borrowDate, Date returnDate, Pageable pageable);
 
-    @Query(value = "select r from Records r where r.endDate<=?1 and r.status=1")
-    List<Records> getLendingExpiredList(Date currentDate);
+    @Query(value = "SELECT * FROM `records` WHERE Date(records.end_date) BETWEEN  CURRENT_DATE and  DATE_ADD(CURRENT_DATE,INTERVAL 3 DAY) and records.`status` = 1;", nativeQuery = true)
+    List<Records> getLendingNearlyExpiredList();
+
+    @Query(value = "SELECT * FROM `records` WHERE Date(records.end_date) <  CURRENT_DATE and records.`status` in (1,3)", nativeQuery = true)
+    List<Records> getLendingExpiredList();
 
     @Query(value = "select r from Records r where r.borrowId = ?1")
-    Page<Records> getRecordsByEmpId(String EmpId,Pageable pageable);
+    Page<Records> getRecordsByEmpId(String EmpId, Pageable pageable);
 
     @Modifying
     @Transactional
-    @Query(value = "update Records r set r.status=3 where r.endDate<=?1 and r.status=1")
-    int lendingExpiredStatus(Date currentDate);
+    @Query(value = "update `records` r set r.status=3 WHERE Date(r.end_date) <  CURRENT_DATE  and r.status=1", nativeQuery = true)
+    int lendingExpiredStatus();
 
     @Query("SELECT r from Records r where r.borrowId=?1 And r.borrowDate>=?2 AND r.borrowDate<=?3")
-    Page<Records> findByTimeIntervalWithEmpId(String empId,Date startDate, Date endDate, Pageable pageable);
+    Page<Records> findByTimeIntervalWithEmpId(String empId, Date startDate, Date endDate, Pageable pageable);
+
 }

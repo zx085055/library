@@ -47,7 +47,7 @@ class ReservationControllerTest {
     MessageUtil messageUtil;
 
     @BeforeEach
-    void init() throws Exception{
+    void init() throws Exception {
         Map<String, String> param = new HashMap<>();
         param.put("account", "ROOT");
         param.put("password", "12345678");
@@ -58,7 +58,7 @@ class ReservationControllerTest {
     }
 
     @Test
-    void testSelectByKeyword() throws Exception{
+    void testSelectByKeyword() throws Exception {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", "法師");
         param.put("pageNumber", 0);
@@ -66,29 +66,29 @@ class ReservationControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/select").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchReservationSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchReservationSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    void testGetBook() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/reservation/getBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","1");
+    void testGetBook() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/reservation/getBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "1");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.receiveBookSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.receiveBookSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
     @Order(3)
-    void testGetBookFail() throws Exception{
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/reservation/getBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id","3");
+    void testGetBookFail() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/reservation/getBook").contentType(MediaType.APPLICATION_JSON).session(session).param("id", "3");
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.checkReservationStatus"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.checkReservationStatus"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void testFindAll() throws Exception{
+    public void testFindAll() throws Exception {
         PageableRequest request = new PageableRequest();
 
         Gson gson = new GsonBuilder().create();
@@ -96,27 +96,27 @@ class ReservationControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findAll").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void testFindByDate() throws Exception{
+    public void testFindByDate() throws Exception {
         ReservationPageRequest reservation = new ReservationPageRequest();
-        reservation.setStartDate(new Date(2019,9,4));
-        reservation.setEndDate(new Date(2019,9,10));
+        reservation.setStartDate(new Date(2019, 9, 4));
+        reservation.setEndDate(new Date(2019, 9, 10));
 
         Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
         String jsonData = gson.toJson(reservation);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findByDate").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void testFindByEmpName() throws Exception{
+    public void testFindByEmpName() throws Exception {
         PageableRequest request = new PageableRequest();
 
         Gson gson = new GsonBuilder().create();
@@ -124,12 +124,12 @@ class ReservationControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findByEmp").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void testInsert() throws Exception{
+    public void testInsert() throws Exception {
         Reservation reservation = new Reservation();
         Book book = new Book();
         book.setId(3);
@@ -140,13 +140,13 @@ class ReservationControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.addWaitSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.addWaitSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
     @Order(1)
-    public void testInsertExsitedReservation() throws Exception{
+    public void testInsertExsitedReservation() throws Exception {
         Reservation reservation = new Reservation();
         Book book = new Book();
         book.setId(1);
@@ -157,13 +157,13 @@ class ReservationControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.reservationExisted"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.reservationExisted"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
     @Order(2)
-    public void testInsertExistedReservationByOthers() throws Exception{
+    public void testInsertExistedReservationByOthers() throws Exception {
         Reservation reservation = new Reservation();
         Book book = new Book();
         book.setId(2);
@@ -174,22 +174,22 @@ class ReservationControllerTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.addWaitSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.addWaitSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 
     @Test
-    public void testFindByDateWithEmpId() throws Exception{
+    public void testFindByDateWithEmpId() throws Exception {
         ReservationPageRequest reservation = new ReservationPageRequest();
-        reservation.setStartDate(new Date(2019,9,4));
-        reservation.setEndDate(new Date(2019,9,10));
+        reservation.setStartDate(new Date(2019, 9, 4));
+        reservation.setEndDate(new Date(2019, 9, 10));
 
         Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
         String jsonData = gson.toJson(reservation);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/reservation/findByDateWithEmpId").contentType(MediaType.APPLICATION_JSON).session(session).content(jsonData);
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"),new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals(MessageUtil.getMessage("reservation.searchSuccess"), new JSONObject(response.getContentAsString()).get("message"));
     }
 }

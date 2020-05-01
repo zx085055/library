@@ -29,7 +29,7 @@ public class LoginFilterTest {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void testAttemptAuthentication()throws Exception{
+    public void testAttemptAuthentication() throws Exception {
 
         Map<String, String> param = new HashMap<>();
         param.put("account", "ROOT");

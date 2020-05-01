@@ -66,4 +66,10 @@ public class RecordsController {
         return recordsService.findByTimeIntervalWithEmpId(recordsPageRequest.getStartDate(), recordsPageRequest.getEndDate(), recordsPageRequest.getPageable());
     }
 
+    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @GetMapping("/renew")
+    public BaseResponse renew(@RequestParam Integer bookId,@RequestParam Integer recordId){
+        return recordsService.renew(bookId,recordId);
+    }
+
 }

@@ -29,6 +29,11 @@ public class Records implements Serializable {
     private Date endDate;
     @Column(name = "status", length = 5, nullable = false)
     private Integer status;
+    @Column(name = "renewed",length = 2)
+    private boolean renewed = false;
+
+    @Transient
+    private boolean renewable = false;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
@@ -110,4 +115,19 @@ public class Records implements Serializable {
         this.book = book;
     }
 
+    public boolean isRenewed() {
+        return renewed;
+    }
+
+    public void setRenewed(boolean renewed) {
+        this.renewed = renewed;
+    }
+
+    public boolean isRenewable() {
+        return renewable;
+    }
+
+    public void setRenewable(boolean renewable) {
+        this.renewable = renewable;
+    }
 }

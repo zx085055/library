@@ -16,11 +16,14 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     @Override
     Book getOne(Integer id);
 
-    @Query(value = "SELECT b FROM Book b WHERE b.name LIKE :keyword or b.author LIKE :keyword or b.pubHouse LIKE :keyword or b.type LIKE :keyword or b.isbn = :isbn ")
-    Page<Book> findAllByKeyword(@Param("keyword") String keyword, @Param("isbn") String isbn, Pageable pageable);
+    @Query(value = "SELECT b FROM Book b WHERE b.name LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.author LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.pubHouse LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.type LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.isbn = :keyword ")
+    Page<Book> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
-    @Query(value = "SELECT b FROM Book b WHERE (b.name LIKE :keyword or b.author LIKE :keyword or b.pubHouse LIKE :keyword or b.type LIKE :keyword or b.isbn = :isbn) AND b.status<>:checkPermission")
-    Page<Book> findNotScrapByKeyword(@Param("keyword") String keyword, @Param("isbn") String isbn,  @Param("checkPermission")Integer checkPermission, Pageable pageable);
+    @Query(value = "SELECT b FROM Book b WHERE (b.name LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.author LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.pubHouse LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.type LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.isbn = :keyword) AND b.status<>:checkPermission")
+    Page<Book> findNotScrapByKeyword(@Param("keyword") String keyword,  @Param("checkPermission")Integer checkPermission, Pageable pageable);
+
+    @Query(value = "SELECT b FROM Book b WHERE b.status <> 6")
+    Page<Book> findAllNotScrapByKeyword(Pageable pageable);
 
     @Query(value = "SELECT u FROM Book u WHERE u.id = :id")
     Book getById(Integer id);
@@ -37,10 +40,10 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     @Query(value = "SELECT u FROM Book u WHERE u.propertyCode = :propertyCode and u.id <> :id")
     List<Book> findByPropertyCodeAndId(Integer id, String propertyCode);
 
-    @Query(value = "SELECT b From Book b where b.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.pubHouse LIKE CONCAT('%',?1,'%')")
+    @Query(value = "SELECT b From Book b where b.name LIKE CONCAT('%@',?1,'%') ESCAPE '@' OR b.author LIKE CONCAT('%',?1,'%') ESCAPE '@' OR b.pubHouse LIKE CONCAT('%',?1,'%') ESCAPE '@' ")
     Page<Book> findBookByKeyWord(String keyWord, Pageable pageable);
 
-    @Query(value = "delete from book  where id LIKE :id ", nativeQuery = true)
+    @Query(value = "delete from book where id = :id ", nativeQuery = true)
     void deleteById(@Param("id") Integer id);
 
     @Query(value = "select b from Book b where b.id=?1 and b.status=?2")

@@ -43,7 +43,7 @@ public class SecurityConfigTest {
     MockHttpSession session;
 
     @BeforeEach
-    void init() throws Exception{
+    void init() throws Exception {
         Map<String, String> param = new HashMap<>();
         param.put("account", "ROOT");
         param.put("password", "12345678");
@@ -96,9 +96,8 @@ public class SecurityConfigTest {
     }
 
 
-
     @Test
-    public void testGetCurrentAuditor()throws Exception{
+    public void testGetCurrentAuditor() throws Exception {
 
         Map<String, Object> param = new HashMap<>();
         param.put("title", "我是公告");
@@ -109,8 +108,8 @@ public class SecurityConfigTest {
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/announcement/insert").contentType(MediaType.APPLICATION_JSON).session(session).content(objectMapper.writeValueAsString(param));
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
-        Assertions.assertEquals(HttpStatus.OK.value(),response.getStatus());
-        Assertions.assertEquals("新增公告成功",new JSONObject(response.getContentAsString()).get("message"));
+        Assertions.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assertions.assertEquals("新增公告成功", new JSONObject(response.getContentAsString()).get("message"));
         Assertions.assertNotNull(config.getCurrentAuditor());
 
     }

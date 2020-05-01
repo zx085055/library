@@ -1,7 +1,6 @@
 package com.tgfc.library.conf;
 
 
-import com.tgfc.library.entity.Schedule;
 import org.quartz.Scheduler;
 import org.quartz.spi.JobFactory;
 import org.springframework.beans.factory.annotation.Autowired;

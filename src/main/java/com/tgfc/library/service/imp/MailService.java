@@ -3,6 +3,7 @@ package com.tgfc.library.service.imp;
 import com.tgfc.library.entity.Records;
 import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.JobTypeEnum;
+import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.repository.IRecordsRepository;
 import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.response.MailResponse;
@@ -23,30 +24,39 @@ public class MailService implements IMailService {
     @Autowired
     IRecordsRepository recordsRepository;
 
+    @Autowired
+    IEmployeeRepository employeeRepository;
+
+
+    public MailService(IReservationRepository reservationRepository, IRecordsRepository recordsRepository) {
+        this.reservationRepository = reservationRepository;
+        this.recordsRepository = recordsRepository;
+    }
+
     @Override
     public List<MailResponse> getReservationNearlyExpiredList() {
-        java.util.Date date = addThreeDays(new java.util.Date());
-        return reservationToModel(reservationRepository.getReservationExpiredList(date), JobTypeEnum.RESERVATION_NEARLY_EXPIRED.getTrans());
+        return reservationToModel(reservationRepository.getReservationNearlyExpiredList(), JobTypeEnum.RESERVATION_NEARLY_EXPIRED.getTrans());
     }
 
     @Override
     public List<MailResponse> getReservationExpiredList() {
-        return reservationToModel(reservationRepository.getReservationExpiredList(new java.util.Date()), JobTypeEnum.RESERVATION_EXPIRED.getTrans());
+        return reservationToModel(reservationRepository.getReservationExpiredList(), JobTypeEnum.RESERVATION_EXPIRED.getTrans());
     }
 
     @Override
     public List<MailResponse> getLendingNearlyExpiredList() {
-        java.util.Date date = addThreeDays(new java.util.Date());
-        return recordsToModel(recordsRepository.getLendingExpiredList(date), JobTypeEnum.LENDING_NEARLY_EXPIRED.getTrans());
+        return recordsToModel(recordsRepository.getLendingNearlyExpiredList(), JobTypeEnum.LENDING_NEARLY_EXPIRED.getTrans());
     }
 
     @Override
     public List<MailResponse> getLendingExpiredJobList() {
-        return recordsToModel(recordsRepository.getLendingExpiredList(new java.util.Date()), JobTypeEnum.LENDING_EXPIRED.getTrans());
+        return recordsToModel(recordsRepository.getLendingExpiredList(), JobTypeEnum.LENDING_EXPIRED.getTrans());
     }
+
 
     /**
      * 批量寄信
+     *
      * @param list
      * @return Boolean
      */
@@ -87,7 +97,7 @@ public class MailService implements IMailService {
                     MailResponse mailResponse = new MailResponse();
                     mailResponse.setEmployee(records.getBorrowUsername());
                     mailResponse.setBookName(records.getBook().getName());
-                    mailResponse.setEmail(records.getEmployee().getEmail());
+                    mailResponse.setEmail(employeeRepository.getReservationByStatus(records.getBorrowId()));
                     mailResponse.setEndDate(new java.sql.Date((records.getEndDate()).getTime()));
                     mailResponse.setTitle(title);
                     return mailResponse;
@@ -106,17 +116,5 @@ public class MailService implements IMailService {
                     return mailResponse;
                 }
         ).collect(Collectors.toList());
-    }
-
-    /**
-     * 計算即將到期的時間(3天)
-     * @param date
-     * @return Date
-     */
-    private Date addThreeDays(java.util.Date date) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        calendar.add(calendar.DATE, 3);
-        return calendar.getTime();
     }
 }

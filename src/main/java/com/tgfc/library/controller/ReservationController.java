@@ -63,4 +63,11 @@ public class ReservationController {
     public BaseResponse findByDateWithEmpId(@RequestBody ReservationPageRequest reservationPageRequest) {
         return reservationService.findByTimeIntervalWithEmpId(reservationPageRequest.getStartDate(), reservationPageRequest.getEndDate(), reservationPageRequest.getPageable());
     }
+
+    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @GetMapping("/checkReservationQue")
+    public BaseResponse checkReservationQue(@RequestParam Integer bookId) {
+        return reservationService.checkReservationQue(bookId);
+    }
+
 }

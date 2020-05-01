@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Date;
 
 @Repository
 public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
@@ -19,6 +19,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 恢復全部暫停job時變更狀態
+     *
      * @return
      */
     @Modifying
@@ -28,6 +29,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 暫停全部job時變更狀態
+     *
      * @return int
      */
     @Modifying
@@ -38,6 +40,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 暫停job時變更狀態
+     *
      * @param id
      * @return int
      */
@@ -48,6 +51,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 恢復暫停job時變更狀態
+     *
      * @param id
      * @return int
      */
@@ -58,6 +62,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 設定Group
+     *
      * @param id
      * @param group
      * @return int
@@ -70,6 +75,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 設置Job上次執行狀態紀錄
+     *
      * @param id
      * @param lastExecute
      * @return int
@@ -80,11 +86,9 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     int setLastExecute(int id, String lastExecute);
 
 
-
-
-
     /**
      * 設置狀態
+     *
      * @param id
      * @param Status
      * @return int
@@ -97,6 +101,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 查詢上次執行狀態
+     *
      * @param id
      * @return String
      */
@@ -106,6 +111,7 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
 
     /**
      * 設置Id
+     *
      * @param oleId
      * @param newId
      * @return int
@@ -115,5 +121,18 @@ public interface IScheduleRepository extends JpaRepository<Schedule, Integer> {
     @Query(value = "update Schedule r set r.id=?2 where r.id=?1")
     int setId(int oleId, int newId);
 
+
+    /**
+     * 查詢排程列表
+     *
+     * @param name
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @Query(value = "SELECT * from schedule  where LOCATE(?1, `name`)>0 and start_time > IFNULL(?2,'0000-01-01 00:00:00') and end_time<IFNULL(?3,'3000-12-31 23:59:59') ORDER BY id",
+            countQuery = "SELECT count(*) from schedule  where LOCATE(?1, `name`)>0 and start_time > IFNULL(?2,'0000-01-01 00:00:00') and end_time<IFNULL(?3,'3000-12-31 23:59:59')",
+            nativeQuery = true)
+    Page<Schedule> getList(String name, Date startTime, Date endTime, Pageable pageable);
 
 }

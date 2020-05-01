@@ -1,6 +1,7 @@
 package com.tgfc.library.repository;
 
 import com.tgfc.library.entity.Reservation;
+import org.hibernate.mapping.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,8 +16,11 @@ import java.util.List;
 @Repository
 public interface IReservationRepository extends JpaRepository<Reservation, Integer> {
 
-    @Query("SELECT r FROM Reservation r LEFT JOIN r.book b WHERE (r.employee.name LIKE CONCAT('%',?1,'%') OR b.author LIKE CONCAT('%',?1,'%') OR b.name LIKE CONCAT('%',?1,'%')) AND (r.status=?2 OR r.status=?3) ORDER BY b.name ASC, r.status ASC, r.startDate ASC")
+    @Query("SELECT r FROM Reservation r LEFT JOIN r.book b WHERE (r.employee.name LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.propertyCode LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.name LIKE CONCAT('%',?1,'%') ESCAPE '/')  AND (r.status=?2 OR r.status=?3) ORDER BY b.name ASC, r.status ASC, r.startDate ASC")
     Page<Reservation> getReservationByKeywordLikeAndStatus(String keyword, Integer aliveStatus, Integer waitStatus, Pageable pageable);
+
+    @Query("SELECT r FROM Reservation r LEFT JOIN r.book b WHERE (r.employee.name LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.propertyCode LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.name LIKE CONCAT('%',?1,'%') ESCAPE '/')  AND (r.status=?2) ORDER BY b.name ASC, r.status ASC, r.startDate ASC")
+    Page<Reservation> getReservationByKeywordLikeAndStatus(String keyword, Integer status, Pageable pageable);
 
     @Query(value = "SELECT r.* FROM `reservation` r WHERE book_id=?2 AND `status` IN ?1 AND r.employee_id <> ?3 ORDER BY `status`,r.start_date LIMIT 1", nativeQuery = true)
     Reservation getReservationByStatusAndBookId(List<Integer> status, Integer bookId, String id);
@@ -40,14 +44,21 @@ public interface IReservationRepository extends JpaRepository<Reservation, Integ
     @Query(value = "select count(r) from Reservation r inner join  r.book b where b.id = ?1 and (r.status = 1 or r.status = 3)")
     Integer reservationCount(Integer bookId);
 
-    @Query(value = "select r from Reservation r where r.endDate<=?1 and r.status=1")
-    List<Reservation> getReservationExpiredList(Date currentDate);
+    @Query(value = "SELECT * FROM `reservation` WHERE Date(reservation.end_date) BETWEEN  CURRENT_DATE and  DATE_ADD(CURRENT_DATE,INTERVAL 3 DAY) and reservation.`status` = 1;", nativeQuery = true)
+    List<Reservation> getReservationNearlyExpiredList();
+
+    @Query(value = "SELECT * FROM `reservation` WHERE Date(reservation.end_date) <  CURRENT_DATE and reservation.`status` = 1", nativeQuery = true)
+    List<Reservation> getReservationExpiredList();
 
     @Modifying
     @Transactional
-    @Query(value = "update Reservation r set r.status=2 where r.endDate<=?1 and r.status=1")
-    int reservationExpiredStatus(Date currentDate);
+    @Query(value = "update `reservation` r set r.status=2 WHERE Date(r.end_date) <  CURRENT_DATE and r.status=1", nativeQuery = true)
+    int reservationExpiredStatus();
 
     @Query(value = "select r from Reservation r inner join r.employee e where e.id = ?1")
     Page<Reservation> findByEmpId(String empId, Pageable pageable);
+
+    @Query(value = "select count(r) from Reservation r inner join r.book b where b.id = ?1 and r.status in (1,3)")
+    int checkReservationQue(Integer bookId);
+
 }

@@ -1,5 +1,6 @@
 package com.tgfc.library.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.tgfc.library.entity.Employee;
 
@@ -12,6 +13,7 @@ public class EmployeeResponse {
     private String account;
     private String name;
     private String email;
+    @JsonIgnore
     private String password;
     private List<String> permissions;
     private String department;

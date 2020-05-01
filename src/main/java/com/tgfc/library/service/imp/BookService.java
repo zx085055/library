@@ -48,13 +48,22 @@ public class BookService implements IBookService {
 
     @Override
     public BaseResponse getBookList(BookDataPageRequest model) {
-        Page<Book> pageBook=null;
+        Page<Book> pageBook = null;
         builder = new BaseResponse.Builder();
         Pageable pageable = model.getPageable();
-        if(model.getCheckPermission()) {
-            pageBook = bookDataRepository.findAllByKeyword("%" + model.getKeyword() + "%", model.getKeyword(), pageable);
-        }else {
-            pageBook = bookDataRepository.findNotScrapByKeyword("%" + model.getKeyword() + "%", model.getKeyword(),BookStatusEnum.BOOK_STATUS_SCRAP.getCode(), pageable);
+        String keyWord = model.getKeyword();
+        if (model.getCheckPermission()) {
+            if (keyWord.isEmpty()) {
+                pageBook = bookDataRepository.findAll(pageable);
+            } else {
+                pageBook = bookDataRepository.findAllByKeyword(keyWord, pageable);
+            }
+        } else {
+            if (keyWord.isEmpty()) {
+                pageBook = bookDataRepository.findAllNotScrapByKeyword(pageable);
+            } else {
+                pageBook = bookDataRepository.findNotScrapByKeyword(keyWord, BookStatusEnum.BOOK_STATUS_SCRAP.getCode(), pageable);
+            }
         }
 
         List<BooksResponse> list = new ArrayList<>();
@@ -62,9 +71,9 @@ public class BookService implements IBookService {
             BooksResponse bookResponse = new BooksResponse();
             BeanUtils.copyProperties(book, bookResponse);
             list.add(bookResponse);
-                if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
-                    bookResponse.setPhotoName(photoService.getPhotoUrl(book.getPhotoName()));
-                }
+            if (book.getPhotoName() != null && book.getPhotoName().length() != 0) {
+                bookResponse.setPhotoName(photoService.getPhotoUrl(book.getPhotoName()));
+            }
 
         }
 
