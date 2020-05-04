@@ -2,9 +2,13 @@ package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Book;
 import com.tgfc.library.entity.Recommend;
+import com.tgfc.library.entity.Records;
+import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.BookStatusEnum;
 import com.tgfc.library.repository.IBookRepository;
 import com.tgfc.library.repository.IRecommendRepository;
+import com.tgfc.library.repository.IRecordsRepository;
+import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.request.BookAddRequest;
 import com.tgfc.library.request.BookDataPageRequest;
 import com.tgfc.library.response.BaseResponse;
@@ -34,15 +38,24 @@ public class BookService implements IBookService {
 
     private final
     IPhotoService photoService;
+
     private final
     IRecommendRepository iRecommendRepository;
 
+    private final
+    IReservationRepository iReservationRepository;
+
+    private final
+    IRecordsRepository iRecordsRepository;
+
     private BaseResponse.Builder builder;
 
-    public BookService(IBookRepository bookDataRepository, IPhotoService photoService, IRecommendRepository iRecommendRepository) {
+    public BookService(IBookRepository bookDataRepository, IPhotoService photoService, IRecommendRepository iRecommendRepository, IReservationRepository iReservationRepository, IRecordsRepository iRecordsRepository) {
         this.bookDataRepository = bookDataRepository;
         this.photoService = photoService;
         this.iRecommendRepository = iRecommendRepository;
+        this.iReservationRepository = iReservationRepository;
+        this.iRecordsRepository = iRecordsRepository;
     }
 
 
@@ -187,6 +200,12 @@ public class BookService implements IBookService {
             return builder.message(MessageUtil.getMessage("book.findNoID")).build();
         }
         try {
+            for (Reservation reservation : iReservationRepository.getReservationByBookId(id)) {
+                iReservationRepository.deleteById(reservation.getId());
+            }
+            for (Records records : iRecordsRepository.getRecordsByBookId(id)) {
+                iRecordsRepository.deleteById(records.getId());
+            }
             bookDataRepository.deleteById(id);
         } catch (Exception e) {
             return builder.message(MessageUtil.getMessage("book.deleteFail")).build();

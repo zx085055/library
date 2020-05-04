@@ -43,9 +43,6 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     @Query(value = "SELECT b From Book b where b.name LIKE CONCAT('%@',?1,'%') ESCAPE '@' OR b.author LIKE CONCAT('%',?1,'%') ESCAPE '@' OR b.pubHouse LIKE CONCAT('%',?1,'%') ESCAPE '@' ")
     Page<Book> findBookByKeyWord(String keyWord, Pageable pageable);
 
-    @Query(value = "delete from book where id = :id ", nativeQuery = true)
-    void deleteById(@Param("id") Integer id);
-
     @Query(value = "select b from Book b where b.id=?1 and b.status=?2")
     Book checkBookLended(Integer id, Integer status);
 

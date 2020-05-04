@@ -1,6 +1,7 @@
 package com.tgfc.library.repository;
 
 import com.tgfc.library.entity.Records;
+import com.tgfc.library.entity.Reservation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,9 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
 
     @Override
     Page<Records> findAll(Pageable pageable);
+
+    @Query(value = "SELECT * FROM `records` WHERE book_id = ?1", nativeQuery = true)
+    List<Records> getRecordsByBookId(Integer bookId);
 
     @Query(value = "SELECT * FROM `records` WHERE records.id = (SELECT MAX(id) FROM `records` where records.book_id = ?1)",nativeQuery = true)
     Records checkOwnBorrowed(Integer id);

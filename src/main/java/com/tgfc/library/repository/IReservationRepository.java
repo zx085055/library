@@ -16,6 +16,9 @@ import java.util.List;
 @Repository
 public interface IReservationRepository extends JpaRepository<Reservation, Integer> {
 
+    @Query(value = "SELECT * FROM `reservation` WHERE book_id = ?1", nativeQuery = true)
+    List<Reservation> getReservationByBookId(Integer bookId);
+
     @Query("SELECT r FROM Reservation r LEFT JOIN r.book b WHERE (r.employee.name LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.propertyCode LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.name LIKE CONCAT('%',?1,'%') ESCAPE '/')  AND (r.status=?2 OR r.status=?3) ORDER BY b.name ASC, r.status ASC, r.startDate ASC")
     Page<Reservation> getReservationByKeywordLikeAndStatus(String keyword, Integer aliveStatus, Integer waitStatus, Pageable pageable);
 
