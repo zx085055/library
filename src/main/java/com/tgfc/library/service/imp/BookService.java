@@ -136,9 +136,7 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public BaseResponse upData(MultipartFile files, BookAddRequest addBook) {
-
-
+    public BaseResponse update(MultipartFile files, BookAddRequest addBook) {
         builder = new BaseResponse.Builder();
         //判斷status是否正確
 

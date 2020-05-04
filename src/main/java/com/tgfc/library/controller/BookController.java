@@ -42,7 +42,7 @@ public class BookController {
             baseResponse.setMessage("上傳格式錯誤");
             return baseResponse;
         }
-        baseResponse=bookDataService.upData(files, bookAddRequest);
+        baseResponse=bookDataService.update(files, bookAddRequest);
         return baseResponse;
     }
 
