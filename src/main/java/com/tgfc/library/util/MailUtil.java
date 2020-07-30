@@ -15,6 +15,7 @@ import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 @Component
 public class MailUtil {
@@ -37,19 +38,35 @@ public class MailUtil {
         from = username;
     }
 
+    @Value("${spring.mail.username}")
+    public void setUsername(String setUsername) {
+        ((JavaMailSenderImpl) mailSender).setUsername(setUsername);
+    }
+
     @Value("${spring.mail.password}")
     public void setPassword(String setPassword) {
         ((JavaMailSenderImpl) mailSender).setPassword(setPassword);
+    }
+
+    @Value("${spring.mail.port}")
+    public void setPort(int setPort) {
+        ((JavaMailSenderImpl) mailSender).setPort(setPort);
     }
 
     private static ITemplateEngine templateEngine;
 
     public static void sendMail(String title, String content, String email) {
         MimeMessagePreparator mailMessage = mimeMessage -> {
+            Properties properties = new Properties();
+            properties.setProperty("mail.transport.protocol", "smtp");
+            properties.setProperty("mail.smtp.auth", "true");
+            properties.setProperty("mail.smtp.starttls.enable", "true");
+            properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            ((JavaMailSenderImpl) mailSender).setJavaMailProperties(properties);
             MimeMessageHelper message = new MimeMessageHelper(
                     mimeMessage, true, "UTF-8");
 
-            message.setFrom(from, "TGFC 圖書管理系統");
+            message.setFrom(from, "圖書管理系統");
             message.setSubject(title); //標題
             message.setTo(email); //發給誰  對方郵箱
             message.setText(content); //內容
