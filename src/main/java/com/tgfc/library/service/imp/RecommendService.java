@@ -1,10 +1,10 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.entity.EmployeeSafty;
+import com.tgfc.library.entity.EmployeeSafety;
 import com.tgfc.library.entity.Recommend;
 import com.tgfc.library.enums.RecommendEnum;
 import com.tgfc.library.repository.IBookRepository;
-import com.tgfc.library.repository.IEmployeeRepositorySafty;
+import com.tgfc.library.repository.IEmployeeRepositorySafety;
 import com.tgfc.library.repository.IRecommendRepository;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IRecommendService;
@@ -25,7 +25,7 @@ public class RecommendService implements IRecommendService {
     IRecommendRepository recommendRepository;
 
     @Autowired
-    IEmployeeRepositorySafty employeeRepository;
+    IEmployeeRepositorySafety employeeRepository;
 
     @Autowired
     IBookRepository bookRepository;
@@ -57,7 +57,7 @@ public class RecommendService implements IRecommendService {
             builder.status(false).message(MessageUtil.getMessage("recommend.bookExisted"));
         } else {
             String id = ContextUtil.getAccount();
-            EmployeeSafty employee = employeeRepository.findById(id).get();
+            EmployeeSafety employee = employeeRepository.findById(id).get();
             recommend.setEmployee(employee);
             recommend.setStatus(RecommendEnum.RECOMMEND_ALIVE.getCode());
             recommendRepository.save(recommend);

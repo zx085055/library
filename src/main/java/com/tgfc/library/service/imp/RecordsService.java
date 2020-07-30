@@ -6,7 +6,7 @@ import com.tgfc.library.enums.BookStatusEnum;
 import com.tgfc.library.enums.RecordsStatusEnum;
 import com.tgfc.library.enums.ReservationEnum;
 import com.tgfc.library.repository.IBookRepository;
-import com.tgfc.library.repository.IEmployeeRepositorySafty;
+import com.tgfc.library.repository.IEmployeeRepositorySafety;
 import com.tgfc.library.repository.IRecordsRepository;
 import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.request.SendMailRequest;
@@ -29,7 +29,7 @@ public class RecordsService implements IRecordsService {
     IRecordsRepository recordsRepository;
 
     @Autowired
-    IEmployeeRepositorySafty employeeRepository;
+    IEmployeeRepositorySafety employeeRepository;
 
     @Autowired
     IBookRepository bookRepository;

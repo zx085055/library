@@ -1,9 +1,9 @@
 package com.tgfc.library.service.imp;
 
 import com.tgfc.library.entity.Announcement;
-import com.tgfc.library.entity.EmployeeSafty;
+import com.tgfc.library.entity.EmployeeSafety;
 import com.tgfc.library.repository.IAnnouncementRepository;
-import com.tgfc.library.repository.IEmployeeRepositorySafty;
+import com.tgfc.library.repository.IEmployeeRepositorySafety;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IAnnouncementService;
 import com.tgfc.library.util.ContextUtil;
@@ -26,7 +26,7 @@ public class AnnouncementService implements IAnnouncementService {
     IAnnouncementRepository announcementRepository;
 
     @Autowired
-    IEmployeeRepositorySafty employeeRepository;
+    IEmployeeRepositorySafety employeeRepository;
 
     private BaseResponse.Builder builder;
 
@@ -58,7 +58,7 @@ public class AnnouncementService implements IAnnouncementService {
             return builder.build();
         }
 
-        EmployeeSafty employee = employeeRepository.findById(id).get();
+        EmployeeSafety employee = employeeRepository.findById(id).get();
         announcement.setEmployee(employee);
         announcementRepository.save(announcement);
         builder.status(true).message(MessageUtil.getMessage("announcement.insertSuccess"));
@@ -70,7 +70,7 @@ public class AnnouncementService implements IAnnouncementService {
         builder = new BaseResponse.Builder();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         String id = ContextUtil.getAccount();
-        EmployeeSafty employee = employeeRepository.findById(id).get();
+        EmployeeSafety employee = employeeRepository.findById(id).get();
         BeanUtils.copyProperties(announcement, existAnnouncement);
         existAnnouncement.setEmployee(employee);
         announcementRepository.save(existAnnouncement);
@@ -95,7 +95,7 @@ public class AnnouncementService implements IAnnouncementService {
         builder = new BaseResponse.Builder();
         String id = ContextUtil.getAccount();
 
-        EmployeeSafty employee = employeeRepository.findById(id).get();
+        EmployeeSafety employee = employeeRepository.findById(id).get();
         Announcement existAnnouncement = announcementRepository.findById(announcement.getId()).get();
         existAnnouncement.setEmployee(employee);
         existAnnouncement.setStatus(announcement.getStatus());

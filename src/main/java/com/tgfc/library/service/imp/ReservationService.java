@@ -27,7 +27,7 @@ public class ReservationService implements IReservationService {
     IReservationRepository reservationRepository;
 
     @Autowired
-    IEmployeeRepositorySafty employeeRepository;
+    IEmployeeRepositorySafety employeeRepository;
 
     @Autowired
     IRecordsRepository recordsRepository;
@@ -205,7 +205,7 @@ public class ReservationService implements IReservationService {
 
 
         Records records = new Records();
-        EmployeeSafty employee = employeeRepository.findById(reservation.getEmployee().getId()).get();
+        EmployeeSafety employee = employeeRepository.findById(reservation.getEmployee().getId()).get();
         Book book = bookRepository.findById(reservation.getBook().getId()).get();
         Date current = new Date();
         Date endDate = new Date(current.getTime() + 14 * 24 * 60 * 60 * 1000);
