@@ -40,10 +40,10 @@ public class SecurityConfig {
             http.csrf().disable();
             http.headers().frameOptions().sameOrigin();
 
-            http.cors().and().regexMatcher("/.*")
-                    .authorizeRequests()
-                    .regexMatchers("/.*")
-                    .authenticated()
+            http.authorizeRequests()
+                    .antMatchers("/register")
+                    .permitAll()
+                    .anyRequest().authenticated()
                     .and()
                     .requestCache()
                     .requestCache(new NullRequestCache())

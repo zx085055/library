@@ -4,6 +4,7 @@ import com.tgfc.library.entity.Employee;
 import com.tgfc.library.enums.PermissionEnum;
 import com.tgfc.library.repository.IEmployeeRepository;
 import com.tgfc.library.response.EmployeeResponse;
+import com.tgfc.library.util.ContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,8 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,24 +26,16 @@ public class LdapAuthProvider implements AuthenticationProvider {
     @Autowired
     IEmployeeRepository employeeRepository;
 
-    private static final PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String account = authentication.getPrincipal().toString();//讀取輸入的帳號
         String password = authentication.getCredentials().toString();//讀取輸入的密碼
         Employee loginUser = null;//宣告一個變數用來存使用者的資料
         if (!employeeRepository.existsById(account)) { //如果帳號不存在的話
-            assert false;
-            loginUser.setId(account);
-            loginUser.setPassword(encoder.encode(password));
-            loginUser.setName("匿名");
-            loginUser.setEmail("xxx@xxx");
-            loginUser.setDepartment("研發部");
-            employeeRepository.save(loginUser);
+            throw new BadCredentialsException("請確認帳號或密碼");
         } else {//如果帳號存在
             loginUser = employeeRepository.getOne(account);//讀取所有該帳號的相關資料
-            if (!encoder.matches(password, loginUser.getPassword())) {//比對密碼是否相符
+            if (!ContextUtil.encoder.matches(password, loginUser.getPassword())) {//比對密碼是否相符
                 throw new BadCredentialsException("請確認帳號或密碼");//如果不相符會丟出一個錯誤訊息
             }
         }
@@ -57,8 +48,8 @@ public class LdapAuthProvider implements AuthenticationProvider {
     private String[] getPermissionsList(Employee loginUser) {
         List<String> permissions = new ArrayList<>();
 
-        String department =loginUser.getDepartment();
-        if (department.equals("管理部") || department.equals("財會部") || department.equals("人資部") || department.equals("HR招募組")) {
+        String department = loginUser.getDepartment();
+        if (department.equals("管理員")) {
             permissions.add(PermissionEnum.ROLE_ADMIN.name());
         }
         permissions.add(PermissionEnum.ROLE_USER.name());
@@ -68,9 +59,5 @@ public class LdapAuthProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> aClass) {
         return aClass == UsernamePasswordAuthenticationToken.class;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(encoder.encode("password"));
     }
 }
