@@ -75,6 +75,12 @@ public class MailUtil {
     }
 
     public static void sendHtmlMail(String title, String content, String email) {
+        Properties properties = new Properties();
+        properties.setProperty("mail.transport.protocol", "smtp");
+        properties.setProperty("mail.smtp.auth", "true");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        ((JavaMailSenderImpl) mailSender).setJavaMailProperties(properties);
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
