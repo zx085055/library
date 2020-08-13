@@ -17,10 +17,10 @@ public class ExceptionAdvice {
         response.setStatus(false);
         e.printStackTrace();
 
-        if (e instanceof AccessDeniedException){
+        if (e instanceof AccessDeniedException) {
             response.setMessage("權限不足,請檢查授權");
             return ResponseEntity.status(403).body(response);
-        }else if (e instanceof MethodArgumentNotValidException){
+        } else if (e instanceof MethodArgumentNotValidException) {
             response.setMessage("參數錯誤,請檢查參數內容");
             return ResponseEntity.status(400).body(response);
         }

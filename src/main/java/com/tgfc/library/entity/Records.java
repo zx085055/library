@@ -29,7 +29,7 @@ public class Records implements Serializable {
     private Date endDate;
     @Column(name = "status", length = 5, nullable = false)
     private Integer status;
-    @Column(name = "renewed",length = 2)
+    @Column(name = "renewed", length = 2)
     private boolean renewed = false;
 
     @Transient

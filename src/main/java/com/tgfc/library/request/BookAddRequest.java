@@ -15,7 +15,7 @@ public class BookAddRequest {
     private String propertyCode;
     @NotNull
     private String pubHouse;
-//    @NotNull
+    //    @NotNull
     private String intro;
     @NotNull
     private String floor;

@@ -18,25 +18,25 @@ public class RecordsController {
     @Autowired
     IRecordsService recordsService;
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/select")
     public BaseResponse select(@RequestBody RecordsPageRequest records) {
         return recordsService.select(records.getKeyword(), records.getStatus(), records.getPageable());
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @DeleteMapping("/delete")
     public BaseResponse delete(@RequestParam int id) {
         return recordsService.delete(id);
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/returnNotify")
     public BaseResponse returnNotify(@RequestBody SendMailRequest model) {
         return recordsService.returnNotify(model);
     }
 
-    @RolesAllowed({ PermissionEnum.Role.ADMIN})
+    @RolesAllowed({PermissionEnum.Role.ADMIN})
     @GetMapping("/returnBook")
     public BaseResponse returnBook(@RequestParam Integer id) {
         return recordsService.returnBook(id);
@@ -66,10 +66,10 @@ public class RecordsController {
         return recordsService.findByTimeIntervalWithEmpId(recordsPageRequest.getStartDate(), recordsPageRequest.getEndDate(), recordsPageRequest.getPageable());
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @GetMapping("/renew")
-    public BaseResponse renew(@RequestParam Integer bookId,@RequestParam Integer recordId){
-        return recordsService.renew(bookId,recordId);
+    public BaseResponse renew(@RequestParam Integer bookId, @RequestParam Integer recordId) {
+        return recordsService.renew(bookId, recordId);
     }
 
 }

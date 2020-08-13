@@ -23,6 +23,6 @@ public interface IRecordsService {
 
     BaseResponse findByTimeIntervalWithEmpId(Date startDate, Date endDate, Pageable pageable);
 
-    BaseResponse renew(Integer bookId,Integer recordId);
+    BaseResponse renew(Integer bookId, Integer recordId);
 
 }

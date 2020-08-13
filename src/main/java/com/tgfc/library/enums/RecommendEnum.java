@@ -1,8 +1,8 @@
 package com.tgfc.library.enums;
 
 public enum RecommendEnum {
-    RECOMMEND_ALIVE(1,"推薦中"),
-    RECOMMEND_END(2,"已採購");
+    RECOMMEND_ALIVE(1, "推薦中"),
+    RECOMMEND_END(2, "已採購");
     private Integer code;
     private String trans;
 
@@ -10,7 +10,7 @@ public enum RecommendEnum {
         return code;
     }
 
-    RecommendEnum(Integer code, String trans){
+    RecommendEnum(Integer code, String trans) {
         this.code = code;
         this.trans = trans;
     }

@@ -21,7 +21,7 @@ public class ResponseAdvice implements ResponseBodyAdvice {
         if (o instanceof BaseResponse) {
             return o;
         } else {
-            BaseResponse response=  new BaseResponse();
+            BaseResponse response = new BaseResponse();
             response.setData(o);
             return response;
         }

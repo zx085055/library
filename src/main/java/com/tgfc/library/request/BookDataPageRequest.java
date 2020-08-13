@@ -1,6 +1,6 @@
 package com.tgfc.library.request;
 
-public class BookDataPageRequest extends PageableRequest{
+public class BookDataPageRequest extends PageableRequest {
     private String keyword;
     private Boolean checkPermission;
 

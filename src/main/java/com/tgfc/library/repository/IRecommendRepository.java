@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IRecommendRepository extends JpaRepository<Recommend,Integer> {
+public interface IRecommendRepository extends JpaRepository<Recommend, Integer> {
 
     @Query("SELECT r from Recommend r where r.name like CONCAT('%',?1,'%')")
     Page<Recommend> getRecommendsByNameLike(String name, Pageable pageable);
@@ -21,6 +21,6 @@ public interface IRecommendRepository extends JpaRepository<Recommend,Integer> {
 
     @Modifying
     @Query("UPDATE Recommend r SET r.status=?2 where r.id=?1")
-    int changeStatus(Integer id,Integer status);
+    int changeStatus(Integer id, Integer status);
 
 }

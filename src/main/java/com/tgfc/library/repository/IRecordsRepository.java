@@ -1,7 +1,6 @@
 package com.tgfc.library.repository;
 
 import com.tgfc.library.entity.Records;
-import com.tgfc.library.entity.Reservation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +23,7 @@ public interface IRecordsRepository extends JpaRepository<Records, Integer> {
     @Query(value = "SELECT * FROM `records` WHERE book_id = ?1", nativeQuery = true)
     List<Records> getRecordsByBookId(Integer bookId);
 
-    @Query(value = "SELECT * FROM `records` WHERE records.id = (SELECT MAX(id) FROM `records` where records.book_id = ?1)",nativeQuery = true)
+    @Query(value = "SELECT * FROM `records` WHERE records.id = (SELECT MAX(id) FROM `records` where records.book_id = ?1)", nativeQuery = true)
     Records checkOwnBorrowed(Integer id);
 
     @Query("SELECT r FROM Records r LEFT JOIN r.book b WHERE (r.borrowUsername LIKE CONCAT('%',?1,'%') ESCAPE '/' OR b.name LIKE CONCAT('%',?1,'%') ESCAPE '/') AND r.status=?2")

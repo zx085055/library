@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookCountResponse {
-    private List<BooksResponse> list=new ArrayList<>();
+    private List<BooksResponse> list = new ArrayList<>();
     private long count;
 
     public List<BooksResponse> getList() {

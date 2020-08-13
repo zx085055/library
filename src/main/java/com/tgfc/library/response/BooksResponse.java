@@ -1,7 +1,5 @@
 package com.tgfc.library.response;
 
-import org.springframework.http.ResponseEntity;
-
 import java.util.Date;
 
 public class BooksResponse {

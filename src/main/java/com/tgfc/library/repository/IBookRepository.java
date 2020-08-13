@@ -20,7 +20,7 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     Page<Book> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
     @Query(value = "SELECT b FROM Book b WHERE (b.name LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.author LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.pubHouse LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.type LIKE concat('%@',:keyword,'%') ESCAPE '@' or b.isbn = :keyword) AND b.status<>:checkPermission")
-    Page<Book> findNotScrapByKeyword(@Param("keyword") String keyword,  @Param("checkPermission")Integer checkPermission, Pageable pageable);
+    Page<Book> findNotScrapByKeyword(@Param("keyword") String keyword, @Param("checkPermission") Integer checkPermission, Pageable pageable);
 
     @Query(value = "SELECT b FROM Book b WHERE b.status <> 6")
     Page<Book> findAllNotScrapByKeyword(Pageable pageable);

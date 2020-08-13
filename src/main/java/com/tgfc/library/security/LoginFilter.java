@@ -31,7 +31,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
                     httpServletResponse.getWriter().println(mapper.writeValueAsString(response));
                 };
         AuthenticationFailureHandler authenticationFailureHandler =
-                (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) ->{
+                (HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) -> {
                     BaseResponse response = new BaseResponse();
                     response.setStatus(false);
                     response.setMessage(e.getMessage());

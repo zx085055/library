@@ -17,6 +17,7 @@ public class MyScheduler {
 
     /**
      * 新增Job
+     *
      * @param job
      * @param trigger
      * @return Boolean
@@ -29,6 +30,7 @@ public class MyScheduler {
 
     /**
      * 啟動一個Scheduler
+     *
      * @throws SchedulerException
      */
     public void start() throws SchedulerException {
@@ -37,6 +39,7 @@ public class MyScheduler {
 
     /**
      * 关闭调度器
+     *
      * @throws SchedulerException
      */
     public void shutdown() throws SchedulerException {
@@ -45,6 +48,7 @@ public class MyScheduler {
 
     /**
      * 檢查是否啟動
+     *
      * @return boolean
      * @throws SchedulerException
      */
@@ -54,6 +58,7 @@ public class MyScheduler {
 
     /**
      * 停止調度Job任務
+     *
      * @param triggerkey
      * @return boolean
      * @throws SchedulerException
@@ -65,6 +70,7 @@ public class MyScheduler {
 
     /**
      * 重新恢复触发器相关的job任务
+     *
      * @param triggerkey
      * @param trigger
      * @return Date
@@ -76,6 +82,7 @@ public class MyScheduler {
 
     /**
      * 删除相关的job任务
+     *
      * @param jobkey
      * @return boolean
      * @throws SchedulerException
@@ -86,6 +93,7 @@ public class MyScheduler {
 
     /**
      * 暂停调度中所有的job任务
+     *
      * @throws SchedulerException
      */
     public void pauseAll() throws SchedulerException {
@@ -94,6 +102,7 @@ public class MyScheduler {
 
     /**
      * 恢复调度中所有的job的任务
+     *
      * @throws SchedulerException
      */
     public void resumeAll() throws SchedulerException {
@@ -103,6 +112,7 @@ public class MyScheduler {
 
     /**
      * 刪除全部job
+     *
      * @return Boolean
      * @throws SchedulerException
      */
@@ -124,6 +134,7 @@ public class MyScheduler {
 
     /**
      * 暫停指定Job
+     *
      * @param jobKey
      * @throws SchedulerException
      */
@@ -133,6 +144,7 @@ public class MyScheduler {
 
     /**
      * 恢復指定Job
+     *
      * @param jobKey
      * @throws SchedulerException
      */

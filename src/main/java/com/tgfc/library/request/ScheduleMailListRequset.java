@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ScheduleMailListRequset {
-    private List<Map<String,Object>> mailList;
+    private List<Map<String, Object>> mailList;
 
     public List<Map<String, Object>> getMailList() {
         return mailList;

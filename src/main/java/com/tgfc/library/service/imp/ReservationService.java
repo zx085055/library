@@ -1,10 +1,16 @@
 package com.tgfc.library.service.imp;
 
-import com.tgfc.library.entity.*;
+import com.tgfc.library.entity.Book;
+import com.tgfc.library.entity.EmployeeSafety;
+import com.tgfc.library.entity.Records;
+import com.tgfc.library.entity.Reservation;
 import com.tgfc.library.enums.BookStatusEnum;
 import com.tgfc.library.enums.RecordsStatusEnum;
 import com.tgfc.library.enums.ReservationEnum;
-import com.tgfc.library.repository.*;
+import com.tgfc.library.repository.IBookRepository;
+import com.tgfc.library.repository.IEmployeeRepositorySafety;
+import com.tgfc.library.repository.IRecordsRepository;
+import com.tgfc.library.repository.IReservationRepository;
 import com.tgfc.library.response.BaseResponse;
 import com.tgfc.library.service.IReservationService;
 import com.tgfc.library.util.ContextUtil;
@@ -87,7 +93,7 @@ public class ReservationService implements IReservationService {
                 reservation.setStartDate(startDate);
                 builder.content(count);
                 builder.message(MessageUtil.getMessage("reservation.bookBorrowingCauseWait"));
-            }  else if (count > 0) {
+            } else if (count > 0) {
                 status = ReservationEnum.RESERVATION_WAIT.getCode();
                 builder.content(count);
                 builder.message(MessageUtil.getMessage("reservation.addWaitSuccess"));

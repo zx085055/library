@@ -28,7 +28,7 @@ public class LogAspect {
     public void before(JoinPoint joinPoint) throws Exception {
         String requestMethod = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getMethod();
         Logger logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        logger.info("request :" + joinPoint.getTarget() + " , request type :"+ requestMethod);
+        logger.info("request :" + joinPoint.getTarget() + " , request type :" + requestMethod);
         Object[] args = joinPoint.getArgs();
         logger.info("args : " + gson.toJson(args));
     }

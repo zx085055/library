@@ -1,7 +1,6 @@
 package com.tgfc.library.entity;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -14,37 +13,37 @@ import java.util.Date;
 public class Book implements Serializable {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY, generator="generatorName")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "generatorName")
     @GenericGenerator(name = "generatorName", strategy = "native")
     private Integer id;
-    @Column(name="name",length = 100,nullable = false)
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
-    @Column(name = "author",length = 100,nullable = false)
+    @Column(name = "author", length = 100, nullable = false)
     private String author;
-    @Column(name = "isbn",length = 13,nullable = false)
+    @Column(name = "isbn", length = 13, nullable = false)
     private String isbn;
-    @Column(name = "property_code",nullable = false)
+    @Column(name = "property_code", nullable = false)
     private String propertyCode;
-    @Column(name = "pub_house",length = 30,nullable = false)
+    @Column(name = "pub_house", length = 30, nullable = false)
     private String pubHouse;
     @Column(name = "intro")
     private String intro;
-    @Column(name = "floor",length = 11,nullable = false)
+    @Column(name = "floor", length = 11, nullable = false)
     private String floor;
     @Column(name = "photo_original_name")
     private String photoOriginalName;
     @Column(name = "photo_name")
     private String photoName;
-    @Column(name = "purchase_date",nullable = false)
+    @Column(name = "purchase_date", nullable = false)
 //    @CreatedDate
     private Date purchaseDate;
-    @Column(name = "publish_date",nullable = false)
+    @Column(name = "publish_date", nullable = false)
     private Date publishDate;
-    @Column(name="type",length = 20,nullable = false)
+    @Column(name = "type", length = 20, nullable = false)
     private String type;
-    @Column(name="language",length = 10,nullable = false )
+    @Column(name = "language", length = 10, nullable = false)
     private String language;
-    @Column(name="status",length = 2,nullable = false )
+    @Column(name = "status", length = 2, nullable = false)
     private Integer status;
 
 

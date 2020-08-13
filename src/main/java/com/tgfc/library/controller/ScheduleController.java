@@ -20,9 +20,9 @@ public class ScheduleController {
 
     /**
      * 新增排程
-     * @param SchedulePageRequest
-     * (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
-     * @return  BaseResponse
+     *
+     * @param model (排程名稱，類型，通知時間，起始日期，結束日期，狀態)
+     * @return BaseResponse
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
     @PostMapping("/schedule/create")
@@ -32,8 +32,8 @@ public class ScheduleController {
 
     /**
      * 編輯排程
-     * @param model
-     * (id，排程名稱，類型，通知時間，起始日期，結束日期，狀態)
+     *
+     * @param model (id，排程名稱，類型，通知時間，起始日期，結束日期，狀態)
      * @return BaseResponse
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
@@ -44,8 +44,8 @@ public class ScheduleController {
 
     /**
      * 查詢排程列表
-     * @param model
-     * (排程名稱，起始日期，結束日期，分頁頁數，分頁容量)
+     *
+     * @param model (排程名稱，起始日期，結束日期，分頁頁數，分頁容量)
      * @return BaseResponse
      * (排程名稱，起始日期，結束日期，上次執行情況，狀態)
      * @throws ParseException
@@ -58,6 +58,7 @@ public class ScheduleController {
 
     /**
      * 刪除指定排程
+     *
      * @param id
      * @return BaseResponse
      */
@@ -69,6 +70,7 @@ public class ScheduleController {
 
     /**
      * 變排程狀態 ( 啟用 <---> 禁用 )
+     *
      * @param model
      * @return BaseResponse
      */
@@ -80,6 +82,7 @@ public class ScheduleController {
 
     /**
      * 刪除全部排程
+     *
      * @return BaseResponse
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
@@ -90,6 +93,7 @@ public class ScheduleController {
 
     /**
      * 暫停全部排程
+     *
      * @return BaseResponse
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})
@@ -100,6 +104,7 @@ public class ScheduleController {
 
     /**
      * 恢復全部被暫停排程
+     *
      * @return BaseResponse
      */
     @RolesAllowed({PermissionEnum.Role.ADMIN})

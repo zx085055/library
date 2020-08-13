@@ -10,7 +10,7 @@ public class MessageUtil {
 
     private static ResourceBundle res = ResourceBundle.getBundle("messages");
 
-    public static String getMessage(String property){
+    public static String getMessage(String property) {
         return res.getString(property);
     }
 

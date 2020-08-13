@@ -17,6 +17,7 @@ public class OneDayOneTimeTrigger {
     /**
      * 觸發器 : 固定一天執行一次
      * 傳入值 : SchedulePageRequest (需要 NoticeTime, StartTime, EndTime )
+     *
      * @param model
      * @return CronTrigger
      */

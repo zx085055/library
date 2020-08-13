@@ -10,6 +10,7 @@ public enum BookStatusEnum {
 
     private Integer code;
     private String trans;
+
     BookStatusEnum(Integer code, String trans) {
         this.code = code;
         this.trans = trans;
@@ -31,8 +32,8 @@ public enum BookStatusEnum {
         this.trans = trans;
     }
 
-    public static BookStatusEnum getStatus(Integer i){
-        switch(i){
+    public static BookStatusEnum getStatus(Integer i) {
+        switch (i) {
             case 1:
                 return BOOK_STATUS_LEND;
             case 2:

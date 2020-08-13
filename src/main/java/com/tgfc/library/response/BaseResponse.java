@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import java.util.HashMap;
 import java.util.Map;
 
-@JsonInclude(value= JsonInclude.Include.NON_NULL)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class BaseResponse {
 
     private String message;
@@ -15,11 +15,11 @@ public class BaseResponse {
 
     private Object data;
 
-    public BaseResponse(){
+    public BaseResponse() {
 
     }
 
-    public BaseResponse(Builder builder){
+    public BaseResponse(Builder builder) {
         this.message = builder.message;
         this.status = builder.status;
         this.data = builder.data;
@@ -58,7 +58,7 @@ public class BaseResponse {
                 '}';
     }
 
-    public static class Builder{
+    public static class Builder {
         private String message;
 
         private boolean status;

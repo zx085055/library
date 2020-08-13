@@ -31,9 +31,10 @@ public class ReservationController {
 
     @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/findByEmp")
-    public BaseResponse findByEmpName(@RequestBody PageableRequest pageableRequest){
+    public BaseResponse findByEmpName(@RequestBody PageableRequest pageableRequest) {
         return reservationService.findByEmpId(pageableRequest.getPageable());
     }
+
     @RolesAllowed({PermissionEnum.Role.USER})
     @PostMapping("/cancelReservation")
     public BaseResponse cancel(@RequestBody Reservation reservation) {
@@ -52,7 +53,7 @@ public class ReservationController {
         return reservationService.findAll(pageableRequest.getPageable());
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @GetMapping("/getBook")
     public BaseResponse getBook(@RequestParam Integer id) {
         return reservationService.getBook(id);
@@ -64,7 +65,7 @@ public class ReservationController {
         return reservationService.findByTimeIntervalWithEmpId(reservationPageRequest.getStartDate(), reservationPageRequest.getEndDate(), reservationPageRequest.getPageable());
     }
 
-    @RolesAllowed({PermissionEnum.Role.ADMIN,PermissionEnum.Role.USER})
+    @RolesAllowed({PermissionEnum.Role.ADMIN, PermissionEnum.Role.USER})
     @GetMapping("/checkReservationQue")
     public BaseResponse checkReservationQue(@RequestParam Integer bookId) {
         return reservationService.checkReservationQue(bookId);
