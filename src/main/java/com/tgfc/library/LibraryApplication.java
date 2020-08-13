@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackages = {"com.tgfc.library.entity"})
 @EnableJpaAuditing
 public class LibraryApplication extends SpringBootServletInitializer {
-
+//測試
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(LibraryApplication.class);
